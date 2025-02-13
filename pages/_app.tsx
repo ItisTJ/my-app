@@ -2,7 +2,7 @@
 import '../styles/index.css';
 import '../styles/bootstrap.min.css';
 //importing utils
-import { useStore } from '../state';
+import { useStore } from '../state/store';
 import type { AppProps } from 'next/app';
 //importing components
 import MainLayout from '../layouts/MainLayout';
