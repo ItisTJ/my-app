@@ -8,12 +8,15 @@ import { ActionTypes } from './cart.action-types';
 import { CartAction } from './cart.actions';
 import { cartWithPrices } from '../../utils';
 import Router from 'next/router';
+import { mockCart } from './mockCart';
 
 interface AddToCart {
   qty: number;
   productId?: string;
   product?: ProductInterface;
 }
+
+
 
 export const addToCart =
   ({ qty, productId, product }: AddToCart) =>
@@ -25,7 +28,7 @@ export const addToCart =
         });
       }
 
-      const { data } = await proshopAPI.post(
+      /*const { data } = await proshopAPI.post(
         '/cart',
         {
           product,
@@ -33,16 +36,28 @@ export const addToCart =
           productId,
         },
         { withCredentials: true }
+      );*/
+
+      //use mock data
+      const mockItem = mockCart.find(
+        (item) => item.product._id === productId
       );
+
+      if (mockItem) {
+        const { product:, qty: mockQty } = mockItem;
+        qty = mockQty;
+      }
 
       dispatch({
         type: ActionTypes.ADD_CART_ITEM_SUCCESS,
-        payload: data,
+        payload: mockItem,
       });
 
       if (Router.asPath !== '/cart') {
         Router.push('/cart');
       }
+
+    //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.ADD_CART_ITEM_ERROR,
@@ -60,6 +75,7 @@ export const removeFromCart =
       payload: id,
     });
     try {
+      //eslint-disable-next-line
     } catch (error: any) {
       console.log(error.response.data.message);
     }
@@ -83,6 +99,7 @@ export const saveShippingAddress =
       });
 
       Router.push('/payment');
+      //eslint-disable-next-line
     } catch (error: any) {
       console.log(error.response.data.message);
     }
@@ -107,10 +124,11 @@ export const getCart = () => async (dispatch: Dispatch<CartAction>) => {
       type: ActionTypes.CALCULATE_PRICES,
       payload: newCart,
     });
+    //eslint-disable-next-line
   } catch (error: any) {
     dispatch({
       type: ActionTypes.GET_CART_ERROR,
-      payload: error.response.data.message,
+      payload: error.response.data.message, 
     });
   }
 };
@@ -132,6 +150,7 @@ export const savePaymentMethod =
       });
 
       Router.push('/placeorder');
+      //eslint-disable-next-line
     } catch (error: any) {
       console.log(error.response.data.message);
     }

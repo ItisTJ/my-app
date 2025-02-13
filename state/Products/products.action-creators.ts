@@ -12,7 +12,7 @@ export const fetchProducts =
       dispatch({
         type: ActionTypes.FETCH_PRODUCTS_START,
       });
-
+      
       const { data } = await proshopAPI.get(
         `/products?keyword=${keyword}&pageId=${pageId}`
       );
@@ -21,6 +21,8 @@ export const fetchProducts =
         type: ActionTypes.FETCH_PRODUCTS_SUCCESS,
         payload: data,
       });
+
+      //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.FETCH_PRODUCTS_ERROR,
@@ -42,6 +44,7 @@ export const fetchTopRatedProducts =
         type: ActionTypes.FETCH_TOP_PRODUCTS_SUCCESS,
         payload: data,
       });
+      //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.FETCH_TOP_PRODUCTS_ERROR,
@@ -63,6 +66,7 @@ export const fetchProduct =
         type: ActionTypes.FETCH_PRODUCT_SUCCESS,
         payload: data,
       });
+      //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.FETCH_PRODUCT_ERROR,
@@ -95,6 +99,7 @@ export const deleteProduct =
         type: ActionTypes.DELETE_PRODUCT_SUCCESS,
         payload: null,
       });
+      //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.DELETE_PRODUCT_ERROR,
@@ -122,6 +127,7 @@ export const createProduct =
       });
 
       Router.push(`/admin/products/edit/${data._id}`);
+      //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.CREATE_PRODUCT_ERROR,
@@ -154,6 +160,7 @@ export const updateProduct =
       });
 
       Router.push('/admin/products');
+      //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.UPDATE_PRODUCT_ERROR,
@@ -188,6 +195,7 @@ export const createProductReview =
       dispatch({
         type: ActionTypes.CREATE_PRODUCT_REVIEW_RESET,
       });
+      //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.CREATE_PRODUCT_REVIEW_ERROR,
