@@ -8,7 +8,6 @@ import { ActionTypes } from './cart.action-types';
 import { CartAction } from './cart.actions';
 import { cartWithPrices } from '../../utils';
 import Router from 'next/router';
-import { mockCart } from './mockCart';
 
 interface AddToCart {
   qty: number;
@@ -28,7 +27,7 @@ export const addToCart =
         });
       }
 
-      /*const { data } = await proshopAPI.post(
+      const { data } = await proshopAPI.post(
         '/cart',
         {
           product,
@@ -36,21 +35,11 @@ export const addToCart =
           productId,
         },
         { withCredentials: true }
-      );*/
-
-      //use mock data
-      const mockItem = mockCart.find(
-        (item) => item.product._id === productId
       );
-
-      if (mockItem) {
-        const { product:, qty: mockQty } = mockItem;
-        qty = mockQty;
-      }
 
       dispatch({
         type: ActionTypes.ADD_CART_ITEM_SUCCESS,
-        payload: mockItem,
+        payload: data,
       });
 
       if (Router.asPath !== '/cart') {
