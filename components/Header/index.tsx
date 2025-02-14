@@ -12,22 +12,22 @@ const Header = () => {
     <header>
   <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
     <Container>
-      <Link href="/" legacyBehavior>
+      <Link href="/" passHref legacyBehavior>
         <Navbar.Brand>ElecShop</Navbar.Brand>
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <SearchBox />
         <Nav className="ms-auto">
-          <Link href="/cart" legacyBehavior>
-            <Nav.Link>
-              <i className="fas fa-shopping-cart"></i> Cart
-            </Nav.Link>
-          </Link>
+            <Link href="/cart" passHref legacyBehavior>
+              <Nav.Link>
+                <i className="fas fa-shopping-cart"></i> Cart
+              </Nav.Link>
+            </Link>
 
           {data ? (
             <NavDropdown title={data.name} id="username">
-              <Link href="/profile" legacyBehavior>
+              <Link href="/profile" passHref legacyBehavior>
                 <NavDropdown.Item>Profile</NavDropdown.Item>
               </Link>
               <NavDropdown.Item onClick={() => logout()}>
@@ -35,7 +35,7 @@ const Header = () => {
               </NavDropdown.Item>
             </NavDropdown>
           ) : (
-            <Link href="/login" legacyBehavior>
+            <Link href="/login" passHref legacyBehavior>
               <Nav.Link>
                 <i className="fas fa-user"></i> Sign In
               </Nav.Link>
@@ -44,13 +44,13 @@ const Header = () => {
 
           {data && data.isAdmin && (
             <NavDropdown title="Admin" id="admin-menu">
-              <Link href="/admin/users" legacyBehavior>
+              <Link href="/admin/users" passHref legacyBehavior>
                 <NavDropdown.Item>Users</NavDropdown.Item>
               </Link>
-              <Link href="/admin/products" legacyBehavior>
+              <Link href="/admin/products" passHref legacyBehavior>
                 <NavDropdown.Item>Products</NavDropdown.Item>
               </Link>
-              <Link href="/admin/orders" legacyBehavior>
+              <Link href="/admin/orders" passHref legacyBehavior>
                 <NavDropdown.Item>Orders</NavDropdown.Item>
               </Link>
             </NavDropdown>

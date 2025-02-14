@@ -6,7 +6,7 @@ interface PaginateProps {
   pages: number;
   page: number;
   isAdmin?: boolean;
-  keyword?: query;
+  keyword?: string;
 }
 
 const Paginate: React.FC<PaginateProps> = ({
@@ -27,7 +27,7 @@ const Paginate: React.FC<PaginateProps> = ({
                 : `/page/${x + 1}`
               : `/admin/products/page/${x + 1}`
           }
-          passHref
+          passHref legacyBehavior
         >
           <Pagination.Item active={x + 1 === page}>{x + 1}</Pagination.Item>
         </Link>
