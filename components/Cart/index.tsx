@@ -14,6 +14,16 @@ import Message from '../Message';
 import Loader from '../Loader';
 import { useRouter } from 'next/router';
 
+// Define the type for a cart item
+interface CartItem {
+  productId: string;
+  image: string;
+  name: string;
+  price: number;
+  qty: number;
+  countInStock: number;
+}
+
 const Cart: React.FC = () => {
   const router = useRouter();
 
@@ -27,7 +37,6 @@ const Cart: React.FC = () => {
 
   const onCheckoutHandler = () => {
     const redirect = data ? '/shipping' : '/login';
-
     router.push(redirect);
   };
 
@@ -46,7 +55,7 @@ const Cart: React.FC = () => {
             ) : error ? (
               <Message variant="danger">{error}</Message>
             ) : (
-              cartItems.map(item => (
+              cartItems.map((item: CartItem) => (
                 <ListGroup.Item key={randomID()}>
                   <Row>
                     <Col md={2}>
@@ -98,12 +107,13 @@ const Cart: React.FC = () => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                Subtotal (
+                {cartItems.reduce((acc: number, item: CartItem) => acc + item.qty, 0)})
                 items
               </h2>
               $
               {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
+                .reduce((acc: number, item: CartItem) => acc + item.qty * item.price, 0)
                 .toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>

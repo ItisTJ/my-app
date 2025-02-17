@@ -1,8 +1,5 @@
 import { Dispatch } from 'redux';
-import {
-  ProductInterface,
-  ShippingDetails,
-} from '../../interfaces';
+import { ProductInterface, ShippingDetails } from '../../interfaces';
 import { proshopAPI } from '../../lib';
 import { ActionTypes } from './cart.action-types';
 import { CartAction } from './cart.actions';
@@ -15,7 +12,10 @@ interface AddToCart {
   product?: ProductInterface;
 }
 
-
+// Utility function to extract error message
+const getErrorMessage = (error: any): string => {
+  return error.response?.data?.message || error.message || 'An error occurred';
+};
 
 export const addToCart =
   ({ qty, productId, product }: AddToCart) =>
@@ -45,28 +45,25 @@ export const addToCart =
       if (Router.asPath !== '/cart') {
         Router.push('/cart');
       }
-
-    //eslint-disable-next-line
     } catch (error: any) {
       dispatch({
         type: ActionTypes.ADD_CART_ITEM_ERROR,
-        payload: error.response.data.message,
+        payload: getErrorMessage(error),
       });
     }
   };
 
 export const removeFromCart =
   (id: string) => async (dispatch: Dispatch<CartAction>) => {
-    await proshopAPI.delete(`/cart/${id}`, { withCredentials: true });
-
-    dispatch({
-      type: ActionTypes.REMOVE_CART_ITEM,
-      payload: id,
-    });
     try {
-      //eslint-disable-next-line
+      await proshopAPI.delete(`/cart/${id}`, { withCredentials: true });
+
+      dispatch({
+        type: ActionTypes.REMOVE_CART_ITEM,
+        payload: id,
+      });
     } catch (error: any) {
-      console.log(error.response.data.message);
+      console.log(getErrorMessage(error));
     }
   };
 
@@ -88,9 +85,8 @@ export const saveShippingAddress =
       });
 
       Router.push('/payment');
-      //eslint-disable-next-line
     } catch (error: any) {
-      console.log(error.response.data.message);
+      console.log(getErrorMessage(error));
     }
   };
 
@@ -113,11 +109,10 @@ export const getCart = () => async (dispatch: Dispatch<CartAction>) => {
       type: ActionTypes.CALCULATE_PRICES,
       payload: newCart,
     });
-    //eslint-disable-next-line
   } catch (error: any) {
     dispatch({
       type: ActionTypes.GET_CART_ERROR,
-      payload: error.response.data.message, 
+      payload: getErrorMessage(error),
     });
   }
 };
@@ -139,8 +134,7 @@ export const savePaymentMethod =
       });
 
       Router.push('/placeorder');
-      //eslint-disable-next-line
     } catch (error: any) {
-      console.log(error.response.data.message);
+      console.log(getErrorMessage(error));
     }
   };
