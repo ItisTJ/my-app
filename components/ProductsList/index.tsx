@@ -7,7 +7,7 @@ import Message from '../Message';
 import Paginate from '../Paginate';
 
 interface ProductListProps {
-  pageId?: query;
+  pageId?: string;
 }
 
 const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
@@ -64,7 +64,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
               </tr>
             </thead>
             <tbody>
-              {products.map(_product => (
+              {products.map(( _product: { _id: string; name: string; price: number; category: string; brand: string }) => (
                 <tr key={_product._id}>
                   <td>{_product._id}</td>
                   <td>{_product.name}</td>
