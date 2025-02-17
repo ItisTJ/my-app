@@ -1,6 +1,7 @@
 //importing components
 import Link from 'next/link';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+//import Image from 'next/image';
 import { useTypedSelector, useUserActions } from '../../hooks';
 import SearchBox from '../SearchBox';
 
@@ -13,7 +14,9 @@ const Header = () => {
   <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
     <Container>
       <Link href="/" passHref legacyBehavior>
-        <Navbar.Brand>ElecShop</Navbar.Brand>
+        <Navbar.Brand>
+          {/*<Image src="/logoC.png" alt="logo" width={200} height={80} priority />*/}Sellaro
+        </Navbar.Brand>
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

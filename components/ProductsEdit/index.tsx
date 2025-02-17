@@ -59,6 +59,7 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
     updateProduct(pageId as string, productDetails);
   };
 
+  //eslint-disable-next-line
   const uploadFileHandler = async (e: ChangeEvent<any>) => {
     const file = e.target.files[0];
     const formData = new FormData();
