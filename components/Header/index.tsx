@@ -56,6 +56,15 @@ const Header = () => {
               <Link href="/admin/orders" passHref legacyBehavior>
                 <NavDropdown.Item>Orders</NavDropdown.Item>
               </Link>
+              <Link href = "/admin/pages" passHref legacyBehavior>
+                <NavDropdown.Item>Update Header</NavDropdown.Item>
+              </Link>
+              <Link href = "/admin/pages" passHref legacyBehavior>
+                <NavDropdown.Item>Updatet Slider</NavDropdown.Item>
+              </Link>
+              <Link href = "/admin/pages" passHref legacyBehavior>
+                <NavDropdown.Item>Update Footer</NavDropdown.Item>
+              </Link>
             </NavDropdown>
           )}
         </Nav>
