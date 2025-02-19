@@ -1,8 +1,8 @@
-//importing hooks, types & utils
+// Importing hooks, types & utils
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import { homeConfig } from '../../utils';
-//importing components
+// Importing components
 import ProductDetails from '../../components/ProductDetails';
 import SEO from '../../components/SEO';
 
