@@ -6,6 +6,7 @@ import {
   OrderActionCreators,
   ProductsActionCreators,
   UserActionCreators,
+  SliderActionCreators,
 } from '../state';
 
 export const useProductsActions = () => {
@@ -13,6 +14,15 @@ export const useProductsActions = () => {
 
   return useMemo(() => {
     return bindActionCreators(ProductsActionCreators, dispatch);
+  }, [dispatch]);
+};
+
+
+export const useSliderActions = () => {
+  const dispatch = useDispatch();
+
+  return useMemo(() => {
+    return bindActionCreators(SliderActionCreators, dispatch);
   }, [dispatch]);
 };
 
