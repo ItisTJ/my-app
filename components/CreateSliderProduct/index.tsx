@@ -1,9 +1,10 @@
-import { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState, useEffect, ChangeEvent } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useTypedSelector, useSliderActions } from "../../hooks";
 import FormContainer from "../../components/FormContainer";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
+import { proshopAPI } from "../../lib";
 
 const SliderUpload = () => {
   const initialData = {
@@ -19,28 +20,65 @@ const SliderUpload = () => {
 
   const [sliderData, setSliderData] = useState(initialData);
   const [message, setMessage] = useState<string | null | string[]>(error);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   useEffect(() => {
     setMessage(error);
   }, [error]);
 
-  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     const { name, description, image } = sliderData;
-
+  
     if (!name || !description || !image) {
       setMessage("All fields are required.");
       return;
     }
+  
+    try {
+      const config = {
+        headers: { "Content-Type": "application/json" }, // Ensure JSON format
+      };
+  
+      const response = await proshopAPI.post(
+        "/slider/upload",
+        { name, description, image }, // Send as JSON
+        config
+      );
+  
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Upload Error:", error);
+      setMessage("Failed to upload slider item.");
+    }
+  };
+  
 
-    // FormData for file upload
+  const uploadFileHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("image", image);
+    formData.append("image", file);
 
-    uploadSliderItem(formData);
+    try {
+      const config = {
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+
+      const { data } = await proshopAPI.post("/upload", formData, config);
+
+      console.log("Image URL:", data);
+      setSliderData({...sliderData,  image: data });
+
+    } catch (error) {
+      console.error("Image Upload Error:", error);
+      setMessage("Image upload failed.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -76,18 +114,12 @@ const SliderUpload = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="image">
-          <Form.Label>Upload Image</Form.Label>
-          <Form.Control
-            type="file"
-            accept="image/*"
-            onChange={(e) =>
-              setSliderData({
-                ...sliderData,
-                image: e.target.files ? e.target.files[0] : null,
-              })
-            }
-          ></Form.Control>
+        <Form.Group controlId="image" className="py-2">
+              <Form.Label>Image</Form.Label>
+              <Form.Group controlId="formFile" onChange={uploadFileHandler}>
+                <Form.Control type="file" />
+              </Form.Group>
+              {uploading && <Loader />}
         </Form.Group>
 
         <Button type="submit" variant="primary" className="my-1">
