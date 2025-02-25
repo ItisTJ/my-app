@@ -5,27 +5,6 @@ import {
 import { Dispatch } from "redux";
 
 
-export const uploadSliderItem = (formData: FormData) => async (dispatch: any) => {
-  try {
-    dispatch({ type: ActionTypes.SLIDER_UPLOAD_REQUEST });
-
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
-    console.log("formData", formData);
-    const { data } = await axios.post("http://localhost:4000/slider/upload", formData, config);
-    console.log("data", data);
-
-    dispatch({ type: ActionTypes.SLIDER_UPLOAD_SUCCESS, payload: data });
-  } catch (error: any) {
-    dispatch({
-      type: ActionTypes.SLIDER_UPLOAD_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message + " Upload failed "
-          : error.message,
-    });
-  }
-};
-
 
 // ✅ Fetch Sliders (Redux Integrated)
 export const fetchSliders = () => async (dispatch: Dispatch) => {
