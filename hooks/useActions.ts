@@ -7,6 +7,7 @@ import {
   ProductsActionCreators,
   UserActionCreators,
   SliderActionCreators,
+  FooterActionCreators,
 } from '../state';
 
 export const useProductsActions = () => {
@@ -25,6 +26,15 @@ export const useSliderActions = () => {
     return bindActionCreators(SliderActionCreators, dispatch);
   }, [dispatch]);
 };
+
+export const useFooterActions = () => {
+  const dispatch = useDispatch();
+
+  return useMemo(() => {
+    return bindActionCreators(FooterActionCreators, dispatch);
+  }, [dispatch]);
+};
+
 
 export const useCartActions = () => {
   const dispatch = useDispatch();

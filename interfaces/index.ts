@@ -19,6 +19,13 @@ export interface SliderInterface {
   description: string; 
 }
 
+export interface FooterInterface {
+  _id: string;
+  name: string; 
+  image: string;
+  description: string; 
+}
+
 export interface CartItemInterface {
   productId: string;
   name: string;
