@@ -1,6 +1,6 @@
 import { FormEvent, useState, useEffect, ChangeEvent } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { useTypedSelector, useSliderActions } from "../../hooks";
+import { useTypedSelector } from "../../hooks";
 import FormContainer from "../../components/FormContainer";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
@@ -8,12 +8,11 @@ import { proshopAPI } from "../../lib";
 
 const SliderUpload = () => {
   const initialData = {
-    name: "",
-    description: "",
+    name: "Sample Name",
+    description: "Sample Description",
     image: null as File | null,
   };
 
-  const { uploadSliderItem } = useSliderActions(); // Replace with your actual upload function
   const { loading, error, success } = useTypedSelector(
     (state) => state.slider
   );
@@ -48,6 +47,10 @@ const SliderUpload = () => {
       );
   
       console.log("Response:", response.data);
+      window.location.reload(); //refreshs the browser
+
+
+      setSliderData(initialData);
     } catch (error) {
       console.error("Upload Error:", error);
       setMessage("Failed to upload slider item.");
@@ -86,7 +89,7 @@ const SliderUpload = () => {
       <h1>Upload Slider Item</h1>
 
       {message && <Message variant="danger">{message}</Message>}
-      {success && <Message variant="success">Upload successful!</Message>}
+      {/*{success && window.alert("Slider item uploaded successfully.")}*/}
       {loading && <Loader />}
 
       <Form onSubmit={onSubmitHandler}>
