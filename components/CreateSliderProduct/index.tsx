@@ -10,7 +10,7 @@ const SliderUpload = () => {
   const initialData = {
     name: "Sample Name",
     description: "Sample Description",
-    image: null as File | null,
+    image: "", // Image URL
   };
 
   const { loading, error, success } = useTypedSelector(

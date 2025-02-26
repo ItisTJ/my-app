@@ -16,7 +16,7 @@ const FooterInitialState: FooterState = {
   success: false,
 };
 
-export const FooterReducer = (
+export const footerReducer = (
   state: FooterState = FooterInitialState,
   action: FooterAction
 ): FooterState => {
@@ -61,4 +61,4 @@ export const FooterReducer = (
   }
 };
 
-export default FooterReducer;
+export default footerReducer;

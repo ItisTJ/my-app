@@ -26,6 +26,7 @@ import {
 
 
 import { sliderReducer } from './Slider/slider.reducers';
+import { footerReducer } from './Footer/footer.reducers';
 
 
 export const reducers = combineReducers({
@@ -48,6 +49,7 @@ export const reducers = combineReducers({
   userOrders: userOrdersReducer as never,
   users: usersReducer as never,
   slider: sliderReducer as never,
+  footer: footerReducer as never,
 });
 
 export type RootState = ReturnType<typeof reducers>;
