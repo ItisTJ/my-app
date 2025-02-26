@@ -8,7 +8,6 @@ const LoginPage: NextPage = () => {
     <>
       <SEO {...homeConfig} />
       <main className="wrapper py-5">
-        <br></br><br></br>
         <CreateFooterProduct />   
       </main>
     </>

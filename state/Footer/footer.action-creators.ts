@@ -6,12 +6,13 @@ import { Dispatch } from "redux";
 
 
 
-// ✅ Fetch FOOTERs (Redux Integrated)
+// ✅ F (Redux Integrated)
 export const fetchFooter = () => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.FOOTER_FETCH_REQUEST });
 
-    const { data } = await axios.get("http://localhost:4000/FOOTER");
+    const { data } = await axios.get("http://localhost:4000/footer");
+    console.log("Footer Data:", data);
 
     dispatch({ type: ActionTypes.FOOTER_FETCH_SUCCESS, payload: data });
   } catch (error: any) {
@@ -23,18 +24,18 @@ export const fetchFooter = () => async (dispatch: Dispatch) => {
 };
 
 
-// ✅ Delete FOOTER
-export const deleteFooter = (id: string) => async (dispatch: Dispatch) => {
-  try {
-    dispatch({ type: ActionTypes.FOOTER_DELETE_REQUEST });
+// ✅ Delete Slider
+// export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {
+//   try {
+//     dispatch({ type: ActionTypes.FOOTER_DELETE_FAIL });
 
-    await axios.delete(`http://localhost:4000/FOOTERs/${id}`);
+//     await axios.delete(`http://localhost:4000/sliders/${id}`);
 
-    dispatch({ type: ActionTypes.FOOTER_DELETE_SUCCESS, payload: id });
-  } catch (error: any) {
-    dispatch({
-      type: ActionTypes.FOOTER_DELETE_FAIL,
-      payload: error.response?.data?.message ? error.response.data.message + " Delete failed" : error.message,
-    });
-  }
-};
+//     dispatch({ type: ActionTypes.FOOTER_DELETE_SUCCESS, payload: id });
+//   } catch (error: any) {
+//     dispatch({
+//       type: ActionTypes.FOOTER_DELETE_FAIL,
+//       payload: error.response?.data?.message ? error.response.data.message + " Delete failed" : error.message,
+//     });
+//   }
+// };
