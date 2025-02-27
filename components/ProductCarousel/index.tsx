@@ -3,23 +3,25 @@ import Link from 'next/link';
 import { Carousel, Image } from 'react-bootstrap';
 import Loader from '../Loader';
 import Message from '../Message';
-import { useProductsActions, useTypedSelector } from '../../hooks';
+import { useSliderActions, useTypedSelector } from '../../hooks';
 
 const ProductCarousel = () => {
-  const { fetchTopRatedProducts } = useProductsActions();
+  const { fetchSliders } = useSliderActions();
 
   const { loading, error, data } = useTypedSelector(
-    state => state.productsTopRated
+    state => state.slider || { loading: false, error: null, data: null }
   );
 
   useEffect(() => {
-    fetchTopRatedProducts();
-  }, [fetchTopRatedProducts]);
+    fetchSliders();
+  }, [fetchSliders]);
 
   return loading ? (
     <Loader />
   ) : error ? (
     <Message variant="danger">{error}</Message>
+  ) : !data || data.length === 0 ? ( // Ensure data is not null before accessing length
+    <Message variant="info">No products available</Message>
   ) : (
     <Carousel pause="hover" className="bg-dark">
       {data.map(_product => (
