@@ -3,51 +3,52 @@ import Link from "next/link";
 import { Button, Col, Form, Row, Table, Image } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../hooks";
-import { fetchFooter } from "../../state/Footer/footer.action-creators";
+import { fetchHeader } from "../../state/Header/header.action-creators";
 import FormContainer from "../../components/FormContainer";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { proshopAPI } from "../../lib";
 
-const FooterManager = () => {
+const HeaderManager = () => {
   const dispatch = useDispatch();
 
   // Redux state for footer data
-  const { loading, error, data } = useTypedSelector((state) => state.footer || { loading: false, error: null, data: [] });
+  const { loading, error, data } = useTypedSelector((state) => state.header || { loading: false, error: null, data: [] });
+  
 
   // Assume there's only one data entry
-  const footer = Array.isArray(data) && data.length > 0 ? data[0] : null;
-  console.log("Footer Data(client):", data);
+  const header = Array.isArray(data) && data.length > 0 ? data[0] : null;
+  console.log("Header Data(client):", data);
 
   // Form state
-  const [footerData, setFooterData] = useState({
-    name: footer?.name || "",
-    description: footer?.description || "",
-    image: footer?.image || "",
+  const [headerData, setHeaderData] = useState({
+    name: header?.name || "Sample name",
+    description: header?.description || "Sample Description",
+    image: header?.image || "",
   });
 
   const [message, setMessage] = useState<string | null | string[]>(error);
   const [uploading, setUploading] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(fetchFooter());
+    dispatch(fetchHeader());
   }, [dispatch]);
 
   // Update form state when Redux data is loaded
   useEffect(() => {
-    if (footer) {
-      setFooterData({
-        name: footer.name,
-        description: footer.description,
-        image: footer.image,
+    if (header) {
+      setHeaderData({
+        name: header.name,
+        description: header.description,
+        image: header.image,
       });
     }
-  }, [footer]);
+  }, [header]);
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, description, image } = footerData;
+    const { name, description, image } = headerData;
 
     if (!name || !description || !image) {
       setMessage("All fields are required.");
@@ -59,10 +60,10 @@ const FooterManager = () => {
         headers: { "Content-Type": "application/json" },
       };
 
-      await proshopAPI.post("/footer/upload", { name, description, image }, config);
+      await proshopAPI.post("/header/upload", { name, description, image }, config);
       window.location.reload(); // Refresh browser
 
-      setFooterData({
+      setHeaderData({
         name: "",
         description: "",
         image: "",
@@ -87,7 +88,7 @@ const FooterManager = () => {
       };
 
       const { data } = await proshopAPI.post("/upload", formData, config);
-      setFooterData({ ...footerData, image: data });
+      setHeaderData({ ...headerData, image: data });
     } catch (error) {
       console.error("Image Upload Error:", error);
       setMessage("Image upload failed.");
@@ -107,25 +108,25 @@ const FooterManager = () => {
 
           {/* Update Form */}
           <FormContainer>
-            <h2>Update Footer</h2>
+            <h2>Update Header</h2>
 
             {message && <Message variant="danger">{message}</Message>}
             {loading && <Loader />}
 
             <Form onSubmit={onSubmitHandler}>
               <Form.Group controlId="name">
-                <Form.Label>Footer Name</Form.Label>
+                <Form.Label>Header Name</Form.Label>
                 <Row>
                   <Col md={6}>
                     <Form.Control
                       type="text"
                       placeholder="Enter name"
-                      value={footerData.name}
-                      onChange={(e) => setFooterData({ ...footerData, name: e.target.value })}
+                      value={headerData.name}
+                      onChange={(e) => setHeaderData({ ...headerData, name: e.target.value })}
                     />
                   </Col>
                   <Col md={6}>
-                    <Form.Text className="text-muted">{footer?.name || "No data"}</Form.Text>
+                    <Form.Text className="text-muted">{header?.name || "No data"}</Form.Text>
                   </Col>
                 </Row>
               </Form.Group>
@@ -137,12 +138,12 @@ const FooterManager = () => {
                     <Form.Control
                       as="textarea"
                       placeholder="Enter description"
-                      value={footerData.description}
-                      onChange={(e) => setFooterData({ ...footerData, description: e.target.value })}
+                      value={headerData.description}
+                      onChange={(e) => setHeaderData({ ...headerData, description: e.target.value })}
                     />
                   </Col>
                   <Col md={6}>
-                    <Form.Text className="text-muted">{footer?.description || "No data"}</Form.Text>
+                    <Form.Text className="text-muted">{header?.description || "No data"}</Form.Text>
                   </Col>
                 </Row>
               </Form.Group>
@@ -155,8 +156,8 @@ const FooterManager = () => {
                     {uploading && <Loader />}
                   </Col>
                   <Col md={6}>
-                    {footer?.image && (
-                      <Image src={footer.image} alt="Current" width={50} height={50} fluid />
+                    {header?.image && (
+                      <Image src={header.image} alt="Current" width={50} height={50} fluid />
                     )}
                   </Col>
                 </Row>
@@ -173,4 +174,4 @@ const FooterManager = () => {
   );
 };
 
-export default FooterManager;
+export default HeaderManager;

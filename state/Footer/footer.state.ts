@@ -1,15 +1,15 @@
-import { UserInterface } from '../../interfaces';
+import { FooterInterface } from '../../interfaces';
 
-export interface UserState {
+export interface FooterState {
   loading: boolean;
   error: string | null;
-  data: UserInterface | null;
+  data: FooterInterface | null;
   success?: boolean;
 }
 
-export interface UsersState {
+export interface FooterState {
   loading: boolean;
   error: string | null;
-  data: UserInterface[];
+  data: FooterInterface[];
   success?: boolean;
 }

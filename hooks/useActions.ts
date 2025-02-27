@@ -8,6 +8,7 @@ import {
   UserActionCreators,
   SliderActionCreators,
   FooterActionCreators,
+  HeaderActionCreators,
 } from '../state';
 
 export const useProductsActions = () => {
@@ -35,6 +36,13 @@ export const useFooterActions = () => {
   }, [dispatch]);
 };
 
+export const useHeaderActions = () => {
+  const dispatch = useDispatch();
+
+  return useMemo(() => {
+    return bindActionCreators(HeaderActionCreators, dispatch);
+  }, [dispatch]);
+};
 
 export const useCartActions = () => {
   const dispatch = useDispatch();
