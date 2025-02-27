@@ -78,7 +78,7 @@ const Header = () => {
         <Container>
           <Link href="/" passHref legacyBehavior>
             <Navbar.Brand>
-              {!imageError ? (
+              {headerSettings.logo.match(/\.(jpeg|jpg|gif|png|svg|webp)$/i) ? (
                 <img
                   src={headerSettings.logo}
                   alt={headerSettings.alt}
