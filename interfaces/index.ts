@@ -23,7 +23,7 @@ export interface HeaderInterface {
   _id: string;
   name: string; 
   image: string;
-  description: string; 
+  color: string; 
 }
 
 export interface FooterInterface {
