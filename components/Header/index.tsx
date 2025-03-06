@@ -82,8 +82,8 @@ const Header = () => {
                 <img
                   src={headerSettings.logo}
                   alt={headerSettings.alt}
-                  width={150}
-                  height={100}
+                  width={100}
+                  height={50}
                   style={{ objectFit: "contain", display: "block" }}
                   onError={() => setImageError(true)}
                 />

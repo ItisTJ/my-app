@@ -30,7 +30,7 @@ const ProductCarousel = () => {
           <Link href={`/product/${_product._id}`} passHref>
             <Carousel.Caption className="carousel-caption">
               <h2>
-                {_product.name} (${_product.price})
+                {_product.name} ({_product.description})
               </h2>
             </Carousel.Caption>
           </Link>

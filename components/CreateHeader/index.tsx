@@ -153,14 +153,17 @@ const HeaderManager = () => {
                   </Col>
                   <Col md={6}>
                     {header?.image && (
-                      <Image src={header.image} alt="Current" width={100} height={100} fluid />
+                      <>
+                        <Form.Text className="text-muted">Current Logo</Form.Text>
+                        <Image src={header?.image} alt="Current" width={100} height={100} fluid />
+                      </>
                     )}
                   </Col>
                 </Row>
               </Form.Group>
 
               <Button type="submit" variant="primary" className="my-1">
-                Upload
+                Update Header
               </Button>
             </Form>
           </FormContainer>
