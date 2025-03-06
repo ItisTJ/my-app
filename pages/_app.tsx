@@ -9,6 +9,11 @@ import MainLayout from '../layouts/MainLayout';
 import { Container } from 'react-bootstrap';
 import { Provider } from 'react-redux';
 
+import "../styles/globals.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
+
+
 function MyApp({ Component, pageProps }: AppProps) {
   const initialState = {
     ...pageProps.initialReduxState,

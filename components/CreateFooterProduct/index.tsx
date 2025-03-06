@@ -1,6 +1,6 @@
 import { useEffect, useState, FormEvent, ChangeEvent } from "react";
 import Link from "next/link";
-import { Button, Col, Form, Row, Table, Image } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../hooks";
 import { fetchFooter } from "../../state/Footer/footer.action-creators";
@@ -14,32 +14,36 @@ const FooterManager = () => {
 
   // Redux state for footer data
   const { loading, error, data } = useTypedSelector((state) => state.footer || { loading: false, error: null, data: [] });
-
-  // Assume there's only one data entry
   const footer = Array.isArray(data) && data.length > 0 ? data[0] : null;
-  console.log("Footer Data(client):", data);
 
-  // Form state
   const [footerData, setFooterData] = useState({
-    name: footer?.name || "",
-    description: footer?.description || "",
-    image: footer?.image || "",
+    contactNumber: footer?.contactNumber || "",
+    email: footer?.email || "",
+    aboutUs: footer?.aboutUs || "",
+    fbLink: footer?.fbLink || "",
+    whatsappLink: footer?.whatsappLink || "",
+    instaLink: footer?.instaLink || "",
+    ytLink: footer?.ytLink || "",
+    ttLink: footer?.ttLink || "",
   });
 
   const [message, setMessage] = useState<string | null | string[]>(error);
-  const [uploading, setUploading] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(fetchFooter());
   }, [dispatch]);
 
-  // Update form state when Redux data is loaded
   useEffect(() => {
     if (footer) {
       setFooterData({
-        name: footer.name,
-        description: footer.description,
-        image: footer.image,
+        contactNumber: footer.contactNumber,
+        email: footer.email,
+        aboutUs: footer.aboutUs,
+        fbLink: footer.fbLink,
+        whatsappLink: footer.whatsappLink,
+        instaLink: footer.instaLink,
+        ytLink: footer.ytLink,
+        ttLink: footer.ttLink,
       });
     }
   }, [footer]);
@@ -47,52 +51,15 @@ const FooterManager = () => {
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, description, image } = footerData;
-
-    if (!name || !description || !image) {
-      setMessage("All fields are required.");
-      return;
-    }
-
     try {
       const config = {
         headers: { "Content-Type": "application/json" },
       };
-
-      await proshopAPI.post("/footer/upload", { name, description, image }, config);
-      window.location.reload(); // Refresh browser
-
-      setFooterData({
-        name: "",
-        description: "",
-        image: "",
-      });
+      await proshopAPI.post("/footer/upload", footerData, config);
+      window.location.reload();
     } catch (error) {
       console.error("Upload Error:", error);
       setMessage("Failed to upload footer item.");
-    }
-  };
-
-  const uploadFileHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const config = {
-        headers: { "Content-Type": "multipart/form-data" },
-      };
-
-      const { data } = await proshopAPI.post("/upload", formData, config);
-      setFooterData({ ...footerData, image: data });
-    } catch (error) {
-      console.error("Image Upload Error:", error);
-      setMessage("Image upload failed.");
-    } finally {
-      setUploading(false);
     }
   };
 
@@ -103,71 +70,90 @@ const FooterManager = () => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <>
+        <FormContainer>
+          <h1 style={{ textAlign: "center" ,fontSize:"30px"}}>Update Footer</h1>
+          {message && <Message variant="danger">{message}</Message>}
+          <Form onSubmit={onSubmitHandler}>
+            <Form.Group controlId="contactNumber">
+              <Form.Label>Contact Number</Form.Label>
+              <Form.Control
+                type="text"
+                value={footerData.contactNumber}
+                onChange={(e) => setFooterData({ ...footerData, contactNumber: e.target.value })}
+              />
+            </Form.Group>
+            
+            <Form.Group controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                value={footerData.email}
+                onChange={(e) => setFooterData({ ...footerData, email: e.target.value })}
+              />
+            </Form.Group>
 
-          {/* Update Form */}
-          <FormContainer>
-            <h2>Update Footer</h2>
+            <Form.Group controlId="aboutUs">
+              <Form.Label>About Us</Form.Label>
+              <Form.Control
+                type="textarea"
+                as="textarea"
+                rows={10}
+                value={footerData.aboutUs}
+                onChange={(e) => setFooterData({ ...footerData, aboutUs: e.target.value })}
+              />
+            </Form.Group>
 
-            {message && <Message variant="danger">{message}</Message>}
-            {loading && <Loader />}
+            <Form.Group controlId="fbLink">
+              <Form.Label>Facebook Link</Form.Label>
+              <Form.Control
+                type="text"
+                value={footerData.fbLink}
+                onChange={(e) => setFooterData({ ...footerData, fbLink: e.target.value })}
+              />
+            </Form.Group>
 
-            <Form onSubmit={onSubmitHandler}>
-              <Form.Group controlId="name">
-                <Form.Label>Footer Name</Form.Label>
-                <Row>
-                  <Col md={6}>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter name"
-                      value={footerData.name}
-                      onChange={(e) => setFooterData({ ...footerData, name: e.target.value })}
-                    />
-                  </Col>
-                  <Col md={6}>
-                    <Form.Text className="text-muted">{footer?.name || "No data"}</Form.Text>
-                  </Col>
-                </Row>
-              </Form.Group>
+            <Form.Group controlId="whatsappLink">
+              <Form.Label>WhatsApp Link</Form.Label>
+              <Form.Control
+                type="text"
+                value={footerData.whatsappLink}
+                onChange={(e) => setFooterData({ ...footerData, whatsappLink: e.target.value })}
+              />
+            </Form.Group>
 
-              <Form.Group controlId="description" className="py-3">
-                <Form.Label>Description</Form.Label>
-                <Row>
-                  <Col md={6}>
-                    <Form.Control
-                      as="textarea"
-                      placeholder="Enter description"
-                      value={footerData.description}
-                      onChange={(e) => setFooterData({ ...footerData, description: e.target.value })}
-                    />
-                  </Col>
-                  <Col md={6}>
-                    <Form.Text className="text-muted">{footer?.description || "No data"}</Form.Text>
-                  </Col>
-                </Row>
-              </Form.Group>
+            <Form.Group controlId="instaLink">
+              <Form.Label>Instagram Link</Form.Label>
+              <Form.Control
+                type="text"
+                value={footerData.instaLink}
+                onChange={(e) => setFooterData({ ...footerData, instaLink: e.target.value })}
+              />
 
-              <Form.Group controlId="image" className="py-2">
-                <Form.Label>Image</Form.Label>
-                <Row>
-                  <Col md={6}>
-                    <Form.Control type="file" onChange={uploadFileHandler} />
-                    {uploading && <Loader />}
-                  </Col>
-                  <Col md={6}>
-                    {footer?.image && (
-                      <Image src={footer.image} alt="Current" width={50} height={50} fluid />
-                    )}
-                  </Col>
-                </Row>
-              </Form.Group>
+            </Form.Group>
 
-              <Button type="submit" variant="primary" className="my-1">
-                Upload
-              </Button>
-            </Form>
-          </FormContainer>
-        </>
+            <Form.Group controlId="ytLink">
+              <Form.Label>YouTube Link</Form.Label>
+              <Form.Control
+                type="text"
+                value={footerData.ytLink}
+                onChange={(e) => setFooterData({ ...footerData, ytLink: e.target.value })}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="tiktokLink">
+              <Form.Label>TikTok Link</Form.Label>
+              <Form.Control
+                type="text"
+                value={footerData.ttLink}
+                onChange={(e) => setFooterData({ ...footerData, ttLink: e.target.value })}
+              />
+            </Form.Group>
+
+            <br></br>
+
+            <Button type="submit" variant="primary">Update Footer</Button>
+          </Form>
+        </FormContainer>
       )}
     </>
   );

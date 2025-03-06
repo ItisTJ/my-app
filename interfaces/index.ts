@@ -28,9 +28,14 @@ export interface HeaderInterface {
 
 export interface FooterInterface {
   _id: string;
-  name: string; 
-  image: string;
-  description: string; 
+  contactNumber: string;
+  email: string;
+  aboutUs: string;
+  fbLink: string;
+  whatsappLink: string;
+  instaLink: string;
+  ytLink: string;
+  ttLink: string;
 }
 
 export interface CartItemInterface {
