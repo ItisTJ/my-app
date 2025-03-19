@@ -170,7 +170,7 @@ const Footer: React.FC = () => {
 
         {/* Quick Links Section */}
         <div className="flex-4 min-w-[240px]">
-          <Link href={data.aboutUs} className="font-bold text-white transition-all duration-300 hover:text-blue-500 hover:drop-shadow-[0_0_8px_rgba(0,200,255,0.8)]">
+          <Link href="/about" className="font-bold text-white transition-all duration-300 hover:text-blue-500 hover:drop-shadow-[0_0_8px_rgba(0,200,255,0.8)]">
             <h3 className="text-3xl font-semibold mb-3 text-white">
               W h o<br />W e<br />A r e ?
             </h3>
