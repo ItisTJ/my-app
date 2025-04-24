@@ -11,7 +11,7 @@ export const fetchFooter = () => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.FOOTER_FETCH_REQUEST });
 
-    const { data } = await axios.get("http://localhost:4000/footer");
+    const { data } = await axios.get("http://localhost:4000/api/footer");
     console.log("Footer Data:", data);
 
     dispatch({ type: ActionTypes.FOOTER_FETCH_SUCCESS, payload: data });

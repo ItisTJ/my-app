@@ -55,7 +55,7 @@ const FooterManager = () => {
       const config = {
         headers: { "Content-Type": "application/json" },
       };
-      await proshopAPI.post("/footer/upload", footerData, config);
+      await proshopAPI.post("/api/footer/upload", footerData, config);
       window.location.reload();
     } catch (error) {
       console.error("Upload Error:", error);
