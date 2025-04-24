@@ -21,7 +21,7 @@ export const login =
       });
 
       const { data } = await proshopAPI.post(
-        '/auth/login',
+        '/api/auth/login',
         {
           email,
           password,
@@ -64,7 +64,7 @@ export const getCurrentUser =
         type: ActionTypes.GET_CURRENT_USER_START,
       });
 
-      const { data } = await proshopAPI.get('/auth/profile', config);
+      const { data } = await proshopAPI.get('/api/auth/profile', config);
 
       dispatch({
         type: ActionTypes.GET_CURRENT_USER_SUCCESS,
@@ -80,7 +80,7 @@ export const getCurrentUser =
 
 export const logout = () => async (dispatch: Dispatch<UserAction>) => {
   try {
-    await proshopAPI.post('/auth/logout', {}, { withCredentials: true });
+    await proshopAPI.post('/api/auth/logout', {}, { withCredentials: true });
 
     dispatch({
       type: ActionTypes.USER_LOGOUT,
@@ -107,7 +107,7 @@ export const register =
       });
 
       const { data } = await proshopAPI.post(
-        '/auth/register',
+        '/api/auth/register',
         {
           name,
           email,
@@ -150,7 +150,7 @@ export const updateUser =
       });
 
       const { data } = await proshopAPI.put(
-        '/auth/profile',
+        '/api/auth/profile',
         userCredentials,
         config
       );
@@ -182,7 +182,7 @@ export const fetchUsers = () => async (dispatch: Dispatch<UserAction>) => {
       type: ActionTypes.FETCH_USERS_START,
     });
 
-    const { data } = await proshopAPI.get('/users', config);
+    const { data } = await proshopAPI.get('/api/users', config);
 
     dispatch({
       type: ActionTypes.FETCH_USERS_SUCCESS,
@@ -207,7 +207,7 @@ export const deleteUser =
         type: ActionTypes.DELETE_USER_START,
       });
 
-      await proshopAPI.delete(`/users/${id}`, config);
+      await proshopAPI.delete(`/api/users/${id}`, config);
 
       dispatch({
         type: ActionTypes.DELETE_USER_SUCCESS,
@@ -232,7 +232,7 @@ export const fetchUser =
         type: ActionTypes.FETCH_USER_START,
       });
 
-      const { data } = await proshopAPI.get(`/users/${id}`, config);
+      const { data } = await proshopAPI.get(`/api/users/${id}`, config);
 
       dispatch({
         type: ActionTypes.FETCH_USER_SUCCESS,
@@ -259,7 +259,7 @@ export const adminUpdateUser =
       });
 
       const { data } = await proshopAPI.put(
-        `/users/${id}`,
+        `/api/users/${id}`,
         userCredentials,
         config
       );
@@ -273,7 +273,7 @@ export const adminUpdateUser =
         type: ActionTypes.ADMIN_UPDATE_USER_RESET,
       });
 
-      Router.push('/admin/users');
+      Router.push('/api/admin/users');
     } catch (error: any) {
       dispatch({
         type: ActionTypes.ADMIN_UPDATE_USER_ERROR,

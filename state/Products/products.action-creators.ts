@@ -19,7 +19,7 @@ export const fetchProducts =
       });
 
       const { data } = await proshopAPI.get(
-        `/products?keyword=${keyword}&pageId=${pageId}`
+        `/api/products?keyword=${keyword}&pageId=${pageId}`
       );
 
       dispatch({
@@ -41,7 +41,7 @@ export const fetchTopRatedProducts =
         type: ActionTypes.FETCH_TOP_PRODUCTS_START,
       });
 
-      const { data } = await proshopAPI.get('/products/topRated');
+      const { data } = await proshopAPI.get('/api/products/topRated');
 
       dispatch({
         type: ActionTypes.FETCH_TOP_PRODUCTS_SUCCESS,
@@ -62,7 +62,7 @@ export const fetchProduct =
         type: ActionTypes.FETCH_PRODUCT_START,
       });
 
-      const { data } = await proshopAPI.get(`/products/${id}`);
+      const { data } = await proshopAPI.get(`/api/products/${id}`);
 
       dispatch({
         type: ActionTypes.FETCH_PRODUCT_SUCCESS,
@@ -94,7 +94,7 @@ export const deleteProduct =
         type: ActionTypes.DELETE_PRODUCT_START,
       });
 
-      await proshopAPI.delete(`/products/${id}`, config);
+      await proshopAPI.delete(`/api/products/${id}`, config);
 
       dispatch({
         type: ActionTypes.DELETE_PRODUCT_SUCCESS,
@@ -119,14 +119,14 @@ export const createProduct =
         type: ActionTypes.CREATE_PRODUCT_START,
       });
 
-      const { data } = await proshopAPI.post(`/products`, {}, config);
+      const { data } = await proshopAPI.post(`/api/products`, {}, config);
 
       dispatch({
         type: ActionTypes.CREATE_PRODUCT_SUCCESS,
         payload: data,
       });
 
-      Router.push(`/admin/products/edit/${data._id}`);
+      Router.push(`/api/admin/products/edit/${data._id}`);
     } catch (error: any) {
       dispatch({
         type: ActionTypes.CREATE_PRODUCT_ERROR,
@@ -147,7 +147,7 @@ export const updateProduct =
         type: ActionTypes.UPDATE_PRODUCT_START,
       });
 
-      const { data } = await proshopAPI.put(`/products/${id}`, product, config);
+      const { data } = await proshopAPI.put(`/api/products/${id}`, product, config);
 
       dispatch({
         type: ActionTypes.UPDATE_PRODUCT_SUCCESS,
@@ -158,7 +158,7 @@ export const updateProduct =
         type: ActionTypes.UPDATE_PRODUCT_RESET,
       });
 
-      Router.push('/admin/products');
+      Router.push('/api/admin/products');
     } catch (error: any) {
       dispatch({
         type: ActionTypes.UPDATE_PRODUCT_ERROR,
@@ -180,7 +180,7 @@ export const createProductReview =
       });
 
       const { data } = await proshopAPI.put(
-        `/products/${id}/review`,
+        `/api/products/${id}/review`,
         review,
         config
       );

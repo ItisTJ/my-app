@@ -19,14 +19,14 @@ export const createOrder =
         type: ActionTypes.CREATE_ORDER_START,
       });
 
-      const { data } = await proshopAPI.post('/orders', order, config);
+      const { data } = await proshopAPI.post('/api/orders', order, config);
 
       dispatch({
         type: ActionTypes.CREATE_ORDER_SUCCESS,
         payload: data,
       });
 
-      Router.push(`/orders/${data._id}`);
+      Router.push(`/api/orders/${data._id}`);
     } catch (error: any) {
       dispatch({
         type: ActionTypes.CREATE_ORDER_ERROR,
@@ -49,7 +49,7 @@ export const fetchOrder =
         type: ActionTypes.FETCH_ORDER_START,
       });
 
-      const { data } = await proshopAPI.get(`/orders/${id}`, config);
+      const { data } = await proshopAPI.get(`/api/orders/${id}`, config);
 
       dispatch({
         type: ActionTypes.FETCH_ORDER_SUCCESS,
@@ -76,7 +76,7 @@ export const fetchOrders = () => async (dispatch: Dispatch<OrderAction>) => {
       type: ActionTypes.FETCH_ORDERS_START,
     });
 
-    const { data } = await proshopAPI.get('/orders', config);
+    const { data } = await proshopAPI.get('/api/orders', config);
 
     dispatch({
       type: ActionTypes.FETCH_ORDERS_SUCCESS,
@@ -106,7 +106,7 @@ export const payOrder =
       });
 
       const { data } = await proshopAPI.put(
-        `/orders/${orderId}/pay`,
+        `/api/orders/${orderId}/pay`,
         {
           paymentResult,
         },
@@ -139,7 +139,7 @@ export const fetchUserOrders =
         type: ActionTypes.FETCH_USER_ORDERS_START,
       });
 
-      const { data } = await proshopAPI.get(`/orders/myorders`, config);
+      const { data } = await proshopAPI.get(`/api/orders/myorders`, config);
 
       dispatch({
         type: ActionTypes.FETCH_USER_ORDERS_SUCCESS,
@@ -169,7 +169,7 @@ export const deliverOrder =
       });
 
       const { data } = await proshopAPI.put(
-        `/orders/${orderId}/deliver`,
+        `/api/orders/${orderId}/deliver`,
         {},
         config
       );

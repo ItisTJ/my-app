@@ -11,7 +11,7 @@ export const fetchSliders = () => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.SLIDER_FETCH_REQUEST });
 
-    const { data } = await axios.get("http://localhost:4000/slider");
+    const { data } = await axios.get("http://localhost:4000/api/slider");
 
     dispatch({ type: ActionTypes.SLIDER_FETCH_SUCCESS, payload: data });
   } catch (error: any) {
