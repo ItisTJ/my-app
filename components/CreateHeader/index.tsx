@@ -58,7 +58,7 @@ const HeaderManager = () => {
         headers: { "Content-Type": "application/json" },
       };
 
-      await proshopAPI.post("/header/upload", { name, color, image }, config);
+      await proshopAPI.post("/api/header/upload", { name, color, image }, config);
       window.location.reload(); // Refresh browser
 
       setHeaderData({
