@@ -28,7 +28,7 @@ export const addToCart =
       }
 
       const { data } = await proshopAPI.post(
-        '/cart',
+        '/api/cart',
         {
           product,
           qty,
@@ -42,8 +42,8 @@ export const addToCart =
         payload: data,
       });
 
-      if (Router.asPath !== '/cart') {
-        Router.push('/cart');
+      if (Router.asPath !== '/api/cart') {
+        Router.push('/api/cart');
       }
     } catch (error: any) {
       dispatch({
