@@ -11,7 +11,7 @@ export const fetchHeader = () => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.HEADER_FETCH_REQUEST });
 
-    const { data } = await axios.get("http://localhost:4000/api/header");
+    const { data } = await axios.get("http://localhost:8080/api/header");
     console.log("Header Data:", data);
 
     dispatch({ type: ActionTypes.HEADER_FETCH_SUCCESS, payload: data });
@@ -29,7 +29,7 @@ export const fetchHeader = () => async (dispatch: Dispatch) => {
 //   try {
 //     dispatch({ type: ActionTypes.FOOTER_DELETE_FAIL });
 
-//     await axios.delete(`http://localhost:4000/sliders/${id}`);
+//     await axios.delete(`http://localhost:8080/sliders/${id}`);
 
 //     dispatch({ type: ActionTypes.FOOTER_DELETE_SUCCESS, payload: id });
 //   } catch (error: any) {
