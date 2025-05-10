@@ -126,7 +126,7 @@ export const createProduct =
         payload: data,
       });
 
-      Router.push(`/api/admin/products/edit/${data._id}`);
+      Router.push(`/admin/products/edit/${data._id}`);
     } catch (error: any) {
       dispatch({
         type: ActionTypes.CREATE_PRODUCT_ERROR,
@@ -158,7 +158,7 @@ export const updateProduct =
         type: ActionTypes.UPDATE_PRODUCT_RESET,
       });
 
-      Router.push('/api/admin/products');
+      Router.push('/admin/products');
     } catch (error: any) {
       dispatch({
         type: ActionTypes.UPDATE_PRODUCT_ERROR,
