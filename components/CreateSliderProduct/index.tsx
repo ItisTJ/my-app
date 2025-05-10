@@ -71,7 +71,7 @@ const SliderUpload = () => {
         headers: { "Content-Type": "multipart/form-data" },
       };
 
-      const { data } = await proshopAPI.post("/upload", formData, config);
+      const { data } = await proshopAPI.post("/api/upload", formData, config);
 
       console.log("Image URL:", data);
       setSliderData({...sliderData,  image: data });
