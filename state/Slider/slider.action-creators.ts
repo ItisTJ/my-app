@@ -11,7 +11,7 @@ export const fetchSliders = () => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.SLIDER_FETCH_REQUEST });
 
-    const { data } = await axios.get("http://localhost:8080/api/slider");
+    const { data } = await axios.get("http://localhost:4000/api/slider");
 
     dispatch({ type: ActionTypes.SLIDER_FETCH_SUCCESS, payload: data });
   } catch (error: any) {
@@ -28,7 +28,7 @@ export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.SLIDER_DELETE_REQUEST });
 
-    await axios.delete(`http://localhost:8080/sliders/${id}`);
+    await axios.delete(`http://localhost:4000/sliders/${id}`);
 
     dispatch({ type: ActionTypes.SLIDER_DELETE_SUCCESS, payload: id });
   } catch (error: any) {

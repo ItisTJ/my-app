@@ -1,12 +1,12 @@
 import SEO from '../../components/SEO';
 import Cart from '../../components/Cart';
 import { NextPage } from 'next';
-import { cartConfig } from '../../utils';
+import { homeConfig } from '../../utils';
 
 const CartPage: NextPage = () => {
   return (
     <>
-      <SEO {...cartConfig} />
+      <SEO {...homeConfig} />
       <main className="wrapper py-5">
         <Cart />
       </main>
