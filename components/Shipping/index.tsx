@@ -1,11 +1,14 @@
+"use client"
 import FormContainer from '../FormContainer';
-import { Form, Button } from 'react-bootstrap';
 import { FormEvent, useState } from 'react';
+import { motion } from "framer-motion";
 import { ShippingDetails } from '../../interfaces';
 import { useAuth, useCartActions, useTypedSelector } from '../../hooks';
 import CheckoutSteps from '../CheckoutSteps';
 import { useRouter } from 'next/router';
 import Message from '../Message';
+import { MapPin, Building, Mail, Globe, ArrowRight,ArrowLeft } from 'lucide-react';
+import Link from "next/link"
 
 const Shipping = () => {
   useAuth();
@@ -34,90 +37,183 @@ const Shipping = () => {
       postalCode.length < 1
     ) {
       setMessage('All fields are required.');
-
       return null;
     }
 
     saveShippingAddress(shippingAddress);
-
     router.push('/payment');
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
   };
 
   return (
     <FormContainer>
       <CheckoutSteps step1 step2 />
-      <h1>Shipping</h1>
+      
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        className="bg-white rounded-2xl shadow-xl overflow-hidden"
+      >
+        <div className="relative h-24 bg-gradient-to-r from-blue-100 to-teal-100">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="absolute -bottom-10 left-8 bg-white p-4 rounded-full shadow-lg"
+          >
+            <MapPin size={32} className="text-gray-700" strokeWidth={1.5} />
+          </motion.div>
+        </div>
 
-      {message && (
-        <Message variant="danger">
-          {Array.isArray(message) ? message[0] : message}
-        </Message>
-      )}
+        <div className="pt-16 pb-8 px-8">
+          <motion.h1 variants={itemVariants} className="text-2xl font-bold text-gray-800 mb-6">
+            Shipping Details
+          </motion.h1>
 
-      <Form onSubmit={onSubmitHandler}>
-        <Form.Group controlId="address">
-          <Form.Label>Address</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter address"
-            value={shippingAddress.address}
-            onChange={e =>
-              setShippingAddress({
-                ...shippingAddress,
-                address: e.target.value,
-              })
-            }
-          ></Form.Control>
-        </Form.Group>
+          {message && (
+            <motion.div variants={itemVariants} className="mb-6">
+              <Message variant="danger">
+                {Array.isArray(message) ? message[0] : message}
+              </Message>
+            </motion.div>
+          )}
 
-        <Form.Group controlId="city" className="py-3">
-          <Form.Label>City</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter city"
-            value={shippingAddress.city}
-            onChange={e =>
-              setShippingAddress({ ...shippingAddress, city: e.target.value })
-            }
-          ></Form.Control>
-        </Form.Group>
+          <motion.form variants={containerVariants} onSubmit={onSubmitHandler} className="space-y-5">
+            <motion.div variants={itemVariants} className="flex flex-col">
+              <label htmlFor="address" className="mb-2 text-sm font-medium text-gray-700">
+                Address
+              </label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <MapPin size={18} />
+                </div>
+                <input
+                  id="address"
+                  type="text"
+                  placeholder="Enter your address"
+                  value={shippingAddress.address}
+                  onChange={e =>
+                    setShippingAddress({
+                      ...shippingAddress,
+                      address: e.target.value,
+                    })
+                  }
+                  className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                />
+              </div>
+            </motion.div>
 
-        <Form.Group controlId="postalCode">
-          <Form.Label>Postal Code</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter postal code"
-            value={shippingAddress.postalCode}
-            onChange={e =>
-              setShippingAddress({
-                ...shippingAddress,
-                postalCode: e.target.value,
-              })
-            }
-          ></Form.Control>
-        </Form.Group>
+            <motion.div variants={itemVariants} className="flex flex-col">
+              <label htmlFor="city" className="mb-2 text-sm font-medium text-gray-700">
+                City
+              </label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Building size={18} />
+                </div>
+                <input
+                  id="city"
+                  type="text"
+                  placeholder="Enter your city"
+                  value={shippingAddress.city}
+                  onChange={e =>
+                    setShippingAddress({ ...shippingAddress, city: e.target.value })
+                  }
+                  className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                />
+              </div>
+            </motion.div>
 
-        <Form.Group controlId="country" className="py-3">
-          <Form.Label>Country</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter country"
-            value={shippingAddress.country}
-            onChange={e =>
-              setShippingAddress({
-                ...shippingAddress,
-                country: e.target.value,
-              })
-            }
-          ></Form.Control>
-        </Form.Group>
+            <motion.div variants={itemVariants} className="flex flex-col">
+              <label htmlFor="postalCode" className="mb-2 text-sm font-medium text-gray-700">
+                Postal Code
+              </label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Mail size={18} />
+                </div>
+                <input
+                  id="postalCode"
+                  type="text"
+                  placeholder="Enter your postal code"
+                  value={shippingAddress.postalCode}
+                  onChange={e =>
+                    setShippingAddress({
+                      ...shippingAddress,
+                      postalCode: e.target.value,
+                    })
+                  }
+                  className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                />
+              </div>
+            </motion.div>
 
-        <Button type="submit" variant="primary">
-          Continue
-        </Button>
-      </Form>
+            <motion.div variants={itemVariants} className="flex flex-col">
+              <label htmlFor="country" className="mb-2 text-sm font-medium text-gray-700">
+                Country
+              </label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Globe size={18} />
+                </div>
+                <input
+                  id="country"
+                  type="text"
+                  placeholder="Enter your country"
+                  value={shippingAddress.country}
+                  onChange={e =>
+                    setShippingAddress({
+                      ...shippingAddress,
+                      country: e.target.value,
+                    })
+                  }
+                  className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                />
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="pt-4">
+              <button
+                type="submit"
+                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full md:w-auto"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2 font-bold">
+                  Continue to Payment
+                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+                <span className="absolute inset-0 z-0 bg-gradient-to-r from-teal-500 to-rose-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+              </button>
+              <div className="mt-4 text-center">
+                <Link
+                  href="/cart"
+                  className="text-gray-600 hover:text-teal-600 text-sm font-medium transition-colors inline-flex items-center"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  Back to Cart
+                </Link>
+              </div>
+            </motion.div>
+          </motion.form>
+        </div>
+      </motion.div>
     </FormContainer>
   );
 };
 
 export default Shipping;
+
