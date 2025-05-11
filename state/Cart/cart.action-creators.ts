@@ -42,8 +42,8 @@ export const addToCart =
         payload: data,
       });
 
-      if (Router.asPath !== '/api/cart') {
-        Router.push('/api/cart');
+      if (Router.asPath !== '/cart') {
+        Router.push('/cart');
       }
     } catch (error: any) {
       dispatch({
@@ -96,7 +96,7 @@ export const getCart = () => async (dispatch: Dispatch<CartAction>) => {
       type: ActionTypes.GET_CART_START,
     });
 
-    const { data } = await proshopAPI.get('/cart', { withCredentials: true });
+    const { data } = await proshopAPI.get('/api/cart', { withCredentials: true });
 
     dispatch({
       type: ActionTypes.GET_CART_SUCCESS,

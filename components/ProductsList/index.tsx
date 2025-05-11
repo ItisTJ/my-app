@@ -4,11 +4,7 @@ import { Row, Col, Button, Table } from 'react-bootstrap';
 import { useAdmin, useProductsActions, useTypedSelector } from '../../hooks';
 import Loader from '../Loader';
 import Message from '../Message';
-import Paginate from '../Paginate';
-
-interface ProductListProps {
-  pageId?: string;
-}
+import { useRouter } from 'next/router';
 
 interface Product {
   _id: string;
@@ -16,6 +12,10 @@ interface Product {
   price: number;
   category: string;
   brand: string;
+}
+
+interface ProductListProps {
+  pageId?: string;
 }
 
 const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
@@ -27,43 +27,77 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
     loading,
     error,
     data: { products, pages, page },
-  } = useTypedSelector(state => state.products);
+  } = useTypedSelector((state) => state.products);
 
-  const { success: successDelete } = useTypedSelector(
-    state => state.productDelete
-  );
+  const { success: successDelete } = useTypedSelector((state) => state.productDelete);
 
-  // State to store loaded products
-  const [allProducts, setAllProducts] = useState<Product[]>([]); // Initializing with an empty array
-  const [currentPage, setCurrentPage] = useState(parseInt(pageId || '1'));
-  const [isLoadingMore, setIsLoadingMore] = useState(false); // Flag to track loading state when loading more products
+  const router = useRouter();
 
+  const [currentPage, setCurrentPage] = useState<number>(parseInt(pageId || '1'));
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+
+  // Fetch products for all pages from 1 to the current pageId
   useEffect(() => {
-    // Fetch products on initial load or page change
-    fetchProducts('', currentPage);
-  }, [fetchProducts, successDelete, currentPage]);
+    const queryPage = router.query.pageId ? parseInt(router.query.pageId as string) : 1;
+    setCurrentPage(queryPage);
 
+    const fetchAllPages = async () => {
+      let accumulatedProducts: Product[] = [];
+      for (let i = 1; i <= queryPage; i++) {
+        await fetchProducts('', i);
+      }
+    };
+
+    fetchAllPages();
+  }, [fetchProducts, router.query.pageId]);
+
+  // Accumulate products and filter duplicates
   useEffect(() => {
     if (products.length > 0) {
-      setAllProducts((prevProducts) => [...prevProducts, ...products]); // Append new products
+      const newProducts = products.filter((product) => !allProducts.some((p) => p._id === product._id));
+      setAllProducts((prevProducts) => [...prevProducts, ...newProducts]);
     }
-  }, [products]);
-
-  // Function to handle "Load More"
-  const handleLoadMore = async () => {
-    if (currentPage < pages && !isLoadingMore) {
-      setIsLoadingMore(true); // Set loading state
-      const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
-
-      try {
-        await fetchProducts('', nextPage); // Fetch the new products
-      } catch (error) {
-        console.error('Error fetching more products', error);
-      } finally {
-        setIsLoadingMore(false); // Reset loading state
-      }
+    // Reset allProducts if pageId is 1
+    if (currentPage === 1) {
+      setAllProducts(products);
     }
+  }, [products, currentPage]);
+
+  // Refresh products after a successful deletion
+  useEffect(() => {
+    if (successDelete) {
+      setAllProducts([]); // Clear current products
+      const fetchAllPages = async () => {
+        for (let i = 1; i <= currentPage; i++) {
+          await fetchProducts('', i);
+        }
+      };
+      fetchAllPages();
+    }
+  }, [successDelete, fetchProducts, currentPage]);
+
+  const handleShowMore = async () => {
+    const nextPage = currentPage + 1;
+    router.push(
+      { pathname: router.pathname, query: { ...router.query, pageId: nextPage } },
+      undefined,
+      { shallow: true }
+    );
+    await fetchProducts('', nextPage);
+    setCurrentPage(nextPage);
+  };
+
+  const handleShowLess = () => {
+    const prevPage = currentPage - 1;
+    if (prevPage < 1) return;
+    const productsToRemove = products.length;
+    setAllProducts(allProducts.slice(0, allProducts.length - productsToRemove));
+    setCurrentPage(prevPage);
+    router.push(
+      { pathname: router.pathname, query: { ...router.query, pageId: prevPage } },
+      undefined,
+      { shallow: true }
+    );
   };
 
   return (
@@ -79,8 +113,8 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
         </Col>
       </Row>
 
-      {loading || isLoadingMore ? (
-        <Loader /> // Show loading indicator when loading
+      {loading ? (
+        <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
@@ -127,17 +161,18 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
             </tbody>
           </Table>
 
-          {/* Pagination */}
-          <Paginate pages={pages} page={page} isAdmin={true} />
-
-          {/* Load More Button */}
-          {currentPage < pages && (
-            <div className="text-center mt-3">
-              <Button variant="primary" onClick={handleLoadMore} disabled={isLoadingMore}>
-                {isLoadingMore ? 'Loading...' : 'Load More'}
+          <div className="d-flex justify-content-between mt-3">
+            {currentPage > 1 && (
+              <Button variant="secondary" onClick={handleShowLess}>
+                Show Less
               </Button>
-            </div>
-          )}
+            )}
+            {currentPage < pages && (
+              <Button variant="primary" onClick={handleShowMore}>
+                Show More
+              </Button>
+            )}
+          </div>
         </>
       )}
     </>
