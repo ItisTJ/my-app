@@ -85,7 +85,7 @@ const HeaderManager = () => {
         headers: { "Content-Type": "multipart/form-data" },
       };
 
-      const { data } = await proshopAPI.post("/api/upload", formData, config);
+      const { data } = await proshopAPI.post("/api/uploadLogo", formData, config);
       setHeaderData({ ...headerData, image: data });
     } catch (error) {
       console.error("Image Upload Error:", error);
