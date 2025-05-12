@@ -28,7 +28,7 @@ const ProductCarousel: React.FC = () => {
   if (!data || data.length === 0) return <Message variant="info">No products available</Message>;
 
   return (
-    <div className="w-full mx-auto p-16 bg-gradient-to-br from-gray-100 to-gray-400 mb-16 ">
+    <div className="w-full mx-auto p-24 bg-gradient-to-br from-gray-100 to-gray-400 mb-16 ">
       <Carousel 
         pause="hover" 
         className="rounded-1g overflow-hidden"
