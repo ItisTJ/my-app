@@ -23,7 +23,7 @@ const ProductCarousel = () => {
   ) : !data || data.length === 0 ? ( // Ensure data is not null before accessing length
     <Message variant="info">No products available</Message>
   ) : (
-    <Carousel pause="hover" className="bg-dark">
+    <Carousel pause="hover" className="bg-blue-900">
       {data.map(_product => (
         <Carousel.Item key={_product._id}>
           <Image src={_product.image} alt={_product.name} fluid />
