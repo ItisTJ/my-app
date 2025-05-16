@@ -3,47 +3,46 @@ import Link from "next/link";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { useTypedSelector, useUserActions } from "../../hooks";
 import SearchBox from "../SearchBox";
-import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { fetchHeader } from "../../state/Header/header.action-creators";
 
 const Header = () => {
   const dispatch = useAppDispatch();
 
-  // Redux state for header data
   const { loading, error, headerdata } = useTypedSelector((state) => ({
     loading: state.header?.loading || false,
     error: state.header?.error || null,
     headerdata: state.header?.data || [],
   }));
 
-  // Ensure `header` is correctly extracted from `headerdata`
   const header = headerdata.length > 0 ? headerdata[0] : null;
-  console.log("Header Data (in Header component):", headerdata);
 
   // Form state
-  const [headerData, setHeaderData] = useState({
+  const [headerData, setHeaderData] = useState<{
+    name: string;
+    color: string;
+    image: string;
+    items: string | string[];
+  }>({
     name: "Sample name",
-    color: "#000000", // Default black color
+    color: "#000000",
     image: "",
-    items:"",
+    items: "",
   });
 
-  // Fetch header data when component mounts
   useEffect(() => {
     if (!headerdata.length) {
       dispatch(fetchHeader());
     }
-  }, [dispatch, headerdata.length]); // Avoid unnecessary re-fetching
+  }, [dispatch, headerdata.length]);
 
-  // Update form state when Redux data is loaded
   useEffect(() => {
     if (header) {
       setHeaderData({
         name: header.name || "Sample name",
         color: header.color || "#000000",
         image: header.image || "",
-        items: header.items,
+        items: header.items || "",
       });
     }
   }, [header]);
@@ -51,24 +50,34 @@ const Header = () => {
   const { data } = useTypedSelector((state) => state.user);
   const { logout } = useUserActions();
 
-  // State to hold header settings (color & logo)
-  const [headerSettings, setHeaderSettings] = useState({
-    color: "#343a40", // Default dark theme
+  const [headerSettings, setHeaderSettings] = useState<{
+    color: string;
+    logo: string;
+    alt: string;
+    item: string[];
+  }>({
+    color: "#343a40",
     logo: "/default-logo.png",
     alt: "logo",
-    item: "Home",
+    item: [],
   });
 
-  // Track image error state
   const [imageError, setImageError] = useState(false);
 
-  // Update header settings when `headerData` changes
   useEffect(() => {
+    let itemsArray: string[] = [];
+
+    if (typeof headerData.items === "string") {
+      itemsArray = headerData.items.split(",").map((i) => i.trim());
+    } else if (Array.isArray(headerData.items)) {
+      itemsArray = headerData.items;
+    }
+
     setHeaderSettings({
       color: headerData.color || "#343a40",
       logo: headerData.image || "/default-logo.png",
       alt: headerData.name || "logo",
-      item: headerData.items,
+      item: itemsArray,
     });
   }, [headerData]);
 
@@ -77,14 +86,14 @@ const Header = () => {
       <Navbar
         expand="lg"
         collapseOnSelect
-        style={{ backgroundColor: headerSettings.color }} // Apply dynamic color
+        style={{ backgroundColor: headerSettings.color }}
         variant="dark"
         className="h-20"
       >
         <Container>
           <Link href="/" passHref legacyBehavior>
             <Navbar.Brand>
-              {headerSettings.logo.match(/\.(jpeg|jpg|gif|png|svg|webp)$/i) ? (
+              {headerSettings.logo.match(/\.(jpeg|jpg|gif|png|svg|webp)$/i) && !imageError ? (
                 <img
                   src={headerSettings.logo}
                   alt={headerSettings.alt}
@@ -101,35 +110,65 @@ const Header = () => {
               )}
             </Navbar.Brand>
           </Link>
+
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <SearchBox />
             <Nav className="ms-auto">
 
-              <Link href="/" passHref legacyBehavior>
-                <Nav.Link className="mr-3">
-                  {headerSettings.item[0]}
-                </Nav.Link>
-              </Link>
 
-              <Link href="/about" passHref legacyBehavior>
-                <Nav.Link className="mr-3">
-                  {headerSettings.item[1]}
-                </Nav.Link>
-              </Link>
+              {/* Categories */}
+            <NavDropdown title="Categories" id="categories-menu">
+              {headerSettings.item.map((item, index) => (
+                <Link key={index} href={`/${item.toLowerCase()}`} passHref legacyBehavior>
+                  <NavDropdown.Item>
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                  </NavDropdown.Item>
+                </Link>
+              ))}
+            </NavDropdown>
 
+          
+               {/*make items array*/}
+              {/*
+              {headerSettings.item.map((item, index) => (
+                <Link key={index} href={`/${item.toLowerCase()}`} passHref legacyBehavior>
+                  <Nav.Link className="mr-3">
+                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                  </Nav.Link>
+                </Link>
+              ))}
+              */}
+
+
+              {/*
               <Link href="/cart" passHref legacyBehavior>
                 <Nav.Link className="mr-3">
                 {headerSettings.item[2]}
                 </Nav.Link>
               </Link>
-
-              <Link href="/cart" passHref legacyBehavior>
-                <Nav.Link className="mr-3">
-                {headerSettings.item[3]}
+              */}
+              
+              {/*Navbar Items
+              <Link href="/services" passHref legacyBehavior>
+                <Nav.Link className="mr-1">
+                  Services
                 </Nav.Link>
               </Link>
 
+              <Link href="/about" passHref legacyBehavior>
+                <Nav.Link className="mr-1">
+                  About Us
+                </Nav.Link>
+              </Link>
+
+              <Link href="/contact" passHref legacyBehavior>
+                <Nav.Link className="mr-1">
+                  Contact
+                </Nav.Link>
+              </Link>
+              */}
+              
               <Link href="/cart" passHref legacyBehavior>
                 <Nav.Link className="mr-3">
                   <i className="fas fa-shopping-cart"></i> Cart
