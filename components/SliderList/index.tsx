@@ -59,7 +59,7 @@ const SliderList = () => {
                   <td>{slider.name}</td>
                   <td>{slider.description}</td>
                   <td>
-                    <Link href={`/slider/edit/${slider._id}`} passHref>
+                    <Link href={`SliderEdit/${slider._id}`} passHref>
                       <Button variant="light" className="btn-sm">
                         <i className="fas fa-edit"></i>
                       </Button>
