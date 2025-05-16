@@ -28,7 +28,7 @@ export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.SLIDER_DELETE_REQUEST });
 
-    await axios.delete(`http://localhost:4000/sliders/${id}`);
+    await axios.delete(`http://localhost:4000/api/slider/${id}`);
 
     dispatch({ type: ActionTypes.SLIDER_DELETE_SUCCESS, payload: id });
   } catch (error: any) {
