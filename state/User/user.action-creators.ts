@@ -91,9 +91,10 @@ export const logout = () => async (dispatch: Dispatch<UserAction>) => {
   }
 };
 
-export const register =
-  (name: string, email: string, password: string) =>
-  async (dispatch: Dispatch<UserAction>) => {
+export const register = (name: string, email: string, password: string) => async (dispatch: Dispatch<Action>) => {
+  try {
+    dispatch({ type: ActionTypes.USER_REGISTER_START });
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -101,41 +102,35 @@ export const register =
       withCredentials: true,
     };
 
-    try {
-      dispatch({
-        type: ActionTypes.USER_REGISTER_START,
-      });
+    const { data } = await proshopAPI.post('/api/auth/register', { name, email, password }, config);
 
-      const { data } = await proshopAPI.post(
-        '/api/auth/register',
-        {
-          name,
-          email,
-          password,
-        },
-        config
-      );
+    dispatch({
+      type: ActionTypes.USER_REGISTER_SUCCESS,
+      payload: data,
+    });
 
-      dispatch({
-        type: ActionTypes.USER_REGISTER_SUCCESS,
-        payload: data,
-      });
+    dispatch({
+      type: ActionTypes.USER_LOGIN_SUCCESS,
+      payload: data,
+    });
 
-      dispatch({
-        type: ActionTypes.USER_LOGIN_SUCCESS,
-        payload: data,
-      });
+    localStorage.setItem('userInfo', JSON.stringify(data));
 
-      localStorage.setItem('accessToken', data.accessToken);
+    return true; //  success
 
-      Router.push('/');
-    } catch (error: any) {
-      dispatch({
-        type: ActionTypes.USER_REGISTER_ERROR,
-        payload: error.response.data.message,
-      });
-    }
-  };
+  } catch (error: any) {
+    dispatch({
+      type: ActionTypes.USER_REGISTER_ERROR,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+
+    return false; //  failed
+  }
+};
+
 
 export const updateUser =
   (userCredentials: Partial<UserCredentials>) =>
