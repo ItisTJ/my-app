@@ -83,7 +83,7 @@ const Header = () => {
                 <img
                   src={headerSettings.logo}
                   alt={headerSettings.alt}
-                  width={100}
+                  width={90}
                   height={40}
                   style={{ objectFit: "contain", display: "block" }}
                   className="mt-3"
@@ -101,26 +101,26 @@ const Header = () => {
             <SearchBox />
             <Nav className="ms-auto">
 
+              <Link href="/" passHref legacyBehavior>
+                <Nav.Link className="mr-3">
+                  Home
+                </Nav.Link>
+              </Link>
+
+              <Link href="/about" passHref legacyBehavior>
+                <Nav.Link className="mr-3">
+                  About Us
+                </Nav.Link>
+              </Link>
+
               <Link href="/cart" passHref legacyBehavior>
-                <Nav.Link>
+                <Nav.Link className="mr-3">
                   <i className="fas fa-shopping-cart"></i> Cart
                 </Nav.Link>
               </Link>
 
               <Link href="/cart" passHref legacyBehavior>
-                <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i> Cart
-                </Nav.Link>
-              </Link>
-
-              <Link href="/cart" passHref legacyBehavior>
-                <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i> Cart
-                </Nav.Link>
-              </Link>
-
-              <Link href="/cart" passHref legacyBehavior>
-                <Nav.Link>
+                <Nav.Link className="mr-3">
                   <i className="fas fa-shopping-cart"></i> Cart
                 </Nav.Link>
               </Link>

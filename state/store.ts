@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
-import { reducers, RootState } from './reducers';
- // Adjust the path based on your project structure
+import { reducers, RootState as CombinedRootState } from './reducers';
 
+// 👇 Add these exports
 let store: ReturnType<typeof initStore> | undefined;
 
-function initStore(initialState?: Partial<RootState>) {
-  return configureStore({   //createStore is replaced with configureStore
-    reducer: reducers, 
+function initStore(initialState?: Partial<CombinedRootState>) {
+  return configureStore({
+    reducer: reducers,
     preloadedState: initialState,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -17,7 +17,7 @@ function initStore(initialState?: Partial<RootState>) {
   });
 }
 
-export const initializeStore = (preloadedState?: Partial<RootState>) => {
+export const initializeStore = (preloadedState?: Partial<CombinedRootState>) => {
   let _store = store ?? initStore(preloadedState);
 
   if (store && preloadedState) {
@@ -34,10 +34,12 @@ export const initializeStore = (preloadedState?: Partial<RootState>) => {
   return store;
 };
 
-export const useStore = (initialState?: Partial<RootState>) => {
+export const useStore = (initialState?: Partial<CombinedRootState>) => {
   const store = useMemo(() => initializeStore(initialState), [initialState]);
   return store;
 };
 
-
-
+// ✅ Add these exports
+export type AppStore = ReturnType<typeof initStore>;
+export type AppDispatch = AppStore['dispatch'];
+export type RootState = ReturnType<AppStore['getState']>;
