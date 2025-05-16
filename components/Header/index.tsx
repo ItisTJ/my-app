@@ -4,10 +4,11 @@ import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { useTypedSelector, useUserActions } from "../../hooks";
 import SearchBox from "../SearchBox";
 import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { fetchHeader } from "../../state/Header/header.action-creators";
 
 const Header = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Redux state for header data
   const { loading, error, headerdata } = useTypedSelector((state) => ({
@@ -25,6 +26,7 @@ const Header = () => {
     name: "Sample name",
     color: "#000000", // Default black color
     image: "",
+    items:"",
   });
 
   // Fetch header data when component mounts
@@ -41,6 +43,7 @@ const Header = () => {
         name: header.name || "Sample name",
         color: header.color || "#000000",
         image: header.image || "",
+        items: header.items,
       });
     }
   }, [header]);
@@ -53,6 +56,7 @@ const Header = () => {
     color: "#343a40", // Default dark theme
     logo: "/default-logo.png",
     alt: "logo",
+    item: "Home",
   });
 
   // Track image error state
@@ -64,6 +68,7 @@ const Header = () => {
       color: headerData.color || "#343a40",
       logo: headerData.image || "/default-logo.png",
       alt: headerData.name || "logo",
+      item: headerData.items,
     });
   }, [headerData]);
 
@@ -103,19 +108,25 @@ const Header = () => {
 
               <Link href="/" passHref legacyBehavior>
                 <Nav.Link className="mr-3">
-                  Home
+                  {headerSettings.item[0]}
                 </Nav.Link>
               </Link>
 
               <Link href="/about" passHref legacyBehavior>
                 <Nav.Link className="mr-3">
-                  About Us
+                  {headerSettings.item[1]}
                 </Nav.Link>
               </Link>
 
               <Link href="/cart" passHref legacyBehavior>
                 <Nav.Link className="mr-3">
-                  <i className="fas fa-shopping-cart"></i> Cart
+                {headerSettings.item[2]}
+                </Nav.Link>
+              </Link>
+
+              <Link href="/cart" passHref legacyBehavior>
+                <Nav.Link className="mr-3">
+                {headerSettings.item[3]}
                 </Nav.Link>
               </Link>
 
