@@ -56,7 +56,7 @@ export const addToCart =
 export const removeFromCart =
   (id: string) => async (dispatch: Dispatch<CartAction>) => {
     try {
-      await proshopAPI.delete(`/cart/${id}`, { withCredentials: true });
+      await proshopAPI.delete(`/api/cart/${id}`, { withCredentials: true });
 
       dispatch({
         type: ActionTypes.REMOVE_CART_ITEM,
@@ -72,7 +72,7 @@ export const saveShippingAddress =
   async (dispatch: Dispatch<CartAction>) => {
     try {
       const { data } = await proshopAPI.post(
-        '/cart/shipping',
+        '/api/cart/shipping',
         shippingDetails,
         {
           withCredentials: true,
@@ -121,7 +121,7 @@ export const savePaymentMethod =
   (paymentMethod: string) => async (dispatch: Dispatch<CartAction>) => {
     try {
       const { data } = await proshopAPI.post(
-        '/cart/payment',
+        '/api/cart/payment',
         { paymentMethod },
         {
           withCredentials: true,
