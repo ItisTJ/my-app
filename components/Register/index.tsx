@@ -6,9 +6,13 @@ import { UserCredentials } from '../../interfaces';
 import FormContainer from '../FormContainer';
 import Loader from '../Loader';
 import Message from '../Message';
+import SignUpSteps from '../SignUpSteps';
+import { useRouter } from 'next/router';
 
 const Register = () => {
-  const initialCredentials = {
+  const router = useRouter();
+
+  const initialCredentials: UserCredentials = {
     name: '',
     email: '',
     password: '',
@@ -18,41 +22,41 @@ const Register = () => {
   const { register } = useUserActions();
   const { loading, error } = useTypedSelector(state => state.userRegister);
 
-  const [credentials, setCredentials] =
-    useState<UserCredentials>(initialCredentials);
+  const [credentials, setCredentials] = useState(initialCredentials);
   const [message, setMessage] = useState<string | null | string[]>(error);
 
   useEffect(() => {
     setMessage(error);
   }, [error]);
 
-  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { name, email, password, confirmPassword } = credentials;
 
-    if (
-      name.length < 1 ||
-      email.length < 1 ||
-      password.length < 1 ||
-      confirmPassword.length < 1
-    ) {
+    if (!name || !email || !password || !confirmPassword) {
       setMessage('All fields are required.');
-
-      return null;
+      return;
     }
 
-    if (password && password !== confirmPassword) {
+    if (password !== confirmPassword) {
       setMessage('Passwords do not match');
-
-      return null;
+      return;
     }
 
-    register(name, email, password);
+    const success = await register(name, email, password);
+
+    if (success) {
+      router.push({
+        pathname: '/verifyToken',
+        query: { name, email },
+      });
+    }
   };
 
   return (
     <FormContainer>
+      <SignUpSteps step1 step2={false} step3={false} />
       <h1>Sign Up</h1>
 
       {message && (
@@ -66,13 +70,13 @@ const Register = () => {
         <Form.Group controlId="name">
           <Form.Label>Name</Form.Label>
           <Form.Control
-            type="name"
+            type="text"
             placeholder="Enter name"
             value={credentials.name}
             onChange={e =>
               setCredentials({ ...credentials, name: e.target.value })
             }
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId="email" className="py-3">
@@ -84,7 +88,7 @@ const Register = () => {
             onChange={e =>
               setCredentials({ ...credentials, email: e.target.value })
             }
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId="password">
@@ -96,7 +100,7 @@ const Register = () => {
             onChange={e =>
               setCredentials({ ...credentials, password: e.target.value })
             }
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId="confirmPassword" className="py-3">
@@ -111,7 +115,7 @@ const Register = () => {
                 confirmPassword: e.target.value,
               })
             }
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Button type="submit" variant="primary" className="my-1">

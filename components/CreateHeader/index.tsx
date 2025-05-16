@@ -1,6 +1,5 @@
 import { useEffect, useState, FormEvent, ChangeEvent } from "react";
-import Link from "next/link";
-import { Button, Col, Form, Row, Table, Image } from "react-bootstrap";
+import { Button, Col, Form, Row, Image } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../hooks";
 import { fetchHeader } from "../../state/Header/header.action-creators";
@@ -58,7 +57,7 @@ const HeaderManager = () => {
         headers: { "Content-Type": "application/json" },
       };
 
-      await proshopAPI.post("/header/upload", { name, color, image }, config);
+      await proshopAPI.post("/api/header/upload", { name, color, image }, config);
       window.location.reload(); // Refresh browser
 
       setHeaderData({
@@ -85,7 +84,7 @@ const HeaderManager = () => {
         headers: { "Content-Type": "multipart/form-data" },
       };
 
-      const { data } = await proshopAPI.post("/upload", formData, config);
+      const { data } = await proshopAPI.post("/api/upload", formData, config);
       setHeaderData({ ...headerData, image: data });
     } catch (error) {
       console.error("Image Upload Error:", error);
