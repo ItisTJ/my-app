@@ -1,28 +1,26 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { Button, Table, Image } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useTypedSelector } from '../../hooks';
 import { fetchSliders, deleteSlider } from '../../state/Slider/slider.action-creators';
 import Loader from '../Loader';
 import Message from '../Message';
 
 const SliderList = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  // ✅ Access Redux state properly
-  const { loading, error, data } = useTypedSelector(
-    (state) => state.slider || { loading: false, error: null, data: [] }
+  const { loading, error, data } = useTypedSelector((state) =>
+    state.slider || { loading: false, error: null, data: [] }
   );
 
-  // ✅ Fetch sliders on component mount
   useEffect(() => {
-    dispatch(fetchSliders()); // Dispatch the action
-  }, [dispatch]); // Depend only on dispatch
+    dispatch(fetchSliders());
+  }, [dispatch]);
 
   const handleDelete = (id: string) => {
     if (window.confirm('Are you sure you want to delete this slider product?')) {
-      dispatch(deleteSlider(id)); // Dispatch delete action
+      dispatch(deleteSlider(id));
     }
   };
 
@@ -45,14 +43,13 @@ const SliderList = () => {
             </tr>
           </thead>
           <tbody>
-          {Array.isArray(data) && data.length > 0 ? (
-          data.map((slider) => (
-            <tr key={slider._id}>
-              <td>{slider._id}</td>
-
+            {Array.isArray(data) && data.length > 0 ? (
+              data.map((slider) => (
+                <tr key={slider._id}>
+                  <td>{slider._id}</td>
                   <td>
                     <Image
-                      src={slider.image} // ✅ Ensure correct image URL
+                      src={slider.image}
                       alt={slider.name}
                       width={50}
                       height={50}
@@ -62,7 +59,7 @@ const SliderList = () => {
                   <td>{slider.name}</td>
                   <td>{slider.description}</td>
                   <td>
-                    <Link href={`/admin/sliders/edit/${slider._id}`} passHref>
+                    <Link href={`SliderEdit/${slider._id}`} passHref>
                       <Button variant="light" className="btn-sm">
                         <i className="fas fa-edit"></i>
                       </Button>
