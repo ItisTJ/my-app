@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import PlaceOrder from '../../components/PlaceOrder';
+import PlaceOrder from '../../components/PlaceOrder/index';
 import SEO from '../../components/SEO';
 import { homeConfig } from '../../utils';
 
