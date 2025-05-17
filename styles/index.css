@@ -6,6 +6,7 @@
 
 main {
   min-height: 80vh;
+  margin: 0;
 }
 
 h1 {
@@ -44,11 +45,11 @@ h2 {
 }
 
 .carousel img {
-  height: 300px;
+  height: 500px;
+  width: 600px;
   padding: 30px;
   display: flex;
   margin: 40px;
-  border-radius: 50%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -58,3 +59,42 @@ h2 {
     font-size: 2.5vw;
   }
 }
+
+/**/
+
+.carousel-control-prev,
+        .carousel-control-next {
+          width: auto;
+          padding: 0 1rem;
+          opacity: 1;
+        }
+        
+        .carousel-indicators {
+          bottom: 1rem;
+        }
+        
+        .carousel-indicators button {
+          width: 12px !important;
+          height: 12px !important;
+          border-radius: 50% !important;
+          background-clip: padding-box !important;
+          border: none !important;
+          margin: 0 5px !important;
+          opacity: 1 !important;
+        }
+        
+        .carousel-indicators button.active {
+          background-color: rgb(79, 70, 229) !important;
+          transform: scale(1.25);
+        }
+        
+        .carousel-caption {
+          position: relative;
+          right: auto;
+          bottom: auto;
+          left: auto;
+          padding-top: 0;
+          padding-bottom: 0;
+          color: inherit;
+          text-align: left;
+        }

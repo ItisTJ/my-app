@@ -56,6 +56,8 @@ export const sliderReducer = (
     case ActionTypes.SLIDER_RESET:
       return sliderInitialState;
 
+    
+
     default:
       return state;
   }
