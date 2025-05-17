@@ -45,7 +45,7 @@ export const login =
     } catch (error: any) {
       dispatch({
         type: ActionTypes.USER_LOGIN_ERROR,
-        payload: error.response.data.message,
+        payload: error?.response?.data?.message || error.message || 'Something went wrong',
       });
     }
   };
@@ -73,7 +73,7 @@ export const getCurrentUser =
     } catch (error: any) {
       dispatch({
         type: ActionTypes.GET_CURRENT_USER_ERROR,
-        payload: error.response.data.message,
+        payload: error?.response?.data?.message || error.message || 'Something went wrong',
       });
     }
   };

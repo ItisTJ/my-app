@@ -1,7 +1,5 @@
 import axios from "axios";
-import {
-  ActionTypes
-} from "./slider.action-types";
+import { ActionTypes } from "./slider.action-types";
 import { Dispatch } from "redux";
 
 
@@ -28,13 +26,42 @@ export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.SLIDER_DELETE_REQUEST });
 
-    await axios.delete(`http://localhost:4000/sliders/${id}`);
+    await axios.delete(`http://localhost:4000/api/slider/${id}`);
 
     dispatch({ type: ActionTypes.SLIDER_DELETE_SUCCESS, payload: id });
   } catch (error: any) {
     dispatch({
       type: ActionTypes.SLIDER_DELETE_FAIL,
       payload: error.response?.data?.message ? error.response.data.message + " Delete failed" : error.message,
+    });
+  }
+};
+
+
+// ✅ Update Slider
+export const updateSlider = (slider: { _id: string; name: string; description: string; image: string }) => async (dispatch: Dispatch) => {
+  try {
+    dispatch({ type: ActionTypes.SLIDER_UPDATE_REQUEST });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.put(`http://localhost:4000/api/slider/${slider._id}`, slider, config);
+
+    dispatch({
+      type: ActionTypes.SLIDER_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ActionTypes.SLIDER_UPDATE_FAIL,
+      payload:
+        error.response?.data?.message
+          ? error.response.data.message + ' Update failed'
+          : error.message,
     });
   }
 };

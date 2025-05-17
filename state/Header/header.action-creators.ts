@@ -1,7 +1,5 @@
 import axios from "axios";
-import {
-  ActionTypes
-} from "./header.action-types";
+import { ActionTypes } from "./header.action-types";
 import { Dispatch } from "redux";
 
 
@@ -24,18 +22,3 @@ export const fetchHeader = () => async (dispatch: Dispatch) => {
 };
 
 
-// ✅ Delete Slider
-// export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {
-//   try {
-//     dispatch({ type: ActionTypes.FOOTER_DELETE_FAIL });
-
-//     await axios.delete(`http://localhost:4000/sliders/${id}`);
-
-//     dispatch({ type: ActionTypes.FOOTER_DELETE_SUCCESS, payload: id });
-//   } catch (error: any) {
-//     dispatch({
-//       type: ActionTypes.FOOTER_DELETE_FAIL,
-//       payload: error.response?.data?.message ? error.response.data.message + " Delete failed" : error.message,
-//     });
-//   }
-// };

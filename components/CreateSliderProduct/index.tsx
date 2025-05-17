@@ -13,9 +13,8 @@ const SliderUpload = () => {
     image: "", // Image URL
   };
 
-  const { loading, error, success } = useTypedSelector(
-    (state) => state.slider
-  );
+  const { loading, error, success } = useTypedSelector((state) => state.slider);
+
 
   const [sliderData, setSliderData] = useState(initialData);
   const [message, setMessage] = useState<string | null | string[]>(error);
@@ -41,7 +40,7 @@ const SliderUpload = () => {
       };
   
       const response = await proshopAPI.post(
-        "/slider/upload",
+        "/api/slider/upload",
         { name, description, image }, // Send as JSON
         config
       );
