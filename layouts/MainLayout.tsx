@@ -1,5 +1,6 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import ProductCarousel from '../components/ProductCarousel';
 import {
   useCartActions,
   useLocalStorage,
@@ -33,7 +34,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   }, [accessToken, getCurrentUser]);
 
   return (
-    <div className="app__container">
+    <div>
       <Header />
       {children}
       <Footer />

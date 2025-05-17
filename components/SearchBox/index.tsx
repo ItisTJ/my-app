@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 
 const SearchBox = () => {
   const router = useRouter();
@@ -15,18 +15,18 @@ const SearchBox = () => {
   };
 
   return (
-    <Form onSubmit={submitHandler} className="d-flex">
-      <Form.Control
+    <form onSubmit={submitHandler} className="relative w-46 max-w-sm">
+      <input
         type="text"
         name="q"
-        onChange={e => setKeyword(e.target.value)}
+        onChange={(e) => setKeyword(e.target.value)}
         placeholder="Search Products..."
-        className="mr-sm-2 ml-sm-5"
-      ></Form.Control>
-      <Button type="submit" variant="outline-success" className="p-2 mx-2">
-        Search
-      </Button>
-    </Form>
+        className="w-full pl-10 pr-4 py-2 rounded-full h-10 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-600"
+      />
+      <button type="submit" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+        <FaSearch />
+      </button>
+    </form>
   );
 };
 

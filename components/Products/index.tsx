@@ -83,14 +83,14 @@ const Products: React.FC<ProductsInterface> = ({ keyword, pageId }) => {
 
   return (
     <>
-      {!keyword ? (
+    {/*  {!keyword ? (
         <ProductCarousel />
       ) : (
         <Link href="/" passHref>
           <Button className="btn btn-light">Go back</Button>
         </Link>
       )}
-
+*/}
       <h1>Latest products</h1>
       {loading ? (
         <Loader />

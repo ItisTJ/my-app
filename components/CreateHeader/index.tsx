@@ -4,13 +4,14 @@ import { Button, Col, Form, Row, Table, Image } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../hooks";
 import { fetchHeader } from "../../state/Header/header.action-creators";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 import FormContainer from "../../components/FormContainer";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { proshopAPI } from "../../lib";
 
 const HeaderManager = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Redux state for header data
   const { loading, error, data } = useTypedSelector((state) => state.header || { loading: false, error: null, data: [] });
@@ -23,6 +24,7 @@ const HeaderManager = () => {
     name: header?.name || "Sample name",
     color: header?.color || "#000000", // Default black color
     image: header?.image || "",
+    items: header?.items || []
   });
 
   const [message, setMessage] = useState<string | null | string[]>(error);
@@ -39,6 +41,7 @@ const HeaderManager = () => {
         name: header.name,
         color: header.color || "#000000",
         image: header.image,
+        items: header.items || []
       });
     }
   }, [header]);
@@ -58,13 +61,14 @@ const HeaderManager = () => {
         headers: { "Content-Type": "application/json" },
       };
 
-      await proshopAPI.post("/api/header/upload", { name, color, image }, config);
+      await proshopAPI.post("/api/header/upload", { name, color, image , items: headerData.items }, config);
       window.location.reload(); // Refresh browser
 
       setHeaderData({
         name: "",
         color: "#000000",
         image: "",
+        items:"",
       });
     } catch (error) {
       console.error("Upload Error:", error);
@@ -161,6 +165,45 @@ const HeaderManager = () => {
                   </Col>
                 </Row>
               </Form.Group>
+
+              <Form.Group controlId="items" className="py-2">
+  <Form.Label>Header Items</Form.Label>
+  {headerData.items.map((item: string, index: number) => (
+    <Row key={index} className="mb-2">
+      <Col md={10}>
+        <Form.Control
+          type="text"
+          placeholder={`Item ${index + 1}`}
+          value={item}
+          onChange={(e) => {
+            const updatedItems = [...headerData.items];
+            updatedItems[index] = e.target.value;
+            setHeaderData({ ...headerData, items: updatedItems });
+          }}
+        />
+      </Col>
+      <Col md={2}>
+        <Button
+          variant="danger"
+          onClick={() => {
+            const updatedItems = headerData.items.filter((_: string, i: number) => i !== index);
+            setHeaderData({ ...headerData, items: updatedItems });
+          }}
+        >
+          Remove
+        </Button>
+      </Col>
+    </Row>
+  ))}
+
+  <Button
+    variant="secondary"
+    onClick={() => setHeaderData({ ...headerData, items: [...headerData.items, ""] })}
+  >
+    Add Item
+  </Button>
+</Form.Group>
+
 
               <Button type="submit" variant="primary" className="my-1">
                 Update Header
