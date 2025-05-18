@@ -1,10 +1,9 @@
-//importing utils
-import { ProductInterface } from '../../../interfaces';
-//importing components
-import Link from 'next/link';
-import { Card } from 'react-bootstrap';
-import Rating from '../../Rating';
+// Import required types and components
+import { ProductInterface } from '../../../interfaces'; // Interface for typing product props
+import Link from 'next/link'; // Next.js component for client-side navigation
+import Rating from '../../Rating'; // Reusable Rating component
 
+// Item component that displays a single product's summary (image, name, rating, price)
 const Item: React.FC<ProductInterface> = ({
   _id,
   image,
@@ -14,29 +13,40 @@ const Item: React.FC<ProductInterface> = ({
   price,
 }) => {
   return (
-    <Card className="my-3 p-3 rounded cursor-pointer" role="button">
+    // Main container for the product card
+    <div
+      className="my-3 p-3 rounded cursor-pointer bg-white shadow hover:shadow-md transition-shadow"
+      role="button" // Makes the card feel like a clickable item (accessibility)
+    >
+      {/* Product Image with link to product details page */}
       <Link href={`/product/${_id}`} passHref>
-        <Card.Img src={image} variant="top"></Card.Img>
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-48 object-cover rounded-t"
+        />
       </Link>
 
-      <Card.Body>
+      {/* Product text details */}
+      <div className="p-4">
+        {/* Product Name with link to product details */}
         <Link href={`/product/${_id}`} passHref>
-          <Card.Title as="div">
-            <strong>{name}</strong>
-          </Card.Title>
+          <h3 className="text-lg font-bold">
+            {name}
+          </h3>
         </Link>
 
-        <Card.Text as="div">
-          <div className="my-3">
-            <Rating value={rating} text={`${numReviews} reviews`} />
-          </div>
-        </Card.Text>
+        {/* Product Rating with number of reviews */}
+        <div className="my-3">
+          <Rating value={rating} text={`${numReviews} reviews`} />
+        </div>
 
-        <Card.Text as="h3" className="py-1">
+        {/* Product Price */}
+        <h3 className="text-xl font-semibold py-1">
           ${price}
-        </Card.Text>
-      </Card.Body>
-    </Card>
+        </h3>
+      </div>
+    </div>
   );
 };
 
