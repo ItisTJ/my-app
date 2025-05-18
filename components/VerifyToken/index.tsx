@@ -1,11 +1,8 @@
-"use client"
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { FaPaperPlane } from "react-icons/fa6";
 import SignUpSteps from '../SignUpSteps';
-import { FaUserShield } from 'react-icons/fa';
+import { FaUserLarge } from 'react-icons/fa6';
 
 const VerifyToken = () => {
   const router = useRouter();
@@ -47,6 +44,7 @@ const VerifyToken = () => {
       setTimeout(() => {
         router.push(`/success?msg=${email} verified successfully`);
       }, 2000);
+      //eslint-disable-next-line
     } catch (err: any) {
       setVariant('danger');
       setMessage(err.response?.data?.message || 'Verification failed');
@@ -55,18 +53,20 @@ const VerifyToken = () => {
     }
   };
 
+  // Placeholder for handleResendOtp - implement this function as needed
   const handleResendOtp = async () => {
+    setLoading(true);
+    setMessage('');
     try {
-      const response = await fetch('http://localhost:4000/api/auth/resend-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      const result = await response.json();
-      alert(result.message || 'OTP resent!');
-    } catch (error) {
-      console.error('Resend error:', error);
+      // Replace with your API call to resend OTP
+      const { data } = await axios.post('http://localhost:4000/api/auth/resend-otp', { email });
+      setVariant('success');
+      setMessage(data.message || 'OTP resent successfully');
+    } catch (err: any) {
+      setVariant('danger');
+      setMessage(err.response?.data?.message || 'Failed to resend OTP');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +75,7 @@ const VerifyToken = () => {
       <div className="max-w-xl w-full bg-white rounded-xl shadow-md ml-auto mr-auto">
         <div className="relative h-24 rounded-t-xl bg-gradient-to-r from-blue-200 to-gray-100 mb-12">
           <div className="absolute -bottom-10 left-8 bg-white p-4 rounded-full shadow-lg">
-            <FaUserShield size={40} className="text-gray-700" strokeWidth={1.5} />
+            <FaUserLarge size={32} className="text-gray-700" strokeWidth={1.5} />
           </div>
         </div>
 
@@ -116,7 +116,7 @@ const VerifyToken = () => {
           <button
             type="submit"
             disabled={loading}
-            className="mb-4 w-full bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
           >
             {loading ? 'Verifying...' : 'Verify OTP'}
           </button>
@@ -125,10 +125,9 @@ const VerifyToken = () => {
             type="button"
             onClick={handleResendOtp}
             disabled={loading}
-            className="w-32 text-xs mt-2 bg-gradient-to-r from-gray-700 to-gray-800 hover:opacity-90 text-white font-semibold py-2 rounded-lg shadow-md transition disabled:opacity-50 "
+            className="w-full text-xs mt-2 bg-gradient-to-r from-gray-700 to-gray-800 hover:opacity-90 text-white font-semibold py-2 rounded-lg shadow-md transition disabled:opacity-50"
           >
             {loading ? 'Resending...' : 'Resend OTP'}
-            <FaPaperPlane size={16} className="inline ml-2" strokeWidth={1.5} />
           </button>
         </form>
       </div>

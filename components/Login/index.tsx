@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useTypedSelector, useUserActions } from '../../hooks';
-import FormContainer from '../FormContainer';
 import Loader from '../Loader';
 import Message from '../Message';
+import {  FaEye, FaEyeSlash, FaUserTie } from 'react-icons/fa';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useUserActions();
   const { loading, error } = useTypedSelector(state => state.userLogin);
@@ -22,44 +22,72 @@ const Login = () => {
   };
 
   return (
-    <FormContainer>
-      <h1>Sign In</h1>
+    <div className="min-h-screen bg-gray-50 flex-col items-center justify-center p-8">
+      <div className="max-w-xl w-full bg-white rounded-xl shadow-md ml-auto mr-auto">
+        <div className="relative h-24 rounded-t-xl bg-gradient-to-r from-blue-200 to-gray-100 mb-12">
+          <div className="absolute -bottom-10 left-8 bg-white p-4 rounded-full shadow-lg">
+            <FaUserTie size={52} className="text-gray-700" strokeWidth={1.5} />
+          </div>
+        </div>
 
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-8">Sign In</h2>
 
-      <Form onSubmit={onSubmitHandler}>
-        <Form.Group controlId="email">
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+        {error && <Message variant="danger">{error}</Message>}
+        {loading && <Loader />}
 
-        <Form.Group controlId="password" className="py-4">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+        <form onSubmit={onSubmitHandler} className="space-y-4 p-8">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+              placeholder="Enter email"
+            />
+          </div>
 
-        <Button type="submit" variant="primary">
-          Sign In
-        </Button>
-      </Form>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none pr-10"
+                placeholder="Enter password"
+              />
+              <button
+                type="button"
+                className="absolute top-2.5 right-3 text-gray-500"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+          </div>
 
-      <Row className="py-3">
-        <Col>
-          New Customer? <Link href="/register">Register</Link>
-        </Col>
-      </Row>
-    </FormContainer>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-gray-600 mt-6 pb-8">
+          New Customer?{" "}
+          <Link href="/register" className="text-teal-600 hover:underline font-medium">
+            Register
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 };
 

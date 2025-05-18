@@ -1,45 +1,60 @@
-"use client"
+import Link from 'next/link';
+import { FormEvent, useState, useEffect } from 'react';
+import { useTypedSelector, useUserActions } from '../../hooks';
+import { UserCredentials } from '../../interfaces';
+import FormContainer from '../FormContainer';
+import Loader from '../Loader';
+import Message from '../Message';
+import SignUpSteps from '../SignUpSteps';
+import { useRouter } from 'next/router';
+import { FaUserLarge, FaEye, FaEyeSlash } from 'react-icons/fa6';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import Message from "../Message"
-import Loader from "../Loader"
-import SignUpSteps from "../SignUpSteps"
-import { FaUserLarge } from "react-icons/fa6"
-import { FaEye, FaEyeSlash } from "react-icons/fa"
+const Register = () => {
+  const router = useRouter();
 
-const RegisterPage = () => {
-  const router = useRouter()
+  const initialCredentials: UserCredentials = {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  };
 
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(true)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(true)
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const { register } = useUserActions();
+  const { loading, error } = useTypedSelector(state => state.userRegister);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
+  const [credentials, setCredentials] = useState(initialCredentials);
+  const [message, setMessage] = useState<string | null | string[]>(error);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    setMessage(error);
+  }, [error]);
+
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { name, email, password, confirmPassword } = credentials;
+
+    if (!name || !email || !password || !confirmPassword) {
+      setMessage('All fields are required.');
+      return;
+    }
+
     if (password !== confirmPassword) {
-      setError("Passwords do not match")
-      return
+      setMessage('Passwords do not match');
+      return;
     }
 
-    try {
-      setLoading(true)
-      await new Promise((res) => setTimeout(res, 1000))
-      setLoading(false)
-      router.push("/login")
-      //eslint-disable-next-line
-    } catch (err: any) {
-      setLoading(false)
-      setError("Registration failed. Please try again.")
+    const success = await register(name, email, password);
+
+    if (success) {
+      router.push({
+        pathname: '/verifyToken',
+        query: { name, email },
+      });
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex-col items-center justify-center p-8">
@@ -50,21 +65,21 @@ const RegisterPage = () => {
           </div>
         </div>
 
-        <SignUpSteps step1={true} step2={false} step3={false} />
+        <SignUpSteps step1 step2={false} step3={false} />
 
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-8">Create Your Account</h2>
 
-        {error && <Message variant="danger">{error}</Message>}
+        {message && <Message variant="danger">{Array.isArray(message) ? message[0] : message}</Message>}
         {loading && <Loader />}
 
-        <form onSubmit={handleSubmit} className="space-y-4 p-8">
+        <form onSubmit={onSubmitHandler} className="space-y-4 p-8">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
             <input
               id="name"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={credentials.name}
+              onChange={(e) => setCredentials({ ...credentials, name: e.target.value })}
               required
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
             />
@@ -75,22 +90,21 @@ const RegisterPage = () => {
             <input
               id="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={credentials.email}
+              onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
               required
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
             />
           </div>
 
-          {/* Password with toggle */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <div className="relative">
               <input
                 id="password"
-                type={showPassword ? "password" : "text"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type={showPassword ? "text" : "password"}
+                value={credentials.password}
+                onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
                 required
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none pr-10"
               />
@@ -104,15 +118,14 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          {/* Confirm Password with toggle */}
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
             <div className="relative">
               <input
                 id="confirmPassword"
-                type={showConfirmPassword ? "password" : "text"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                type={showConfirmPassword ? "text" : "password"}
+                value={credentials.confirmPassword}
+                onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })}
                 required
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none pr-10"
               />
@@ -143,7 +156,7 @@ const RegisterPage = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default Register;
