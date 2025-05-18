@@ -34,6 +34,7 @@ const RegisterPage = () => {
       await new Promise((res) => setTimeout(res, 1000))
       setLoading(false)
       router.push("/login")
+      //eslint-disable-next-line
     } catch (err: any) {
       setLoading(false)
       setError("Registration failed. Please try again.")
