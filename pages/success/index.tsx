@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import SignUpSteps from '../../components/SignUpSteps';
+import { FaUserGraduate } from 'react-icons/fa';
 
 const Success = () => {
   const router = useRouter();
@@ -15,32 +16,44 @@ const Success = () => {
   }, [msg]);
 
   return (
-    <>
-
-    <div className="flex-col justify-center items-center mt-20 mb-24 h-[430px]">
-        <SignUpSteps step1={true} step2={true} step3={true} />
-        <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-md ml-auto mr-auto mt-16">
-          <h1 className="fs-1 font-bold text-blue-900 text-center mb-8">congratulations </h1>
-
-          <p className="text-center text-gray-600 mb-4">
-            {message ? (
-              <span className="text-gray-600 font-medium">{message}</span>
-            ) : (
-              'Your operation was successful.'
-            )}
-          </p>
-
-          <div className="flex justify-center">
-            <button
-              onClick={() => router.push('/login')}
-              className="mt-4 bg-gradient-to-r from-blue-900 to-teal-800 hover:bg-blue-900 text-white font-semibold py-2 px-6 rounded-lg transition duration-300"
-            >
-              Proceed to login
-            </button>
+    <div className="min-h-screen bg-gray-50 flex-col items-center justify-center p-8">
+      <div className="max-w-xl w-full bg-white rounded-xl shadow-md ml-auto mr-auto">
+        {/* Gradient header and icon */}
+        <div className="relative h-24 rounded-t-xl bg-gradient-to-r from-blue-200 to-gray-100 mb-12">
+          <div className="absolute -bottom-10 left-8 bg-white p-4 rounded-full shadow-lg">
+            <FaUserGraduate size={60} className="text-green-800" strokeWidth={1.5} />
           </div>
         </div>
+
+        {/* Steps */}
+        <SignUpSteps step1={true} step2={true} step3={true} />
+
+        {/* Message Section */}
+        <h1 className="text-2xl font-bold text-center text-blue-900 mt-10 mb-4">
+          Congratulations!
+        </h1>
+
+        <p className="text-center text-gray-600 mb-6 px-6">
+          {message ? (
+            <span className="text-gray-600 font-medium">{message}</span>
+          ) : (
+            'Your operation was successful.'
+          )}
+        </p>
+
+        {/* Proceed Button */}
+        <div className="flex justify-center px-8 pb-8">
+          <button
+            onClick={() => router.push('/login')}
+            className="w-fit p-4 bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition"
+          >
+            Proceed to Login
+            
+          </button>
+          
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
