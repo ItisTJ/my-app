@@ -52,6 +52,23 @@ const VerifyToken = () => {
     }
   };
 
+
+  const handleResendOtp = async () => {
+  try {
+    const response = await fetch('http://localhost:4000/api/auth/resend-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await response.json();
+    alert(result.message || 'OTP resent!');
+  } catch (error) {
+    console.error('Resend error:', error);
+  }
+};
+
+
   return (
 
     <>
@@ -95,6 +112,7 @@ const VerifyToken = () => {
             />
           </div>
 
+
           <button
             type="submit"
             className={`w-full py-2 px-4 rounded-lg font-semibold text-white transition-colors ${
@@ -106,6 +124,21 @@ const VerifyToken = () => {
           >
             {loading ? 'Verifying...' : 'Verify OTP'}
           </button>
+
+
+          <button
+            onClick={handleResendOtp}
+            className={`al w-fit py-2 px-4 rounded-lg font-semibold text-white transition-colors mt-4 text-xs ${
+              loading
+                ? 'bg-blue-300 cursor-not-allowed'
+                : 'bg-gradient-to-r from-gray-700 to-gray-800 hover:bg-blue-900'
+            }`}
+            disabled={loading}
+          >
+            {loading ? 'Resending...' : 'Resend OTP'}
+          </button>
+
+
         </form>
       </div>
     </div>
