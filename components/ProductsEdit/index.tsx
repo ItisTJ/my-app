@@ -1,6 +1,6 @@
+// Import core libraries and custom hooks/components
 import Link from 'next/link';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
 import { useAdmin, useProductsActions, useTypedSelector } from '../../hooks';
 import { ProductInterface } from '../../interfaces';
 import { proshopAPI } from '../../lib';
@@ -8,13 +8,17 @@ import FormContainer from '../FormContainer';
 import Loader from '../Loader';
 import Message from '../Message';
 
+// Props interface to accept the product ID from the route or parent component
 interface ProductsEditProps {
   pageId: string | string[] | undefined;
 }
 
+// Main component to handle product editing in admin panel
 const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
+  // Hook to ensure only admin can access this component
   useAdmin();
 
+  // Initial values for a blank product form
   const initialProduct = {
     name: '',
     price: 0,
@@ -26,19 +30,20 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
     description: '',
   };
 
+  // Redux state and actions
   const { data, loading, error } = useTypedSelector(state => state.product);
-
   const { fetchProduct, updateProduct } = useProductsActions();
 
-  const [uploading, setUploading] = useState<boolean>(false);
+  // Local state
+  const [uploading, setUploading] = useState<boolean>(false); // Uploading state for image
+  const [productDetails, setDetails] = useState<Partial<ProductInterface>>(initialProduct); // Editable product details
 
-  const [productDetails, setDetails] =
-    useState<Partial<ProductInterface>>(initialProduct);
-
+  // Fetch the product to edit when pageId changes
   useEffect(() => {
     fetchProduct(pageId as string);
   }, [fetchProduct, pageId]);
 
+  // Set the product form state when the fetched product data becomes available
   useEffect(() => {
     if (data) {
       setDetails({
@@ -53,13 +58,13 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
     }
   }, [data]);
 
+  // Handle form submission to update the product
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     updateProduct(pageId as string, productDetails);
   };
 
-  //eslint-disable-next-line
+  // Handle image upload via multipart/form-data
   const uploadFileHandler = async (e: ChangeEvent<any>) => {
     const file = e.target.files[0];
     const formData = new FormData();
@@ -73,9 +78,8 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
         },
       };
 
-      const { data } = await proshopAPI.post('/api/upload', formData, config);
-
-      setDetails({ ...productDetails, image: data });
+      const { data } = await proshopAPI.post('/upload', formData, config);
+      setDetails({ ...productDetails, image: data }); // Update image field with uploaded URL
       setUploading(false);
     } catch (error) {
       console.error(error);
@@ -85,108 +89,115 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
 
   return (
     <>
+      {/* Go back to admin product list */}
       <Link href="/admin/products" passHref>
-        <Button className="btn btn-light my-3">Go Back</Button>
+        <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors my-3">
+          Go Back
+        </button>
       </Link>
-      <FormContainer>
-        <h1>Edit Product</h1>
 
+      {/* Form container to center the form */}
+      <FormContainer>
+        <h1 className="text-2xl font-bold my-4">Edit Product</h1>
+
+        {/* Conditional rendering: loader, error message or form */}
         {loading ? (
           <Loader />
         ) : error ? (
           <Message variant="danger">{error}</Message>
         ) : (
-          <Form onSubmit={onSubmitHandler}>
-            <Form.Group controlId="name" className="py-2">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="name"
+          <form onSubmit={onSubmitHandler} className="space-y-4">
+            {/* Product Name */}
+            <div className="py-2">
+              <label className="block text-sm font-medium">Name</label>
+              <input
+                type="text"
                 placeholder="Enter name"
                 value={productDetails.name}
-                onChange={e =>
-                  setDetails({ ...productDetails, name: e.target.value })
-                }
-              ></Form.Control>
-            </Form.Group>
+                onChange={e => setDetails({ ...productDetails, name: e.target.value })}
+                className="w-full p-2 border rounded"
+              />
+            </div>
 
-            <Form.Group controlId="price" className="py-2">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
+            {/* Product Price */}
+            <div className="py-2">
+              <label className="block text-sm font-medium">Price</label>
+              <input
                 type="number"
                 placeholder="Enter price"
                 value={productDetails.price}
-                onChange={e =>
-                  setDetails({
-                    ...productDetails,
-                    price: parseInt(e.target.value),
-                  })
-                }
-              ></Form.Control>
-            </Form.Group>
+                onChange={e => setDetails({ ...productDetails, price: parseInt(e.target.value) })}
+                className="w-full p-2 border rounded"
+              />
+            </div>
 
-            <Form.Group controlId="image" className="py-2">
-              <Form.Label>Image</Form.Label>
-              <Form.Group controlId="formFile" onChange={uploadFileHandler}>
-                <Form.Control type="file" />
-              </Form.Group>
-              {uploading && <Loader />}
-            </Form.Group>
+            {/* Image Upload */}
+            <div className="py-2">
+              <label className="block text-sm font-medium">Image</label>
+              <input
+                type="file"
+                onChange={uploadFileHandler}
+                className="w-full p-2 border rounded"
+              />
+              {uploading && <Loader />} {/* Show loader during image upload */}
+            </div>
 
-            <Form.Group controlId="brand" className="py-2">
-              <Form.Label>Brand</Form.Label>
-              <Form.Control
+            {/* Brand */}
+            <div className="py-2">
+              <label className="block text-sm font-medium">Brand</label>
+              <input
                 type="text"
                 placeholder="Enter brand"
                 value={productDetails.brand}
-                onChange={e =>
-                  setDetails({ ...productDetails, brand: e.target.value })
-                }
-              ></Form.Control>
-            </Form.Group>
+                onChange={e => setDetails({ ...productDetails, brand: e.target.value })}
+                className="w-full p-2 border rounded"
+              />
+            </div>
 
-            <Form.Group controlId="countInStock" className="py-2">
-              <Form.Label>Count In Stock</Form.Label>
-              <Form.Control
+            {/* Count in Stock */}
+            <div className="py-2">
+              <label className="block text-sm font-medium">Count In Stock</label>
+              <input
                 type="number"
                 placeholder="Enter countInStock"
                 value={productDetails.countInStock}
-                onChange={e =>
-                  setDetails({
-                    ...productDetails,
-                    countInStock: parseInt(e.target.value),
-                  })
-                }
-              ></Form.Control>
-            </Form.Group>
+                onChange={e => setDetails({ ...productDetails, countInStock: parseInt(e.target.value) })}
+                className="w-full p-2 border rounded"
+              />
+            </div>
 
-            <Form.Group controlId="category" className="py-2">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
+            {/* Category */}
+            <div className="py-2">
+              <label className="block text-sm font-medium">Category</label>
+              <input
                 type="text"
                 placeholder="Enter category"
                 value={productDetails.category}
-                onChange={e =>
-                  setDetails({ ...productDetails, category: e.target.value })
-                }
-              ></Form.Control>
-            </Form.Group>
+                onChange={e => setDetails({ ...productDetails, category: e.target.value })}
+                className="w-full p-2 border rounded"
+              />
+            </div>
 
-            <Form.Group controlId="description" className="py-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
+            {/* Description */}
+            <div className="py-2">
+              <label className="block text-sm font-medium">Description</label>
+              <input
                 type="text"
                 placeholder="Enter description"
                 value={productDetails.description}
-                onChange={e =>
-                  setDetails({ ...productDetails, description: e.target.value })
-                }
-              ></Form.Control>
-            </Form.Group>
+                onChange={e => setDetails({ ...productDetails, description: e.target.value })}
+                className="w-full p-2 border rounded"
+              />
+            </div>
 
-            <Button type="submit" variant="primary" className="mt-3">
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors mt-3"
+            >
               Update
-            </Button>
-          </Form>
+            </button>
+          </form>
         )}
       </FormContainer>
     </>

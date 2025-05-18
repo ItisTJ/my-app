@@ -1,42 +1,46 @@
+// Import necessary hooks, components, and utilities
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter to handle page URL changes
+import { useRouter } from 'next/router';
 import { useProductsActions, useTypedSelector } from '../../hooks';
-import { Row, Col, Button } from 'react-bootstrap';
-import Item from './Item'; // Assuming Item is a component that renders individual product details
-import Loader from '../Loader';
-import Message from '../Message';
-import ProductCarousel from '../ProductCarousel';
+import Item from './Item'; // Product card component
+import Loader from '../Loader'; // Loader UI
+import Message from '../Message'; // Error message UI
 import Link from 'next/link';
+import { FaAngleUp,FaAngleDown } from 'react-icons/fa6';
 
+
+// Interface for props passed to the Products component
 interface ProductsInterface {
-  keyword?: string;
-  pageId?: string;
+  keyword?: string;  // Optional keyword for filtering products
+  pageId?: string;   // Optional page number for pagination
 }
 
+// Functional component to render a paginated and optionally filtered list of products
 const Products: React.FC<ProductsInterface> = ({ keyword, pageId }) => {
-  const { fetchProducts } = useProductsActions();
-  const router = useRouter(); // Using router to handle page URL changes
+  const { fetchProducts } = useProductsActions(); // Redux action to fetch products
+  const router = useRouter(); // Next.js router for navigation and URL state
 
+  // Destructure product-related state from Redux store
   const {
     loading,
     error,
     data: { products, pages, page },
   } = useTypedSelector((state) => state.products);
 
+  // State to track current page and accumulated list of products
   const [currentPage, setCurrentPage] = useState<number>(parseInt(pageId || '1'));
-  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [allProducts, setAllProducts] = useState<any[]>([]); // Holds all loaded products (infinite-scroll-like)
 
-  // Fetch products when pageId or keyword changes
+  // Effect: Fetch products when keyword or pageId changes
   useEffect(() => {
     const queryPage = router.query.pageId ? parseInt(router.query.pageId as string) : 1;
     setCurrentPage(queryPage);
-    fetchProducts(keyword || '', queryPage);
-  }, [fetchProducts, keyword, router.query.pageId]); // Dependency on pageId from the router
+    fetchProducts(keyword || '', queryPage); // Trigger Redux fetch
+  }, [fetchProducts, keyword, router.query.pageId]);
 
-  // Append products when the API call completes
+  // Effect: Add new products to allProducts only if they're not already present
   useEffect(() => {
     if (products.length > 0) {
-      // Filter out products that are already in the allProducts array
       const newProducts = products.filter((product) => 
         !allProducts.some((p) => p._id === product._id)
       );
@@ -44,38 +48,29 @@ const Products: React.FC<ProductsInterface> = ({ keyword, pageId }) => {
     }
   }, [products]);
 
-  // Function to load more products (Show More)
+  // Handle "Show More" button: go to next page and fetch more products
   const handleShowMore = async () => {
     const nextPage = currentPage + 1;
-    // Update the URL with the new pageId
     router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, pageId: nextPage }, // Update URL with new pageId
-      },
+      { pathname: router.pathname, query: { ...router.query, pageId: nextPage } },
       undefined,
-      { shallow: true }
+      { shallow: true } // Prevent full page reload
     );
-
-    // Fetch products for the next page only if necessary
     await fetchProducts(keyword || '', nextPage);
-    setCurrentPage(nextPage); // Update page state after fetch
+    setCurrentPage(nextPage);
   };
 
-  // Function to show less products (Show Less)
+  // Handle "Show Less" button: remove last batch of products and decrement page
   const handleShowLess = () => {
     const prevPage = currentPage - 1;
-    if (prevPage < 1) return; // Prevent going to a negative or zero page
-    // Remove the current page products from the list
-    const productsToRemove = products.length;
+    if (prevPage < 1) return;
+
+    const productsToRemove = products.length; // Remove the last fetched batch
     setAllProducts(allProducts.slice(0, allProducts.length - productsToRemove));
-    setCurrentPage(prevPage); // Update page state
-    // Update the URL with the new pageId without fetching data for the previous page
+    setCurrentPage(prevPage);
+    
     router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, pageId: prevPage }, // Update URL with new pageId
-      },
+      { pathname: router.pathname, query: { ...router.query, pageId: prevPage } },
       undefined,
       { shallow: true }
     );
@@ -83,41 +78,54 @@ const Products: React.FC<ProductsInterface> = ({ keyword, pageId }) => {
 
   return (
     <>
-    {/*  {!keyword ? (
-        <ProductCarousel />
-      ) : (
+      {/* Optional "Go Back" button if search keyword exists */}
+      {keyword && (
         <Link href="/" passHref>
-          <Button className="btn btn-light">Go back</Button>
+          <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors">
+            Go back
+          </button>
         </Link>
       )}
-*/}
-      <h1>Latest products</h1>
+
+      <h1 className="text-2xl font-bold my-4">Latest products</h1>
+
+      {/* Conditional rendering based on loading/error states */}
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
         <>
-          <Row>
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {allProducts.map((product: any) => (
-              <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
-                <Item {...product} />
-              </Col>
+              <div key={product._id} className="w-full">
+                <Item {...product} /> {/* Render each product using Item component */}
+              </div>
             ))}
-          </Row>
-
-          <div className="d-flex justify-content-between">
-            {currentPage > 1 && (
-              <Button variant="secondary" onClick={handleShowLess}>
-                Show Less
-              </Button>
-            )}
-            {currentPage < pages && (
-              <Button variant="primary" onClick={handleShowMore}>
-                Show More
-              </Button>
-            )}
           </div>
+
+          {/* Pagination Controls */}
+            <div className="flex justify-center gap-4 mt-4 mb-8">
+              {currentPage > 1 && (
+                <button
+                  className="group flex items-center gap-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+                  onClick={handleShowLess}
+                >
+                  Show Less
+                  <FaAngleUp className="transform transition-transform duration-200 group-hover:scale-150" />
+                </button>
+              )}
+              {currentPage < pages && (
+                <button
+                  className="group flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                  onClick={handleShowMore}
+                >
+                  Show More
+                  <FaAngleDown className="transform transition-transform duration-200 group-hover:scale-150" />
+                </button>
+              )}
+            </div>
         </>
       )}
     </>
