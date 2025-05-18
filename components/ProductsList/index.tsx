@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Row, Col, Button, Table } from 'react-bootstrap';
 import { useAdmin, useProductsActions, useTypedSelector } from '../../hooks';
 import Loader from '../Loader';
 import Message from '../Message';
@@ -36,13 +35,11 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
   const [currentPage, setCurrentPage] = useState<number>(parseInt(pageId || '1'));
   const [allProducts, setAllProducts] = useState<Product[]>([]);
 
-  // Fetch products for all pages from 1 to the current pageId
   useEffect(() => {
     const queryPage = router.query.pageId ? parseInt(router.query.pageId as string) : 1;
     setCurrentPage(queryPage);
 
     const fetchAllPages = async () => {
-      let accumulatedProducts: Product[] = [];
       for (let i = 1; i <= queryPage; i++) {
         await fetchProducts('', i);
       }
@@ -51,22 +48,19 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
     fetchAllPages();
   }, [fetchProducts, router.query.pageId]);
 
-  // Accumulate products and filter duplicates
   useEffect(() => {
     if (products.length > 0) {
       const newProducts = products.filter((product) => !allProducts.some((p) => p._id === product._id));
       setAllProducts((prevProducts) => [...prevProducts, ...newProducts]);
     }
-    // Reset allProducts if pageId is 1
     if (currentPage === 1) {
       setAllProducts(products);
     }
   }, [products, currentPage]);
 
-  // Refresh products after a successful deletion
   useEffect(() => {
     if (successDelete) {
-      setAllProducts([]); // Clear current products
+      setAllProducts([]);
       const fetchAllPages = async () => {
         for (let i = 1; i <= currentPage; i++) {
           await fetchProducts('', i);
@@ -102,16 +96,15 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
 
   return (
     <>
-      <Row className="align-items-center">
-        <Col>
-          <h1>Products</h1>
-        </Col>
-        <Col className="text-right">
-          <Button className="my-3" onClick={createProduct} style={{ float: 'right' }}>
-            <i className="fas fa-plus"></i> Create Product
-          </Button>
-        </Col>
-      </Row>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold mb-2 sm:mb-0">Products</h1>
+        <button
+          onClick={createProduct}
+          className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors"
+        >
+          <i className="fas fa-plus mr-2"></i> Create Product
+        </button>
+      </div>
 
       {loading ? (
         <Loader />
@@ -119,58 +112,65 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
-          <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {allProducts.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
-                  <td>
-                    <Link href={`/admin/products/edit/${product._id}`} passHref>
-                      <Button variant="light" className="btn-sm">
-                        <i className="fas fa-edit"></i>
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="danger"
-                      className="btn-sm"
-                      onClick={() => {
-                        if (window.confirm('Are you sure you want to delete this product?')) {
-                          deleteProduct(product._id);
-                        }
-                      }}
-                    >
-                      <i className="fas fa-trash"></i>
-                    </Button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border-collapse border border-gray-300 text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-4 py-2 text-left">ID</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">NAME</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">PRICE</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">CATEGORY</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">BRAND</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left"></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {allProducts.map((product) => (
+                  <tr key={product._id} className="hover:bg-gray-50">
+                    <td className="border border-gray-300 px-4 py-2">{product._id}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.name}</td>
+                    <td className="border border-gray-300 px-4 py-2">${product.price}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.category}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.brand}</td>
+                    <td className="border border-gray-300 px-4 py-2 space-x-2">
+                      <Link href={`/admin/products/edit/${product._id}`} passHref>
+                        <button className="bg-gray-200 text-gray-700 py-1 px-2 rounded hover:bg-gray-300">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </Link>
+                      <button
+                        className="bg-red-600 text-white py-1 px-2 rounded hover:bg-red-700"
+                        onClick={() => {
+                          if (window.confirm('Are you sure you want to delete this product?')) {
+                            deleteProduct(product._id);
+                          }
+                        }}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          <div className="d-flex justify-content-between mt-3">
+          <div className="flex justify-center gap-4 mt-4">
             {currentPage > 1 && (
-              <Button variant="secondary" onClick={handleShowLess}>
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+                onClick={handleShowLess}
+              >
                 Show Less
-              </Button>
+              </button>
             )}
             {currentPage < pages && (
-              <Button variant="primary" onClick={handleShowMore}>
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                onClick={handleShowMore}
+              >
                 Show More
-              </Button>
+              </button>
             )}
           </div>
         </>
