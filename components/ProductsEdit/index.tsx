@@ -78,7 +78,7 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
         },
       };
 
-      const { data } = await proshopAPI.post('/upload', formData, config);
+      const { data } = await proshopAPI.post('/api/upload', formData, config);
       setDetails({ ...productDetails, image: data }); // Update image field with uploaded URL
       setUploading(false);
     } catch (error) {
