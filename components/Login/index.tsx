@@ -79,7 +79,10 @@ const Login = () => {
             Sign In
           </button>
 
-          
+          <Link href="/resetPwd" className="text-teal-600 hover:underline font-medium">
+            Fogot Password ?
+          </Link>
+
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-6 pb-8">
