@@ -78,6 +78,8 @@ const Login = () => {
           >
             Sign In
           </button>
+
+          
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-6 pb-8">
@@ -85,7 +87,9 @@ const Login = () => {
           <Link href="/register" className="text-teal-600 hover:underline font-medium">
             Register
           </Link>
+          
         </p>
+        
       </div>
     </div>
   );
