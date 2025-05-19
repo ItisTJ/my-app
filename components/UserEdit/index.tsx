@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
 import { useAdmin, useTypedSelector, useUserActions } from '../../hooks';
 import { UserEditCredentials } from '../../interfaces';
-import FormContainer from '../FormContainer';
 import Loader from '../Loader';
 import Message from '../Message';
+import { FaArrowLeft } from 'react-icons/fa';
 
 interface UserEditProps {
   pageId: string | string[] | undefined;
@@ -52,64 +51,77 @@ const UserEdit: React.FC<UserEditProps> = ({ pageId }) => {
   };
 
   return (
-    <>
-      <Link href="/admin/users" passHref>
-        <div className="btn btn-light my-3">Go back</div>
-      </Link>
-      <FormContainer>
-        <h1>Edit User</h1>
+    <div className=" bg-gray-50 flex flex-col items-center justify-center p-8">
+      <div className="max-w-xl w-full bg-white rounded-xl shadow-md mx-auto">
+        <div className="px-8 py-6">
+          <Link href="/admin/users" passHref>
+            <button className="group mb-6 bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition">
+              <FaArrowLeft className="mr-2 inline transform transition-transform duration-300 group-hover:-translate-x-1" /> Back
+            </button>
+          </Link>
 
-        {loading && <Loader />}
-        {errorEdit && !errorUser && (
-          <Message variant="danger">{errorEdit}</Message>
-        )}
+          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Edit User</h2>
 
-        {errorUser ? (
-          <Message variant="danger">{errorUser}</Message>
-        ) : (
-          <Form onSubmit={onSubmitHandler}>
-            <Form.Group controlId="name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="name"
-                placeholder="Enter name"
-                value={credentials.name}
-                onChange={e =>
-                  setCredentials({ ...credentials, name: e.target.value })
-                }
-              ></Form.Control>
-            </Form.Group>
+          {loading && <Loader />}
+          {errorEdit && !errorUser && (
+            <Message variant="danger">{errorEdit}</Message>
+          )}
 
-            <Form.Group controlId="email" className="py-3">
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={credentials.email}
-                onChange={e =>
-                  setCredentials({ ...credentials, email: e.target.value })
-                }
-              ></Form.Control>
-            </Form.Group>
+          {errorUser ? (
+            <Message variant="danger">{errorUser}</Message>
+          ) : (
+            <form onSubmit={onSubmitHandler} className="space-y-4 pb-8">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  value={credentials.name}
+                  onChange={(e) => setCredentials({ ...credentials, name: e.target.value })}
+                  required
+                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                  placeholder="Enter name"
+                />
+              </div>
 
-            <Form.Group controlId="isadmin">
-              <Form.Check
-                type="checkbox"
-                label="Is Admin"
-                checked={credentials.isAdmin}
-                onChange={e =>
-                  setCredentials({ ...credentials, isAdmin: e.target.checked })
-                }
-              ></Form.Check>
-            </Form.Group>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={credentials.email}
+                  onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+                  required
+                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                  placeholder="Enter email"
+                />
+              </div>
 
-            <Button type="submit" variant="primary" className="mt-3">
-              Update
-            </Button>
-          </Form>
-        )}
-      </FormContainer>
-    </>
+              <div>
+                <label htmlFor="isadmin" className="flex items-center space-x-2">
+                  <input
+                    id="isadmin"
+                    type="checkbox"
+                    checked={credentials.isAdmin}
+                    onChange={(e) => setCredentials({ ...credentials, isAdmin: e.target.checked })}
+                    className="h-4 w-4 text-teal-500 border-gray-300 rounded focus:ring-teal-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700">Is Admin</span>
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
+              >
+                Update
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
