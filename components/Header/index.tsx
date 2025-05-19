@@ -96,9 +96,9 @@ const Header = () => {
               <img
                 src={headerSettings.logo}
                 alt={headerSettings.alt}
-                width={90}
-                height={40}
-                className="object-contain mt-3 mr-8"
+                width={100}
+                height={50}
+                className="object-contain mt-2 mr-8"
                 onError={() => setImageError(true)}
               />
             ) : (
@@ -107,7 +107,6 @@ const Header = () => {
               </span>
             )}
           </Link>
-
           <SearchBox />
         </div>
 
