@@ -10,6 +10,7 @@ import Rating from '../Rating';
 import Loader from '../Loader';
 import Message from '../Message';
 import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa6';
 
 // Props for the component — expecting a dynamic `pageId` from route
 interface ProductDetailsProps {
@@ -55,8 +56,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
     <>
       {/* Go Back button */}
       <Link href="/" passHref>
-        <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors my-3 m-4">
-          Go Back
+        <button className="group m-6 bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition">
+          <FaArrowLeft className="mr-2 inline transform transition-transform duration-300 group-hover:-translate-x-1" /> Back
         </button>
       </Link>
 
