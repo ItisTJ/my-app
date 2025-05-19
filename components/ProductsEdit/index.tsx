@@ -91,7 +91,7 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
     <>
       {/* Go back to admin product list */}
       <Link href="/admin/products" passHref>
-        <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors my-3">
+        <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors my-3 m-4">
           Go Back
         </button>
       </Link>
