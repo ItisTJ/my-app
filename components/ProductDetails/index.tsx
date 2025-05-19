@@ -55,7 +55,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
     <>
       {/* Go Back button */}
       <Link href="/" passHref>
-        <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors my-3">
+        <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors my-3 m-4">
           Go Back
         </button>
       </Link>
@@ -68,15 +68,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
       ) : (
         <>
           {/* Product detail layout in 3 columns */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 m-4">
             {/* Left: product image */}
-            <div className="md:col-span-1">
-              <img src={image} alt={name} className="w-full h-96 object-cover rounded" />
+            <div className="md:col-span-1 p-4">
+              <img src={image} alt={name} className="w-full h-90 object-cover rounded" />
             </div>
 
             {/* Center: product info */}
             <div className="md:col-span-1">
-              <div className="space-y-4">
+              <div className="space-y-4 m-4">
                 <h3 className="text-2xl font-bold">{name}</h3>
                 <div>
                   <Rating value={rating} text={`${numReviews} reviews`} />
@@ -88,7 +88,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
 
             {/* Right: cart panel */}
             <div className="md:col-span-1">
-              <div className="bg-white shadow rounded p-4">
+              <div className="bg-white shadow rounded p-4 m-4">
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span>Price:</span>
@@ -141,7 +141,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
 
           {/* Reviews Section */}
           <div className="mt-8">
-            <div className="md:w-1/2">
+            <div className="md:w-1/2 mx-auto">
               <h2 className="text-2xl font-bold mb-4">Reviews</h2>
 
               {/* No reviews message */}
@@ -202,15 +202,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                       </div>
 
                       {/* Submit button */}
-                    <div className="flex justify-end">
-                      <button
-                        type="submit"
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-                        disabled={loadingReview}
-                      >
-                        Submit
-                      </button>
-                    </div>
+                      <div className="flex justify-center">
+                        <button
+                          type="submit"
+                          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                          disabled={loadingReview}
+                        >
+                          Submit
+                        </button>
+                      </div>
                     </form>
                   ) : (
                     <Message>
