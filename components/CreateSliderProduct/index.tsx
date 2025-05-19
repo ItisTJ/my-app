@@ -1,7 +1,6 @@
 import { FormEvent, useState, useEffect, ChangeEvent } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
 import { useTypedSelector } from "../../hooks";
-import FormContainer from "../../components/FormContainer";
+import FormContainer from "../../components/FormContainer"; // Optional: Replace with Tailwind layout if needed
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { proshopAPI } from "../../lib";
@@ -10,11 +9,10 @@ const SliderUpload = () => {
   const initialData = {
     name: "Sample Name",
     description: "Sample Description",
-    image: "", // Image URL
+    image: "",
   };
 
   const { loading, error, success } = useTypedSelector((state) => state.slider);
-
 
   const [sliderData, setSliderData] = useState(initialData);
   const [message, setMessage] = useState<string | null | string[]>(error);
@@ -26,36 +24,33 @@ const SliderUpload = () => {
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     const { name, description, image } = sliderData;
-  
+
     if (!name || !description || !image) {
       setMessage("All fields are required.");
       return;
     }
-  
+
     try {
       const config = {
-        headers: { "Content-Type": "application/json" }, // Ensure JSON format
+        headers: { "Content-Type": "application/json" },
       };
-  
+
       const response = await proshopAPI.post(
         "/api/slider/upload",
-        { name, description, image }, // Send as JSON
+        { name, description, image },
         config
       );
-  
+
       console.log("Response:", response.data);
-      window.location.reload(); //refreshs the browser
-
-
+      window.location.reload();
       setSliderData(initialData);
     } catch (error) {
       console.error("Upload Error:", error);
       setMessage("Failed to upload slider item.");
     }
   };
-  
 
   const uploadFileHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -73,8 +68,7 @@ const SliderUpload = () => {
       const { data } = await proshopAPI.post("/api/upload", formData, config);
 
       console.log("Image URL:", data);
-      setSliderData({...sliderData,  image: data });
-
+      setSliderData({ ...sliderData, image: data });
     } catch (error) {
       console.error("Image Upload Error:", error);
       setMessage("Image upload failed.");
@@ -84,57 +78,77 @@ const SliderUpload = () => {
   };
 
   return (
-    <FormContainer>
-      <h1>Upload Slider Item</h1>
+    <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md">
+      <h1 className="text-2xl font-semibold mb-6">Upload Slider Item</h1>
 
-      {message && <Message variant="danger">{message}</Message>}
-      {/*{success && window.alert("Slider item uploaded successfully.")}*/}
+      {message && (
+        <Message variant="danger">{message}</Message>
+      )}
+
       {loading && <Loader />}
 
-      <Form onSubmit={onSubmitHandler}>
-        <Form.Group controlId="name">
-          <Form.Label>Slider Name</Form.Label>
-          <Form.Control
+      <form onSubmit={onSubmitHandler} className="space-y-4">
+        {/* Name Field */}
+        <div>
+          <label htmlFor="name" className="block text-sm pb-2 font-medium text-gray-700">
+            Slider Name
+          </label>
+          <input
+            id="name"
             type="text"
             placeholder="Enter name"
             value={sliderData.name}
-            onChange={(e) =>
-              setSliderData({ ...sliderData, name: e.target.value })
-            }
-          ></Form.Control>
-        </Form.Group>
+            onChange={(e) => setSliderData({ ...sliderData, name: e.target.value })}
+            className="mt-1 block w-full rounded-md border pb-2 border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+          />
+        </div>
 
-        <Form.Group controlId="description" className="py-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
+        {/* Description Field */}
+        <div>
+          <label htmlFor="description" className="block text-sm pb-2 font-medium text-gray-700">
+            Description
+          </label>
+          <textarea
+            id="description"
             placeholder="Enter description"
             value={sliderData.description}
-            onChange={(e) =>
-              setSliderData({ ...sliderData, description: e.target.value })
-            }
-          ></Form.Control>
-        </Form.Group>
+            onChange={(e) => setSliderData({ ...sliderData, description: e.target.value })}
+            rows={4}
+            className="mt-1 block w-full rounded-md border pb-2 border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+          />
+        </div>
 
-        <Form.Group controlId="image" className="py-2">
-              <Form.Label>Image</Form.Label>
-              <Form.Group controlId="formFile" onChange={uploadFileHandler}>
-                <Form.Control type="file" />
-              </Form.Group>
-              {uploading && <Loader />}
-        </Form.Group>
+        {/* Image Upload Field */}
+        <div>
+          <label htmlFor="image" className="block pb-2 text-sm font-medium text-gray-700">
+            Image
+          </label>
+          <input
+            id="image"
+            type="file"
+            onChange={uploadFileHandler}
+            className="mt-1 block w-full pb-2 text-sm text-gray-900 file:mr-4 file:py-2 file:px-4
+              file:rounded-md file:border-0 file:text-sm file:font-semibold
+              file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          />
+          {uploading && <Loader />}
+        </div>
 
-        <Button type="submit" variant="primary" className="my-1">
+        <button
+          type="submit"
+          className="w-full bg-black opacity-90 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
+        >
           Upload
-        </Button>
-      </Form>
+        </button>
+      </form>
 
-      <Row className="py-3">
-        <Col>
-          View Slider Items? <a href="/admin/slider">Go to Slider</a>
-        </Col>
-      </Row>
-    </FormContainer>
+      <div className="mt-6 text-center text-sm">
+        View Slider Items?{" "}
+        <a href="/admin/slider" className="text-black hover:underline">
+          Go to Slider
+        </a>
+      </div>
+    </div>
   );
 };
 
