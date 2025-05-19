@@ -49,7 +49,26 @@ const ProductCarousel: React.FC = () => {
   return (
     
     <div className="w-full mx-auto p-6 mb-8 md:p-24 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-500 relative">
-      <div className="relative overflow-hidden rounded-lg h-96 md:h-128">
+      
+      {/* Navigation Arrows */}
+        <button 
+          onClick={prevSlide}
+          className="absolute ml-5 top-1/2 left-4 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow text-gray-800"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft size={24} />
+        </button>
+        
+        <button 
+          onClick={nextSlide}
+          className="absolute mr-5 top-1/2 right-4 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow text-gray-800"
+          aria-label="Next slide"
+        >
+          <ChevronRight size={24} />
+        </button>
+
+
+      <div className=" overflow-hidden rounded-lg h-96 md:h-150">
         {/* Slides container */}
         <div 
           className="flex transition-transform duration-500 ease-out h-full"
@@ -69,10 +88,10 @@ const ProductCarousel: React.FC = () => {
               {/* Product Info */}
               <div className="w-full md:w-1/2 p-4 md:p-12 flex flex-col justify-center">
                 <div className="space-y-4 text-left">
-                  <h2 className="text-2xl md:text-4xl font-bold text-gray-800">{product.name}</h2>
-                  <p className="text-lg md:text-2xl text-gray-600 line-clamp-3">{product.description}</p>
-                  <Link href={`/product/${product._id}`} passHref>
-                    <button className="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition-colors">
+                  <h2 className="text-1xl md:text-4xl font-bold text-gray-800">{product.name}</h2>
+                  <p className="text-lg md:text-1xl text-gray-600 line-clamp-3">{product.description}</p>
+                  <Link href={`/components/Products`} passHref>
+                    <button className="mt-4 bg-black text-white px-6 py-2 rounded-3xl hover:bg-blue-600">
                       Show More
                     </button>
                   </Link>
@@ -82,25 +101,8 @@ const ProductCarousel: React.FC = () => {
           ))}
         </div>
 
-        {/* Navigation Arrows */}
-        <button 
-          onClick={prevSlide}
-          className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow text-gray-800"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft size={24} />
-        </button>
-        
-        <button 
-          onClick={nextSlide}
-          className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow text-gray-800"
-          aria-label="Next slide"
-        >
-          <ChevronRight size={24} />
-        </button>
-
         {/* Indicators */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+        <div className="absolute left-1/2 -translate-x-1/2 flex space-x-2">
           {data.map((_: SliderInterface, index: number) => (
             <button
               key={index}
