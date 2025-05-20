@@ -305,27 +305,19 @@ const Header = () => {
                   >
                     Update Footer
                   </Link>
-<<<<<<< HEAD
-                  <Link href="/admin/updateFooter" passHref legacyBehavior>
-                    <NavDropdown.Item>Update Footer</NavDropdown.Item>
+                  <Link
+                    href="/admin/updateServices"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setIsAdminOpen(false)}
+                  >
+                    Update Services
                   </Link>
-                  <Link href="/admin/updateServices" passHref legacyBehavior>
-                    <NavDropdown.Item>Update Services</NavDropdown.Item>
-                  </Link>
-                </NavDropdown>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-=======
                 </div>
               </div>
             )}
           </div>
         </div>
       </nav>
->>>>>>> 7e3129cfdb9e9cc4a79ea45b9689f135f5dd5ea4
     </header>
   );
 };
