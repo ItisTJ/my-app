@@ -7,6 +7,16 @@ import Message from "../Message"
 import { MapPin, Building, Mail, Globe, ArrowRight, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
+const districtsOfSriLanka = [
+  "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo",
+  "Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara",
+  "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar",
+  "Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya",
+  "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"
+]
+
+const countries = ["Sri Lanka"]
+
 const Shipping = () => {
   useAuth()
 
@@ -60,113 +70,72 @@ const Shipping = () => {
               <label htmlFor="address" className="mb-2 text-sm font-medium text-gray-700">
                 Address
               </label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <MapPin size={18} />
-                </div>
-                <input
-                  id="address"
-                  type="text"
-                  placeholder="Enter your address"
-                  value={shippingAddress.address}
-                  onChange={(e) =>
-                    setShippingAddress({
-                      ...shippingAddress,
-                      address: e.target.value,
-                    })
-                  }
-                  className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                />
-              </div>
+              <input
+                id="address"
+                type="text"
+                placeholder="Enter your address"
+                value={shippingAddress.address}
+                onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })}
+                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer"
+              />
             </div>
 
             <div className="flex flex-col">
               <label htmlFor="city" className="mb-2 text-sm font-medium text-gray-700">
                 City
               </label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <Building size={18} />
-                </div>
-                <input
-                  id="city"
-                  type="text"
-                  placeholder="Enter your city"
-                  value={shippingAddress.city}
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
-                  className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <label htmlFor="postalCode" className="mb-2 text-sm font-medium text-gray-700">
-                Postal Code
-              </label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <Mail size={18} />
-                </div>
-                <input
-                  id="postalCode"
-                  type="text"
-                  placeholder="Enter your postal code"
-                  value={shippingAddress.postalCode}
-                  onChange={(e) =>
-                    setShippingAddress({
-                      ...shippingAddress,
-                      postalCode: e.target.value,
-                    })
-                  }
-                  className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                />
-              </div>
+              <select
+                id="city"
+                value={shippingAddress.city}
+                onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
+                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer"
+              >
+                <option value="">Select your city</option>
+                {districtsOfSriLanka.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="flex flex-col">
               <label htmlFor="country" className="mb-2 text-sm font-medium text-gray-700">
                 Country
               </label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <Globe size={18} />
-                </div>
-                <input
-                  id="country"
-                  type="text"
-                  placeholder="Enter your country"
-                  value={shippingAddress.country}
-                  onChange={(e) =>
-                    setShippingAddress({
-                      ...shippingAddress,
-                      country: e.target.value,
-                    })
-                  }
-                  className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                />
-              </div>
+              <select
+                id="country"
+                value={shippingAddress.country}
+                onChange={(e) => setShippingAddress({ ...shippingAddress, country: e.target.value })}
+                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer"
+              >
+                <option value="">Select your country</option>
+                {countries.map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="postalCode" className="mb-2 text-sm font-medium text-gray-700">
+                Postal Code
+              </label>
+              <input
+                id="postalCode"
+                type="text"
+                placeholder="Enter your postal code"
+                value={shippingAddress.postalCode}
+                onChange={(e) => setShippingAddress({ ...shippingAddress, postalCode: e.target.value })}
+                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer"
+              />
             </div>
 
             <div className="pt-4">
-              <button
-                type="submit"
-                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full md:w-auto"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2 font-bold">
-                  Continue to Payment
-                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
-                <span className="absolute inset-0 z-0 bg-gradient-to-r from-teal-500 to-rose-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+              <button type="submit" className="bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white rounded-lg hover:cursor-pointer">
+                Continue to Payment
               </button>
-              <div className="mt-4 text-center">
-                <Link
-                  href="/cart"
-                  className="text-gray-600 hover:text-teal-600 text-sm font-medium transition-colors inline-flex items-center"
-                >
-                  <ArrowLeft className="h-4 w-4 mr-1" />
-                  Back to Cart
-                </Link>
-              </div>
             </div>
           </form>
         </div>
