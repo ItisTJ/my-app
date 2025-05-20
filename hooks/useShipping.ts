@@ -8,10 +8,10 @@ export const useShipping = () => {
 
   useEffect(() => {
     if (
-      shippingDetails.address.length < 1 ||
-      shippingDetails.city.length < 1 ||
-      shippingDetails.country.length < 1 ||
-      shippingDetails.city.length < 1
+      shippingDetails.address.trim().length === 0 ||
+      shippingDetails.country.trim().length === 0 ||
+      shippingDetails.city.trim().length === 0 ||
+      shippingDetails.postalCode.trim().length === 0
     ) {
       router.push('/shipping');
     }

@@ -26,7 +26,7 @@ export const createOrder =
         payload: data,
       });
 
-      Router.push(`/api/orders/${data._id}`);
+      Router.push(`/orders/${data._id}`);
     } catch (error: any) {
       dispatch({
         type: ActionTypes.CREATE_ORDER_ERROR,
@@ -106,7 +106,7 @@ export const payOrder =
       });
 
       const { data } = await proshopAPI.put(
-        `/api/orders/${orderId}/pay`,
+        `/orders/${orderId}/pay`,
         {
           paymentResult,
         },
