@@ -113,7 +113,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto flex flex-wrap justify-between gap-10">
         {/* Branches */}
         <div className="w-full border-b border-gray-700 pb-6">
-          <h3 className="text-xl font-bold mb-4">Branches</h3>
+          <h3 className="text-xl font-bold mb-4 text-gray-100">Branches</h3>
           <div className="overflow-x-auto">
             <div className="flex gap-6 min-w-max">
               {data.branches.map((branch, index) => (
@@ -138,7 +138,7 @@ const Footer: React.FC = () => {
         {/* Who We Are */}
         <div className="flex-1 min-w-[200px]">
           <Link href="/about">
-            <h3 className="text-3xl font-bold leading-tight hover:text-blue-400 transition-all">
+            <h3 className="text-3xl font-bold leading-tight hover:text-blue-400 transition-all text-gray-200">
               W h o<br />W e<br />A r e ?
             </h3>
           </Link>
@@ -146,7 +146,7 @@ const Footer: React.FC = () => {
 
         {/* Services */}
         <div className="flex-1 min-w-[200px]">
-          <h3 className="text-lg font-semibold mb-3">Services</h3>
+          <h3 className="text-lg font-semibold mb-3 text-gray-100">Services</h3>
           <ul className="space-y-2">
             {data.services.map((service: any, index: number) => (
               <li key={index}>
@@ -158,7 +158,7 @@ const Footer: React.FC = () => {
 
         {/* Privacy and Policies */}
         <div className="flex-1 min-w-[200px]">
-          <h3 className="text-lg font-semibold mb-3">Privacy & Policies</h3>
+          <h3 className="text-lg font-semibold mb-3 text-gray-100">Privacy & Policies</h3>
           <ul className="space-y-2">
             {data.privacyAndPolicies.map((term, index) => (
               <li key={index}>
@@ -170,7 +170,7 @@ const Footer: React.FC = () => {
 
         {/* Contact Info */}
         <div className="flex-1 min-w-[200px]">
-          <h3 className="text-lg font-semibold mb-3">Contact Us</h3>
+          <h3 className="text-lg font-semibold mb-3 text-gray-100">Contact Us</h3>
           <p className="flex items-center gap-2 mb-1">📞 {data.contactNumber}</p>
           <p className="flex items-center gap-2">✉️ {data.email}</p>
 
