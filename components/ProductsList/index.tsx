@@ -1,14 +1,9 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Row, Col, Button, Table } from 'react-bootstrap';
 import { useAdmin, useProductsActions, useTypedSelector } from '../../hooks';
 import Loader from '../Loader';
 import Message from '../Message';
-import Paginate from '../Paginate';
-
-interface ProductListProps {
-  pageId?: string;
-}
+import { useRouter } from 'next/router';
 
 interface Product {
   _id: string;
@@ -16,6 +11,10 @@ interface Product {
   price: number;
   category: string;
   brand: string;
+}
+
+interface ProductListProps {
+  pageId?: string;
 }
 
 const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
@@ -27,117 +26,153 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
     loading,
     error,
     data: { products, pages, page },
-  } = useTypedSelector(state => state.products);
+  } = useTypedSelector((state) => state.products);
 
-  const { success: successDelete } = useTypedSelector(
-    state => state.productDelete
-  );
+  const { success: successDelete } = useTypedSelector((state) => state.productDelete);
 
-  // State to store loaded products
-  const [allProducts, setAllProducts] = useState<Product[]>([]); // Initializing with an empty array
-  const [currentPage, setCurrentPage] = useState(parseInt(pageId || '1'));
-  const [isLoadingMore, setIsLoadingMore] = useState(false); // Flag to track loading state when loading more products
+  const router = useRouter();
+
+  const [currentPage, setCurrentPage] = useState<number>(parseInt(pageId || '1'));
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // Fetch products on initial load or page change
-    fetchProducts('', currentPage);
-  }, [fetchProducts, successDelete, currentPage]);
+    const queryPage = router.query.pageId ? parseInt(router.query.pageId as string) : 1;
+    setCurrentPage(queryPage);
+
+    const fetchAllPages = async () => {
+      for (let i = 1; i <= queryPage; i++) {
+        await fetchProducts('', i);
+      }
+    };
+
+    fetchAllPages();
+  }, [fetchProducts, router.query.pageId]);
 
   useEffect(() => {
     if (products.length > 0) {
-      setAllProducts((prevProducts) => [...prevProducts, ...products]); // Append new products
+      const newProducts = products.filter((product) => !allProducts.some((p) => p._id === product._id));
+      setAllProducts((prevProducts) => [...prevProducts, ...newProducts]);
     }
-  }, [products]);
-
-  // Function to handle "Load More"
-  const handleLoadMore = async () => {
-    if (currentPage < pages && !isLoadingMore) {
-      setIsLoadingMore(true); // Set loading state
-      const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
-
-      try {
-        await fetchProducts('', nextPage); // Fetch the new products
-      } catch (error) {
-        console.error('Error fetching more products', error);
-      } finally {
-        setIsLoadingMore(false); // Reset loading state
-      }
+    if (currentPage === 1) {
+      setAllProducts(products);
     }
+  }, [products, currentPage]);
+
+  useEffect(() => {
+    if (successDelete) {
+      setAllProducts([]);
+      const fetchAllPages = async () => {
+        for (let i = 1; i <= currentPage; i++) {
+          await fetchProducts('', i);
+        }
+      };
+      fetchAllPages();
+    }
+  }, [successDelete, fetchProducts, currentPage]);
+
+  const handleShowMore = async () => {
+    const nextPage = currentPage + 1;
+    router.push(
+      { pathname: router.pathname, query: { ...router.query, pageId: nextPage } },
+      undefined,
+      { shallow: true }
+    );
+    await fetchProducts('', nextPage);
+    setCurrentPage(nextPage);
+  };
+
+  const handleShowLess = () => {
+    const prevPage = currentPage - 1;
+    if (prevPage < 1) return;
+    const productsToRemove = products.length;
+    setAllProducts(allProducts.slice(0, allProducts.length - productsToRemove));
+    setCurrentPage(prevPage);
+    router.push(
+      { pathname: router.pathname, query: { ...router.query, pageId: prevPage } },
+      undefined,
+      { shallow: true }
+    );
   };
 
   return (
     <>
-      <Row className="align-items-center">
-        <Col>
-          <h1>Products</h1>
-        </Col>
-        <Col className="text-right">
-          <Button className="my-3" onClick={createProduct} style={{ float: 'right' }}>
-            <i className="fas fa-plus"></i> Create Product
-          </Button>
-        </Col>
-      </Row>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold mb-2 sm:mb-0">Products</h1>
+        <button
+          onClick={createProduct}
+          className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors"
+        >
+          <i className="fas fa-plus mr-2"></i> Create Product
+        </button>
+      </div>
 
-      {loading || isLoadingMore ? (
-        <Loader /> // Show loading indicator when loading
+      {loading ? (
+        <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
         <>
-          <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {allProducts.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
-                  <td>
-                    <Link href={`/admin/products/edit/${product._id}`} passHref>
-                      <Button variant="light" className="btn-sm">
-                        <i className="fas fa-edit"></i>
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="danger"
-                      className="btn-sm"
-                      onClick={() => {
-                        if (window.confirm('Are you sure you want to delete this product?')) {
-                          deleteProduct(product._id);
-                        }
-                      }}
-                    >
-                      <i className="fas fa-trash"></i>
-                    </Button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border-collapse border border-gray-300 text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-4 py-2 text-left">ID</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">NAME</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">PRICE</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">CATEGORY</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">BRAND</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left"></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {allProducts.map((product) => (
+                  <tr key={product._id} className="hover:bg-gray-50">
+                    <td className="border border-gray-300 px-4 py-2">{product._id}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.name}</td>
+                    <td className="border border-gray-300 px-4 py-2">${product.price}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.category}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.brand}</td>
+                    <td className="border border-gray-300 px-4 py-2 space-x-2">
+                      <Link href={`/admin/products/edit/${product._id}`} passHref>
+                        <button className="bg-gray-200 text-gray-700 py-1 px-2 rounded hover:bg-gray-300">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </Link>
+                      <button
+                        className="bg-red-600 text-white py-1 px-2 rounded hover:bg-red-700"
+                        onClick={() => {
+                          if (window.confirm('Are you sure you want to delete this product?')) {
+                            deleteProduct(product._id);
+                          }
+                        }}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          {/* Pagination */}
-          <Paginate pages={pages} page={page} isAdmin={true} />
-
-          {/* Load More Button */}
-          {currentPage < pages && (
-            <div className="text-center mt-3">
-              <Button variant="primary" onClick={handleLoadMore} disabled={isLoadingMore}>
-                {isLoadingMore ? 'Loading...' : 'Load More'}
-              </Button>
-            </div>
-          )}
+          <div className="flex justify-center gap-4 mt-4">
+            {currentPage > 1 && (
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+                onClick={handleShowLess}
+              >
+                Show Less
+              </button>
+            )}
+            {currentPage < pages && (
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                onClick={handleShowMore}
+              >
+                Show More
+              </button>
+            )}
+          </div>
         </>
       )}
     </>
