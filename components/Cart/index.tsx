@@ -134,7 +134,7 @@ const Cart: React.FC = () => {
                   <Message variant="danger">{error}</Message>
                 </div>
               ) : (
-                cartItems.map((item: CartItem, index) => (
+                cartItems.map((item: CartItem, index: number) => (
                   <div
                     key={randomID()}
                     className={`p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors ${index % 2 === 0 ? "bg-gray-50" : ""}`}
