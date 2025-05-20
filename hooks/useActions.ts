@@ -9,6 +9,7 @@ import {
   SliderActionCreators,
   FooterActionCreators,
   HeaderActionCreators,
+  ServicesActionCreators,
 } from '../state';
 
 export const useProductsActions = () => {
@@ -65,5 +66,13 @@ export const useOrderActions = () => {
 
   return useMemo(() => {
     return bindActionCreators(OrderActionCreators, dispatch);
+  }, [dispatch]);
+};
+
+export const useServicesActions = () => {
+  const dispatch = useDispatch();
+
+  return useMemo(() => {
+    return bindActionCreators(ServicesActionCreators, dispatch);
   }, [dispatch]);
 };

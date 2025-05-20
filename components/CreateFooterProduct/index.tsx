@@ -12,7 +12,6 @@ import { proshopAPI } from "../../lib";
 const FooterManager = () => {
   const dispatch = useDispatch();
 
-  // Redux state for footer data
   const { loading, error, data } = useTypedSelector((state) => state.footer || { loading: false, error: null, data: [] });
   const footer = Array.isArray(data) && data.length > 0 ? data[0] : null;
 
@@ -71,7 +70,7 @@ const FooterManager = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <FormContainer>
-          <h1 style={{ textAlign: "center" ,fontSize:"30px"}}>Update Footer</h1>
+          <h1 style={{ textAlign: "center", fontSize: "30px" }}>Update Footer</h1>
           {message && <Message variant="danger">{message}</Message>}
           <Form onSubmit={onSubmitHandler}>
             <Form.Group controlId="contactNumber">
@@ -82,7 +81,7 @@ const FooterManager = () => {
                 onChange={(e) => setFooterData({ ...footerData, contactNumber: e.target.value })}
               />
             </Form.Group>
-            
+
             <Form.Group controlId="email">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -128,7 +127,6 @@ const FooterManager = () => {
                 value={footerData.instaLink}
                 onChange={(e) => setFooterData({ ...footerData, instaLink: e.target.value })}
               />
-
             </Form.Group>
 
             <Form.Group controlId="ytLink">
@@ -149,7 +147,7 @@ const FooterManager = () => {
               />
             </Form.Group>
 
-            <br></br>
+            <br />
 
             <Button type="submit" variant="primary">Update Footer</Button>
           </Form>

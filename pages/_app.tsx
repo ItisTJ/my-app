@@ -6,7 +6,7 @@ import { useStore } from '../state/store';
 import type { AppProps } from 'next/app';
 //importing components
 import MainLayout from '../layouts/MainLayout';
-import { Container } from 'react-bootstrap';
+//import { Container } from 'react-bootstrap';
 import { Provider } from 'react-redux';
 
 import "../styles/globals.css";
@@ -24,9 +24,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <MainLayout>
-        <Container>
+        
           <Component {...pageProps} />
-        </Container>
+        
       </MainLayout>
     </Provider>
   );
