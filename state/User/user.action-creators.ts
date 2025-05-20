@@ -43,6 +43,22 @@ export const login =
 
       Router.push('/');
     } catch (error: any) {
+
+      const errorMessage =
+        error?.response?.data?.message || error.message || 'Something went wrong';
+
+      //  Check for verification notice
+      if (errorMessage.toLowerCase().includes('verify your email')) {
+        const name = errorMessage.split(',')[0].split(' ')[1];
+        console.log(name);
+        Router.push({
+          pathname: '/verifyToken',
+          query: { name, email },
+        }); //  redirect to OTP input page
+        return;
+      }
+
+
       dispatch({
         type: ActionTypes.USER_LOGIN_ERROR,
         payload: error?.response?.data?.message || error.message || 'Something went wrong',
@@ -268,7 +284,7 @@ export const adminUpdateUser =
         type: ActionTypes.ADMIN_UPDATE_USER_RESET,
       });
 
-      Router.push('/api/admin/users');
+      Router.push('/admin/users');
     } catch (error: any) {
       dispatch({
         type: ActionTypes.ADMIN_UPDATE_USER_ERROR,
