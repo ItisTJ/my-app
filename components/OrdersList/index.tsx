@@ -14,8 +14,11 @@ const OrdersList = () => {
   const user = useTypedSelector(state => state.user);
 
   useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders, user.data]);
+  fetchOrders();
+}, []); // Only on mount
+
+console.log('Orders:', data);
+
 
   return (
     <>
