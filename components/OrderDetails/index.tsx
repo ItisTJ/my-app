@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowLeft, CheckCircle, Truck, Package, Clock, Calendar } from 'lucide-react'
 import { useTypedSelector } from "../../hooks"
+import OrderSummaryContent from "../OrderSummary"
 
 const OrderDetails = () => {
   const { order } = useTypedSelector((state) => state)
@@ -94,11 +95,10 @@ const OrderDetails = () => {
             {steps.map((step) => (
               <div key={step.id} className="flex flex-col items-center">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all duration-300 ${
-                    step.id <= currentStep
-                      ? "bg-gradient-to-r from-blue-950 to-teal-500 text-white"
-                      : "bg-gray-200 text-gray-400"
-                  }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all duration-300 ${step.id <= currentStep
+                    ? "bg-gradient-to-r from-blue-950 to-teal-500 text-white"
+                    : "bg-gray-200 text-gray-400"
+                    }`}
                 >
                   {step.icon}
                 </div>
@@ -115,114 +115,11 @@ const OrderDetails = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2">
-          {/* Order Items */}
-          <div className="bg-white shadow-xl rounded-2xl p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Order Items</h2>
-            <div className="space-y-4">
-              {orderItems.map((item, index) => (
-                <div key={index} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
-                  <div className="flex items-center">
-                    <img
-                      src={item.image || "/placeholder.svg"}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                    <div className="ml-4">
-                      <Link href={`/product/${item.productId}`} passHref>
-                        <span className="text-blue-600 hover:underline font-medium">{item.name}</span>
-                      </Link>
-                      <p className="text-gray-500 text-sm">Quantity: {item.qty}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-medium">${(item.qty * item.price).toFixed(2)}</div>
-                    <div className="text-sm text-gray-500">${item.price} each</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Shipping Details */}
-          <div className="bg-white shadow-xl rounded-2xl p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Shipping Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Shipping Address</h3>
-                <p className="mt-2 text-gray-800">
-                  {shippingDetails.address}
-                  <br />
-                  {shippingDetails.city}, {shippingDetails.postalCode}
-                  <br />
-                  {shippingDetails.country}
-                </p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Payment Method</h3>
-                <p className="mt-2 text-gray-800">Cash On Delivery</p>
-
-                <h3 className="text-sm font-medium text-gray-500 mt-4">Contact Information</h3>
-                <p className="mt-2 text-gray-800">
-                  {shippingDetails.name || "Customer"}
-                  <br />
-                  {shippingDetails.email || "customer@example.com"}
-                  <br />
-                  {shippingDetails.phone || "+1 (555) 123-4567"}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Order Summary */}
-        <div className="md:col-span-1">
-          <div className="bg-white shadow-xl rounded-2xl p-6 sticky top-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Order Summary</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Items</span>
-                <span>${itemsPrice.toFixed(2)}</span>
-              </div>
-
-              {discount > 0 && (
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Discount</span>
-                  <span className="text-rose-500">-${discount.toFixed(2)}</span>
-                </div>
-              )}
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Shipping</span>
-                <span>${shippingPrice.toFixed(2)}</span>
-              </div>
-
-              <div className="border-t pt-3 mt-3">
-                <div className="flex justify-between font-bold">
-                  <span>Total</span>
-                  <span>${totalPrice.toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <Link href="/" passHref>
-                <button className="w-full group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg">
-                  <span className="relative z-10">Continue Shopping</span>
-                  <span className="absolute inset-0 z-0 bg-gradient-to-r from-teal-500 to-rose-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
-                </button>
-              </Link>
-
-              <button className="w-full text-gray-600 hover:text-teal-600 text-sm font-medium transition-colors inline-flex items-center justify-center mt-4">
-                <ArrowLeft size={16} className="mr-1" />
-                Need Help? Contact Support
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+      <OrderSummaryContent/>
     </div>
+  </div>
   )
 }
 
