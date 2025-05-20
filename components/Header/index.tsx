@@ -141,6 +141,9 @@ const Header = () => {
                   <Link href="/admin/updateFooter" passHref legacyBehavior>
                     <NavDropdown.Item>Update Footer</NavDropdown.Item>
                   </Link>
+                  <Link href="/admin/updateServices" passHref legacyBehavior>
+                    <NavDropdown.Item>Update Services</NavDropdown.Item>
+                  </Link>
                 </NavDropdown>
               )}
             </Nav>
