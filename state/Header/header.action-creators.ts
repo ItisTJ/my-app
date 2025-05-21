@@ -6,6 +6,7 @@ import { Dispatch } from "redux";
 
 // ✅ F (Redux Integrated)
 export const fetchHeader = () => async (dispatch: Dispatch) => {
+
   try {
     dispatch({ type: ActionTypes.HEADER_FETCH_REQUEST });
 

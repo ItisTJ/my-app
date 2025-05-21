@@ -44,7 +44,7 @@ console.log('Orders:', data);
             {data.map(_order => (
               <tr key={_order._id}>
                 <td>{_order._id}</td>
-                <td>{_order.user && _order.user.name}</td>
+                <td>{_order.user}</td>
                 <td>{_order.createdAt?.substring(0, 10)}</td>
                 <td>${_order.totalPrice}</td>
                 <td>

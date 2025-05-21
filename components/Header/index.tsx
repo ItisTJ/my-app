@@ -6,6 +6,9 @@ import { useTypedSelector, useUserActions } from "../../hooks";
 import SearchBox from "../SearchBox";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { fetchHeader } from "../../state/Header/header.action-creators";
+import { FaShoppingCart } from "react-icons/fa";
+import {  FaAngleDown, FaChessKing,  FaT,  FaUser, FaUserAstronaut } from "react-icons/fa6";
+import { FaTimes, FaSignInAlt } from "react-icons/fa";
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -88,7 +91,7 @@ const Header = () => {
     <header>
       <nav
         style={{ backgroundColor: headerSettings.color }}
-        className="h-20 flex items-center justify-between px-5 lg:px-8 text-gray-500 font-sans font-normal"
+        className="h-20 flex items-center justify-between px-5 lg:px-8 text-gray-500 font-sans font-normal absolute top-0 left-0 right-0 z-50"
       >
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
@@ -113,7 +116,7 @@ const Header = () => {
         <div className="lg:hidden">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none lg:hidden"
             aria-label="Toggle menu"
           >
             <svg
@@ -135,39 +138,28 @@ const Header = () => {
 
         <div
           className={`lg:flex lg:items-center lg:space-x-6 ${
-            isMenuOpen ? "block" : "hidden"
-          } absolute lg:static top-20 left-0 w-full lg:w-auto bg-[${headerSettings.color}] lg:bg TypedPropertyDescriptor-transparent p-4 lg:p-0 transition-all duration-300 z-50`}
+            isMenuOpen ? "block bg-black" : "hidden"
+          } absolute lg:static top-0 left-0 w-full lg:w-auto bg-[${headerSettings.color}] lg:bg TypedPropertyDescriptor-transparent p-4 lg:p-0 transition-all duration-300 z-50`}
         >
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)}><FaTimes size={24}  className="lg:hidden text-white absolute top-4 right-4" /></button>
           
-
           <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-6">
             {/* Categories Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                className="text-white hover:text-gray-300 focus:outline-none flex items-center"
+                className="text-white hover:text-gray-300 focus:outline-none flex items-center group"
               >
                 CATEGORIES
-                <svg
-                  className="w-4 h-4 ml-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                <FaAngleDown size={20} color="white" className="group-hover:animate-bounce "/>
               </button>
               <div
-                className={`absolute left-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg transition-opacity duration-200 z-20 ${
+                className={`fixed top-0 right-0 w-3/4 sm:w-64 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out  ${
                   isCategoriesOpen ? "opacity-100 block" : "opacity-0 hidden"
                 }`}
               >
+                <FaTimes size={24} className="absolute top-4 right-4 " onClick={() => setIsCategoriesOpen(false)} />
+                  <div className="px-2 py-12">
                 {headerSettings.item.map((item, index) => (
                   <Link
                     key={index}
@@ -178,40 +170,30 @@ const Header = () => {
                     {item}
                   </Link>
                 ))}
+                </div>
               </div>
             </div>
 
             <Link href="/cart" className="text-white hover:text-gray-300 flex items-center">
-              <i className="fas fa-shopping-cart mr-2"></i> CART
+              <FaShoppingCart size={20} />
             </Link>
 
             {data ? (
               <div className="relative">
                 <button
-                  onClick={() => setIsUserOpen(!isUserOpen)}
-                  className="text-white hover:text-gray-300 focus:outline-none flex items-center"
-                >
-                  {data.name}
-                  <svg
-                    className="w-4 h-4 ml-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
+                  onClick={() => setIsUserOpen(!isUserOpen)}>
+                  <FaUser size={20} color="white" className={`${data.isAdmin ? "hidden":"visible"}`}/>
+                  <FaUserAstronaut size={20} color="white" className={`${data.isAdmin ? "visible":"hidden"}`}/>
                 </button>
-                <div
-                  className={`absolute left-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg transition-opacity duration-200 z-20 ${
-                    isUserOpen ? "opacity-100 block" : "opacity-0 hidden"
-                  }`}
-                >
+                 <div
+                    className={`fixed top-0 right-0 w-3/4 sm:w-64 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
+                      isUserOpen ? 'translate-x-0' : 'translate-x-full'
+                    } flex flex-col p-4`}
+                  >
+                  <FaTimes size={20} color="white" className="absolute top-4 right-4 cursor-pointer" onClick={() => setIsUserOpen(false)}/>
+                  <p className=" font-sans text-white block px-4 py-0"> Hello</p>
+                  <h1 className="font-bold font-impact text-white block px-4 py-0 pb-2">{data.name} !</h1>
+                  <hr className="my-2 border-gray-300" />
                   <Link
                     href="/profile"
                     className="block px-4 py-2 hover:bg-gray-100"
@@ -232,7 +214,7 @@ const Header = () => {
               </div>
             ) : (
               <Link href="/login" className="text-white hover:text-gray-300 flex items-center">
-                <i className="fas fa-user mr-2"></i> SIGN IN
+                <FaSignInAlt className="mr-2" size={20} /> SIGN IN
               </Link>
             )}
 
@@ -242,27 +224,14 @@ const Header = () => {
                   onClick={() => setIsAdminOpen(!isAdminOpen)}
                   className="text-white hover:text-gray-300 focus:outline-none flex items-center"
                 >
-                  ADMIN
-                  <svg
-                    className="w-4 h-4 ml-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
+                  <FaChessKing size={20} />
                 </button>
                 <div
-                  className={`absolute left-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg transition-opacity duration-200 z-20 ${
-                    isAdminOpen ? "opacity-100 block" : "opacity-0 hidden"
-                  }`}
+                  className={`fixed top-0 right-0 w-3/4 sm:w-64 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
+                      isAdminOpen ? 'translate-x-0' : 'translate-x-full'
+                    } flex flex-col p-4`}
                 >
+                   <FaTimes size={20} color="white" className="absolute top-4 right-4 cursor-pointer" onClick={() => setIsAdminOpen(!isAdminOpen)}/>
                   <Link
                     href="/admin/users"
                     className="block px-4 py-2 hover:bg-gray-100"
