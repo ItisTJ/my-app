@@ -1,12 +1,5 @@
 import { useEffect, useState, FormEvent, ChangeEvent } from "react";
-<<<<<<< HEAD
 import { useTypedSelector } from "../../hooks";
-=======
-import Link from "next/link";
-import { Button, Col, Form, Row, Table, Image } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { useAdmin, useTypedSelector } from "../../hooks";
->>>>>>> tjsBranch
 import { fetchHeader } from "../../state/Header/header.action-creators";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import FormContainer from "../../components/FormContainer";
@@ -15,7 +8,6 @@ import Message from "../../components/Message";
 import { proshopAPI } from "../../lib";
 
 const HeaderManager = () => {
-  useAdmin();
   
   const dispatch = useAppDispatch();
   const { loading, error, data } = useTypedSelector((state) => state.header || { loading: false, error: null, data: [] });

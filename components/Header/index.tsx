@@ -6,8 +6,8 @@ import { useTypedSelector, useUserActions } from "../../hooks";
 import SearchBox from "../SearchBox";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { fetchHeader } from "../../state/Header/header.action-creators";
-import { FaShoppingCart } from "react-icons/fa";
-import {  FaAngleDown, FaChessKing,  FaT,  FaUser, FaUserAstronaut } from "react-icons/fa6";
+import { FaShoppingCart, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import {  FaAngleDown, FaChessKing,   FaUser, FaUserAstronaut } from "react-icons/fa6";
 import { FaTimes, FaSignInAlt } from "react-icons/fa";
 
 const Header = () => {
@@ -154,7 +154,7 @@ const Header = () => {
                 <FaAngleDown size={20} color="white" className="group-hover:animate-bounce "/>
               </button>
               <div
-                className={`fixed top-0 right-0 w-3/4 sm:w-64 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out  ${
+                className={`fixed top-0 right-0 w-3/4 sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out  ${
                   isCategoriesOpen ? "opacity-100 block" : "opacity-0 hidden"
                 }`}
               >
@@ -183,32 +183,36 @@ const Header = () => {
                 <button
                   onClick={() => setIsUserOpen(!isUserOpen)}>
                   <FaUser size={20} color="white" className={`${data.isAdmin ? "hidden":"visible"}`}/>
+                  <FaUserAstronaut size={20} color="magenta" className={`${data.isAdmin ? "visible":"hidden"} absolute top-0 right-0 animate-ping` }/>
                   <FaUserAstronaut size={20} color="white" className={`${data.isAdmin ? "visible":"hidden"}`}/>
                 </button>
                  <div
-                    className={`fixed top-0 right-0 w-3/4 sm:w-64 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
+                    className={`fixed top-0 right-0 w-fit sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
                       isUserOpen ? 'translate-x-0' : 'translate-x-full'
                     } flex flex-col p-4`}
                   >
                   <FaTimes size={20} color="white" className="absolute top-4 right-4 cursor-pointer" onClick={() => setIsUserOpen(false)}/>
                   <p className=" font-sans text-white block px-4 py-0"> Hello</p>
-                  <h1 className="font-bold font-impact text-white block px-4 py-0 pb-2">{data.name} !</h1>
+                  <h1 className="font-bold text-2xl font-impact text-white block px-4 py-0 pb-2">{data.name} !</h1>
+                  <p className=" font-sans text-xs text-[gold] block px-4 py-0">{data.isAdmin ? "(Admin User)" : ""}</p>
                   <hr className="my-2 border-gray-300" />
                   <Link
                     href="/profile"
                     className="block px-4 py-2 hover:bg-gray-100"
                     onClick={() => setIsUserOpen(false)}
                   >
-                    PROFILE
+                    <FaUserCircle size={20} className=" mr-2 inline" />
+                    Profile 
                   </Link>
                   <button
                     onClick={() => {
                       logout();
                       setIsUserOpen(false);
                     }}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 hover:text-red-500 group"
                   >
-                    LOGOUT
+                    <FaSignOutAlt size={20} className=" mr-2 inline group-hover:text-red-500" />
+                    Logout
                   </button>
                 </div>
               </div>
@@ -224,10 +228,10 @@ const Header = () => {
                   onClick={() => setIsAdminOpen(!isAdminOpen)}
                   className="text-white hover:text-gray-300 focus:outline-none flex items-center"
                 >
-                  <FaChessKing size={20} />
+                  <FaChessKing size={20} color="gold" className="animate-bounce" />
                 </button>
                 <div
-                  className={`fixed top-0 right-0 w-3/4 sm:w-64 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
+                  className={`fixed top-0 right-0 w-3/4 sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
                       isAdminOpen ? 'translate-x-0' : 'translate-x-full'
                     } flex flex-col p-4`}
                 >
