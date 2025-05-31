@@ -49,32 +49,8 @@ const ProductCarousel: React.FC = () => {
 
   return (
     
-<<<<<<< HEAD
-    <div className="w-full mx-auto p-6 mb-8 md:p-24 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-500 relative">
-      
-      {/* Navigation Arrows */}
-        <button 
-          onClick={prevSlide}
-          className="absolute ml-5 top-1/2 left-4 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow text-gray-800"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft size={24} />
-        </button>
-        
-        <button 
-          onClick={nextSlide}
-          className="absolute mr-5 top-1/2 right-4 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow text-gray-800"
-          aria-label="Next slide"
-        >
-          <ChevronRight size={24} />
-        </button>
-
-
-      <div className=" overflow-hidden rounded-lg h-96 md:h-150">
-=======
     <div className=" flex w-full min-h-screen bg-gradient-to-r from-gray-200 via-gray-300 to-gray-500 p-4 sm:p-6 md:p-12 z-0 relative">
       <div className="relative overflow-hidden rounded-lg h-auto max-w-full mx-auto sm:max-w-4xl lg:w-full lg:max-w-none">
->>>>>>> tjsBranch
         {/* Slides container */}
         <div 
           className="flex transition-transform duration-500 ease-out h-auto "
@@ -92,15 +68,6 @@ const ProductCarousel: React.FC = () => {
               </div>
               
               {/* Product Info */}
-<<<<<<< HEAD
-              <div className="w-full md:w-1/2 p-4 md:p-12 flex flex-col justify-center">
-                <div className="space-y-4 text-left">
-                  <h2 className="text-1xl md:text-4xl font-bold text-gray-800">{product.name}</h2>
-                  <p className="text-lg md:text-1xl text-gray-600 line-clamp-3">{product.description}</p>
-                  <Link href={`/components/Products`} passHref>
-                    <button className="mt-4 bg-black text-white px-6 py-2 rounded-3xl hover:bg-blue-600">
-                      Show More
-=======
               <div className="w-full sm:w-1/2 p-4 sm:p-6 md:p-8 flex flex-col align-center justify-content-center items-center">
                 <div className="space-y-3 text-left">
                   <h2 className="font-sans text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">{product.name}</h2>
@@ -108,7 +75,6 @@ const ProductCarousel: React.FC = () => {
                   <Link href={`/product/${product._id}`} passHref>
                     <button className="mt-12 sm:mt-4 bg-none text-gray-800 hover:text-white px-4 sm:px-6 py-2 rounded-3xl hover:bg-gray-800 transition-colors text-sm sm:text-base border-2 border-gray-800 bodrer-solid group">
                       Show More <FaAngleDown className="inline-block ml-2 animate-bounce hover:color-white " />
->>>>>>> tjsBranch
                     </button>
                   </Link>
                 </div>
@@ -117,10 +83,6 @@ const ProductCarousel: React.FC = () => {
           ))}
         </div>
 
-<<<<<<< HEAD
-        {/* Indicators */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex space-x-2">
-=======
         {/* Navigation Arrows */}
         <button 
           onClick={prevSlide}
@@ -140,7 +102,6 @@ const ProductCarousel: React.FC = () => {
 
         {/* Indicators */}
         <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex space-x-1 sm:space-x-2">
->>>>>>> tjsBranch
           {data.map((_: SliderInterface, index: number) => (
             <button
               key={index}
