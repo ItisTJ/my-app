@@ -11,7 +11,7 @@ interface UserEditProps {
 }
 
 const UserEdit: React.FC<UserEditProps> = ({ pageId }) => {
-  useAdmin();
+  //useAdmin();
 
   const initialCredentials = {
     name: '',
