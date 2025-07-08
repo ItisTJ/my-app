@@ -129,6 +129,7 @@ export interface PaginatedProducts {
 }
 
 export interface  ServiceInterface {
+  _id: any;
   title: string;
   description: string; 
   image: string;

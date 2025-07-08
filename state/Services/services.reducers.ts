@@ -53,6 +53,25 @@ export const servicesReducer = (
     case ActionTypes.SERVICES_DELETE_FAIL:
       return { ...state, loading: false, error: action.payload, success: false };
 
+    case ActionTypes.SERVICES_EDIT_REQUEST:
+      return { ...state, loading: true, error: null, success: false };
+
+    case ActionTypes.SERVICES_EDIT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        data: state.data
+          ? state.data.map(service =>
+              service._id === action.payload._id ? action.payload : service
+            )
+          : [],
+        error: null,
+      };
+
+    case ActionTypes.SERVICES_EDIT_FAIL:
+      return { ...state, loading: false, error: action.payload, success: false };
+
     case ActionTypes.SERVICES_RESET:
       return ServiceInitialState;
 

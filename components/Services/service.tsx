@@ -1,16 +1,24 @@
 import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { uploadServices, fetchServices } from "../../state/Services/services.action-creators";
+import {
+  uploadServices,
+  fetchServices,
+  deleteService,
+  editService
+} from "../../state/Services/services.action-creators";
 import { useTypedSelector } from "../../hooks";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "../../state";
 import axios from "axios";
+import { FaEdit } from "react-icons/fa";
+import { FaDeleteLeft, FaRecycle, FaTrash } from "react-icons/fa6";
 
 const ServiceManager = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
 
   const [submittedServices, setSubmittedServices] = useState<any[]>([]);
+  const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -72,32 +80,74 @@ const ServiceManager = () => {
     setPreviewUrls(updatedPreviews);
   };
 
+  // ✅ UPDATED: use editService action
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const success = await dispatch<any>(uploadServices(services));
-      console.log("Upload success:", success);
-
-      if (success) {
-        await dispatch<any>(fetchServices());
-        fetchSubmittedServices(); // Refresh the table
-        setMessage("Services uploaded successfully.");
+      if (editingServiceId) {
+        // Dispatch edit action
+        const success = await dispatch(editService(editingServiceId, services[0]));
+        if (success) {
+          setMessage("Service updated successfully.");
+          setEditingServiceId(null);
+          setServices([{ title: "", description: "", image: "" }]);
+          setPreviewUrls([null]);
+        } else {
+          setMessage("Failed to update service.");
+        }
       } else {
-        setMessage("Failed to upload services.");
+        // Adding new services
+        const success = await dispatch<any>(uploadServices(services));
+        if (success) {
+          setMessage("Services uploaded successfully.");
+        } else {
+          setMessage("Failed to upload services.");
+        }
       }
+      await dispatch<any>(fetchServices());
+      fetchSubmittedServices();
     } catch (error) {
       console.error("Upload error:", error);
-      setMessage("Failed to upload services.");
+      setMessage("Error submitting services.");
+    }
+  };
+
+  const handleEdit = (service: any) => {
+    setEditingServiceId(service._id);
+    setServices([
+      { title: service.title, description: service.description, image: service.image }
+    ]);
+    setPreviewUrls([service.image || null]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // ✅ UPDATED: use deleteService action
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this service?")) return;
+    try {
+      const success = await dispatch(deleteService(id));
+      if (success) {
+        setMessage("Service deleted successfully.");
+        await dispatch<any>(fetchServices());
+        fetchSubmittedServices();
+      } else {
+        setMessage("Failed to delete service.");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      setMessage("Error deleting service.");
     }
   };
 
   return (
     <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-center text-2xl font-bold mb-4">Add Services</h1>
+      <h1 className="text-center text-2xl font-bold mb-4">
+        {editingServiceId ? "Edit Service" : "Add Services"}
+      </h1>
       {message && (
         <div
           className={`p-3 rounded mb-4 ${
-            message.includes("successfully")
+            message.includes("success")
               ? "bg-green-100 text-green-800"
               : "bg-red-100 text-red-800"
           }`}
@@ -123,7 +173,6 @@ const ServiceManager = () => {
                 onChange={(e) => handleChange(index, "title", e.target.value)}
               />
             </div>
-
             <div>
               <label className="block font-bold mb-1">Service Description</label>
               <textarea
@@ -135,7 +184,6 @@ const ServiceManager = () => {
                 }
               ></textarea>
             </div>
-
             <div>
               <label className="block font-bold mb-1">Image</label>
               <input
@@ -151,35 +199,35 @@ const ServiceManager = () => {
                 />
               )}
             </div>
-
-            <button
-              type="button"
-              onClick={() => removeService(index)}
-              className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-red-700 to-red-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg"
-            >
-              Remove Service
-            </button>
+            {services.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeService(index)}
+                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-red-700 to-red-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg"
+              >
+                Remove Service
+              </button>
+            )}
           </div>
         ))}
-
-        <button
-          type="button"
-          onClick={addService}
-          className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg"
-        >
-          Add Service
-        </button>
-
+        {!editingServiceId && (
+          <button
+            type="button"
+            onClick={addService}
+            className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg"
+          >
+            Add Service
+          </button>
+        )}
         <button
           type="submit"
           className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full mt-6"
         >
-          Submit Services
+          {editingServiceId ? "Save Changes" : "Submit Services"}
         </button>
       </form>
 
       <h2 className="text-xl font-semibold mt-10 mb-4">Submitted Services</h2>
-
       {loading ? (
         <p className="text-gray-600">Loading services...</p>
       ) : error ? (
@@ -192,6 +240,7 @@ const ServiceManager = () => {
                 <th className="border px-4 py-2">Title</th>
                 <th className="border px-4 py-2">Description</th>
                 <th className="border px-4 py-2">Image</th>
+                <th className="border px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -207,6 +256,22 @@ const ServiceManager = () => {
                         className="w-24 h-auto rounded shadow"
                       />
                     )}
+                  </td>
+                  <td className="px-4 py-2 flex space-x-2">
+                    <button
+                      onClick={() => handleEdit(service)}
+                      className="text-blue-600 hover:text-blue-800 text-lg"
+                      title="Edit"
+                    >
+                      <FaEdit color="black"/>
+                    </button>
+                    <button
+                      onClick={() => handleDelete(service._id)}
+                      className="text-red-600 hover:text-red-800 text-lg"
+                      title="Delete"
+                    >
+                      <FaTrash/>
+                    </button>
                   </td>
                 </tr>
               ))}

@@ -68,3 +68,71 @@ export const fetchServices = (): ThunkAction<Promise<void>, RootState, unknown, 
     }
   };
 };
+
+export const deleteService = (
+  id: string
+): ThunkAction<Promise<boolean>, RootState, unknown, AnyAction> => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: ActionTypes.SERVICES_DELETE_REQUEST });
+
+      await axios.delete(`http://localhost:4000/api/services/${id}`);
+
+      dispatch({
+        type: ActionTypes.SERVICES_DELETE_SUCCESS,
+        payload: id,
+      });
+
+      return true;
+    } catch (error: any) {
+      dispatch({
+        type: ActionTypes.SERVICES_DELETE_FAIL,
+        payload: error.response?.data?.message
+          ? `${error.response.data.message} Delete failed`
+          : error.message,
+      });
+
+      return false;
+    }
+  };
+};
+export const editService = (
+  id: string,
+  updatedServiceData: {
+    title: string;
+    description: string;
+    image: string;
+  }
+): ThunkAction<Promise<boolean>, RootState, unknown, AnyAction> => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: ActionTypes.SERVICES_EDIT_REQUEST });
+
+      const config = {
+        headers: { "Content-Type": "application/json" },
+      };
+
+      const { data } = await axios.put(
+        `http://localhost:4000/api/services/${id}`,
+        updatedServiceData,
+        config
+      );
+
+      dispatch({
+        type: ActionTypes.SERVICES_EDIT_SUCCESS,
+        payload: data,
+      });
+
+      return true;
+    } catch (error: any) {
+      dispatch({
+        type: ActionTypes.SERVICES_EDIT_FAIL,
+        payload: error.response?.data?.message
+          ? `${error.response.data.message} Edit failed`
+          : error.message,
+      });
+
+      return false;
+    }
+  };
+};
