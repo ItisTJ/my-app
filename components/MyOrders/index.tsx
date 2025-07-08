@@ -60,7 +60,7 @@ const MyOrders = () => {
                   )}
                 </td>
                 <td>
-                  <Link href={`/orders/${order._id}`} passHref>
+                  <Link href={`/orders?orderId=${order._id}`} passHref>
                     <Button variant="light" className="btn-sm">
                       Details
                     </Button>
