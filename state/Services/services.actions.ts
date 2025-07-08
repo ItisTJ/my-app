@@ -11,6 +11,9 @@ export type ServiceAction =
   | ServiceDeleteStart
   | ServiceDeleteSuccess
   | ServiceDeleteError
+  | ServiceEditStart       // Added
+  | ServiceEditSuccess     // Added
+  | ServiceEditError       // Added
   | ServiceReset;
 
 export interface ServiceUploadStart {
@@ -52,6 +55,21 @@ export interface ServiceDeleteSuccess {
 
 export interface ServiceDeleteError {
   type: ActionTypes.SERVICES_DELETE_FAIL;
+  payload: string;
+}
+
+// EDIT action interfaces — added for update functionality
+export interface ServiceEditStart {
+  type: ActionTypes.SERVICES_EDIT_REQUEST;
+}
+
+export interface ServiceEditSuccess {
+  type: ActionTypes.SERVICES_EDIT_SUCCESS;
+  payload: ServiceInterface; // Updated service object
+}
+
+export interface ServiceEditError {
+  type: ActionTypes.SERVICES_EDIT_FAIL;
   payload: string;
 }
 
