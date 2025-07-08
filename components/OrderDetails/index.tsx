@@ -1,45 +1,45 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router"; // ✅ Get orderId from URL
 import Link from "next/link";
 import {
-  ArrowLeft,
   CheckCircle,
   Truck,
   Package,
   Clock,
   Calendar,
 } from "lucide-react";
-import { useTypedSelector, useOrderActions } from "../../hooks"; // ✅ import actions
+import { useTypedSelector, useOrderActions } from "../../hooks";
 import Loader from "../Loader";
 import Message from "../Message";
 import OrderSummaryContent from "../OrderSummary";
 
-const OrderDetails = () => {
-  const router = useRouter();
-  const { orderId } = router.query; // ✅ Get orderId from URL
-  const { fetchOrder } = useOrderActions(); // ✅ Action to fetch specific order
+const statusMap: { [key: number]: string } = {
+  1: "Order Confirmed",
+  2: "Processing",
+  3: "Shipped",
+  4: "Delivered",
+};
+
+const OrderDetails = ({ orderId }: { orderId: string }) => {
+  const { fetchOrder } = useOrderActions();
   const { data: order, loading, error } = useTypedSelector(
     (state) => state.order
-  ); // ✅ Pull single order data
+  );
 
   const [currentStep, setCurrentStep] = useState(1);
   const [estimatedDelivery, setEstimatedDelivery] = useState("");
 
   useEffect(() => {
     if (orderId) {
-      fetchOrder(orderId); // ✅ Fetch order details from API
+      fetchOrder(orderId);
     }
-  }, [orderId]);
+  }, [orderId, fetchOrder]);
 
   useEffect(() => {
-    // Calculate estimated delivery date (3-5 days from now)
     const today = new Date();
     const deliveryDate = new Date(today);
-    deliveryDate.setDate(
-      today.getDate() + 3 + Math.floor(Math.random() * 3)
-    ); // Random between 3-5 days
+    deliveryDate.setDate(today.getDate() + 3 + Math.floor(Math.random() * 3));
 
     setEstimatedDelivery(
       deliveryDate.toLocaleDateString("en-US", {
@@ -50,32 +50,51 @@ const OrderDetails = () => {
       })
     );
 
-    // Simulate order progress for demo purposes
     const timer = setTimeout(() => {
-      setCurrentStep(2); // Move to processing after 2 seconds
+      setCurrentStep(2);
     }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  if (loading) {
-    return <Loader />;
-  }
+  const handleStepClick = async (stepId: number) => {
+  if (stepId <= currentStep) return;
 
-  if (error) {
-    return <Message variant="danger">{error}</Message>;
-  }
+  const newStatus = statusMap[stepId];
+  try {
+    const res = await fetch(`http://localhost:4000/api/orders/${order._id}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        // ✅ Add token if backend expects authorization
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify({ status: newStatus }),
+    });
 
-  if (!order) {
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Error:", errorData);
+      throw new Error(`Error ${res.status}: ${res.statusText}`);
+    }
+
+    console.log("Order status updated successfully");
+    setCurrentStep(stepId); // ✅ Update UI progress
+  } catch (err) {
+    console.error("Failed to update status:", err);
+    alert("Could not update order status. Please try again.");
+  }
+};
+
+  if (loading) return <Loader />;
+  if (error) return <Message variant="danger">{error}</Message>;
+  if (!order)
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Order not found
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-800">Order not found</h2>
           <p className="text-gray-600 mt-2">
-            The order details could not be loaded. Please check the URL or go
-            back to your orders.
+            The order details could not be loaded. Please check the URL or go back to your orders.
           </p>
           <Link href="/orders">
             <a className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">
@@ -85,7 +104,6 @@ const OrderDetails = () => {
         </div>
       </div>
     );
-  }
 
   const {
     orderItems,
@@ -153,7 +171,15 @@ const OrderDetails = () => {
           {/* Steps */}
           <div className="flex justify-between relative">
             {steps.map((step) => (
-              <div key={step.id} className="flex flex-col items-center">
+              <div
+                key={step.id}
+                className={`flex flex-col items-center ${
+                  step.id >= 3
+                    ? "cursor-pointer"
+                    : "cursor-not-allowed"
+                }`}
+                onClick={() => handleStepClick(step.id)}
+              >
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all duration-300 ${
                     step.id <= currentStep
