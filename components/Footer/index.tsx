@@ -66,10 +66,10 @@ const Footer: React.FC = () => {
   useEffect(() => {
     const fetchPrivacyPoliciesFromAPI = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/privacyPolicy");
-        setPrivacyPolicy(response.data);
+        const response = await axios.get("http://localhost:4000/api/");
+        setServices(response.data);
       } catch (error) {
-        console.error("Error fetching privacy and policies:", error);
+        console.error("Error fetching services:", error);
       }
     };
     fetchPrivacyPoliciesFromAPI();
