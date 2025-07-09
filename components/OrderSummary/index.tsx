@@ -93,7 +93,7 @@ const OrderSummaryContent = () => {
       discount: Number(discount.toFixed(2)),
     })
 
-    router.push("/OrderDetails")
+    router.push("/orders")
   }
 
   return (
