@@ -140,3 +140,15 @@ export interface PrivacyPolicyInterface {
   title: string;
   description: string;
 }
+
+export interface BranchesInterface {
+  _id: any;
+  city: string;
+  image: string;
+  contact: string;
+  openAt: string;
+  closeAt: string;
+  location: string;
+}
+
+

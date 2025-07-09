@@ -8,6 +8,7 @@ import axios from "axios";
 
 const Footer: React.FC = () => {
   const [services, setServices] = useState([]);
+  const [privacyPolicy, setPrivacyPolicy] = useState([]);
   const dispatch = useDispatch();
 
   const { loading, error, footerdata } = useTypedSelector((state) => ({
@@ -62,6 +63,19 @@ const Footer: React.FC = () => {
     fetchServicesFromAPI();
   }, []);
 
+  useEffect(() => {
+    const fetchPrivacyPoliciesFromAPI = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/privacyPolicy");
+        setPrivacyPolicy(response.data);
+      } catch (error) {
+        console.error("Error fetching privacy and policies:", error);
+      }
+    };
+    fetchPrivacyPoliciesFromAPI();
+  }, []);
+
+
   const data = {
     branches: [
       {
@@ -85,20 +99,7 @@ const Footer: React.FC = () => {
     ],
     aboutUs: footerData.aboutUs,
     services: services,
-    privacyAndPolicies: [
-      {
-        title: "Terms of Service",
-        description: "Our terms of service govern your use of our platform.",
-      },
-      {
-        title: "Privacy Policy",
-        description: "Learn how we handle your personal data securely.",
-      },
-      {
-        title: "Delivery policies",
-        description: "Details about our delivery procedures and policies.",
-      },
-    ],
+    privacyAndPolicies: privacyPolicy,
     contactNumber: footerData.contactNumber,
     email: footerData.email,
     fbLink: footerData.fbLink,
