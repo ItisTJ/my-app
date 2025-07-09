@@ -111,7 +111,7 @@ const OrdersList = () => {
                         </div>
                         <span className="text-sm font-medium text-gray-900">
                           {/* Replace with actual user name or email from _order or user state */}
-                          {_order.user?.name || _order.user?.email || "Unknown User"}
+                          {_order.userName|| "Unknown User"}
                         </span>
                       </div>
                     </td>
