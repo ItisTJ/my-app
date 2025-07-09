@@ -134,3 +134,9 @@ export interface  ServiceInterface {
   description: string; 
   image: string;
 }
+
+export interface PrivacyPolicyInterface {
+  _id: any;
+  title: string;
+  description: string;
+}
