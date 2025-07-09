@@ -228,7 +228,7 @@ const Header = () => {
                   onClick={() => setIsAdminOpen(!isAdminOpen)}
                   className="text-white hover:text-gray-300 focus:outline-none flex items-center"
                 >
-                  <FaChessKing size={20} color="gold" className="animate-bounce" />
+                  <FaChessKing size={20} color="gold" />
                 </button>
                 <div
                   className={`fixed top-0 right-0 w-3/4 sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
@@ -291,6 +291,14 @@ const Header = () => {
                     onClick={() => setIsAdminOpen(false)}
                   >
                     Update Privacy & Policy
+                  </Link>
+
+                  <Link
+                    href="/admin/updateBranches"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setIsAdminOpen(false)}
+                  >
+                    Update Branches
                   </Link>
                 </div>
               </div>

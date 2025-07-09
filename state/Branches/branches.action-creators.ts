@@ -1,40 +1,44 @@
 import axios from "axios";
-import { ActionTypes } from "./privacyPolicy.action-types";
+import { ActionTypes } from "./branches.action-types";
 import { ThunkAction } from "redux-thunk";
 import { AnyAction } from "redux";
-import { RootState } from "../index"; // Adjust if needed
+import { RootState } from "../index"; // adjust path if needed
 
-// Define PrivacyPolicy type
-interface PrivacyPolicy {
-  title: string;
-  description: string;
+// Define Branch type
+interface Branch {
+  city: string;
+  image: string;
+  contact: string;
+  openAt: string;
+  closeAt: string;
+  location: string;
 }
 
-// Upload Privacy Policies
-export const uploadPrivacyPolicy = (
-  policyData: PrivacyPolicy[]
+// Upload Branches Action
+export const uploadBranches = (
+  branchesData: Branch[]
 ): ThunkAction<Promise<boolean>, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     try {
-      dispatch({ type: ActionTypes.POLICY_UPLOAD_REQUEST });
+      dispatch({ type: ActionTypes.BRANCHES_UPLOAD_REQUEST });
 
       const config = {
         headers: { "Content-Type": "application/json" },
       };
 
-      for (const policy of policyData) {
-        await axios.post("http://localhost:4000/api/privacyPolicy", policy, config);
+      for (const branch of branchesData) {
+        await axios.post("http://localhost:4000/api/branches", branch, config);
       }
 
       dispatch({
-        type: ActionTypes.POLICY_UPLOAD_SUCCESS,
-        payload: "Privacy Policies uploaded successfully",
+        type: ActionTypes.BRANCHES_UPLOAD_SUCCESS,
+        payload: "Branches uploaded successfully",
       });
 
       return true;
     } catch (error: any) {
       dispatch({
-        type: ActionTypes.POLICY_UPLOAD_FAIL,
+        type: ActionTypes.BRANCHES_UPLOAD_FAIL,
         payload: error.response?.data?.message
           ? `${error.response.data.message} Upload failed`
           : error.message,
@@ -45,21 +49,21 @@ export const uploadPrivacyPolicy = (
   };
 };
 
-// Fetch Privacy Policies
-export const fetchPrivacyPolicies = (): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
+// Fetch Branches Action
+export const fetchBranches = (): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     try {
-      dispatch({ type: ActionTypes.POLICY_FETCH_REQUEST });
+      dispatch({ type: ActionTypes.BRANCHES_FETCH_REQUEST });
 
-      const { data } = await axios.get("http://localhost:4000/api/privacyPolicy");
+      const { data } = await axios.get("http://localhost:4000/api/branches");
 
       dispatch({
-        type: ActionTypes.POLICY_FETCH_SUCCESS,
+        type: ActionTypes.BRANCHES_FETCH_SUCCESS,
         payload: data,
       });
     } catch (error: any) {
       dispatch({
-        type: ActionTypes.POLICY_FETCH_FAIL,
+        type: ActionTypes.BRANCHES_FETCH_FAIL,
         payload: error.response?.data?.message
           ? `${error.response.data.message} Fetch failed`
           : error.message,
@@ -68,25 +72,25 @@ export const fetchPrivacyPolicies = (): ThunkAction<Promise<void>, RootState, un
   };
 };
 
-// Delete Privacy Policy
-export const deletePrivacyPolicy = (
+// Delete Branch Action
+export const deleteBranch = (
   id: string
 ): ThunkAction<Promise<boolean>, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     try {
-      dispatch({ type: ActionTypes.POLICY_DELETE_REQUEST });
+      dispatch({ type: ActionTypes.BRANCHES_DELETE_REQUEST });
 
-      await axios.delete(`http://localhost:4000/api/privacyPolicy/${id}`);
+      await axios.delete(`http://localhost:4000/api/branches/${id}`);
 
       dispatch({
-        type: ActionTypes.POLICY_DELETE_SUCCESS,
+        type: ActionTypes.BRANCHES_DELETE_SUCCESS,
         payload: id,
       });
 
       return true;
     } catch (error: any) {
       dispatch({
-        type: ActionTypes.POLICY_DELETE_FAIL,
+        type: ActionTypes.BRANCHES_DELETE_FAIL,
         payload: error.response?.data?.message
           ? `${error.response.data.message} Delete failed`
           : error.message,
@@ -97,37 +101,34 @@ export const deletePrivacyPolicy = (
   };
 };
 
-// Edit Privacy Policy
-export const editPrivacyPolicy = (
+// Edit Branch Action
+export const editBranch = (
   id: string,
-  updatedPolicyData: {
-    title: string;
-    description: string;
-  }
+  updatedBranchData: Branch
 ): ThunkAction<Promise<boolean>, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     try {
-      dispatch({ type: ActionTypes.POLICY_EDIT_REQUEST });
+      dispatch({ type: ActionTypes.BRANCHES_EDIT_REQUEST });
 
       const config = {
         headers: { "Content-Type": "application/json" },
       };
 
       const { data } = await axios.put(
-        `http://localhost:4000/api/privacyPolicy/${id}`,
-        updatedPolicyData,
+        `http://localhost:4000/api/branches/${id}`,
+        updatedBranchData,
         config
       );
 
       dispatch({
-        type: ActionTypes.POLICY_EDIT_SUCCESS,
+        type: ActionTypes.BRANCHES_EDIT_SUCCESS,
         payload: data,
       });
 
       return true;
     } catch (error: any) {
       dispatch({
-        type: ActionTypes.POLICY_EDIT_FAIL,
+        type: ActionTypes.BRANCHES_EDIT_FAIL,
         payload: error.response?.data?.message
           ? `${error.response.data.message} Edit failed`
           : error.message,
