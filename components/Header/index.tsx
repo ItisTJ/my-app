@@ -272,6 +272,13 @@ const Header = () => {
                     Update Slider
                   </Link>
                   <Link
+                    href="/admin/banner"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setIsAdminOpen(false)}
+                  >
+                    Banners
+                  </Link>
+                  <Link
                     href="/admin/updateFooter"
                     className="block px-4 py-2 hover:bg-gray-100"
                     onClick={() => setIsAdminOpen(false)}
