@@ -140,3 +140,15 @@ export interface PrivacyPolicyInterface {
   title: string;
   description: string;
 }
+
+export interface BuyNowItem {
+  product: {
+    _id: string
+    name: string
+    image: string
+    price: number
+    countInStock: number
+  }
+  qty: number
+}
+
