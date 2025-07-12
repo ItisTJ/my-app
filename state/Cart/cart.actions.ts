@@ -15,7 +15,8 @@ export type CartAction =
   | RemoveCartItem
   | SaveCartShippingAddress
   | SaveCartPaymentMethod
-  | CalculatePrices;
+  | CalculatePrices
+  | ClearCart; // 🆕 Add this
 
 export interface AddCartItemStart {
   type: ActionTypes.ADD_CART_ITEM_START;
@@ -63,4 +64,9 @@ export interface SaveCartPaymentMethod {
 export interface CalculatePrices {
   type: ActionTypes.CALCULATE_PRICES;
   payload: CartInterface;
+}
+
+// 🆕 Add this for CLEAR_CART
+export interface ClearCart {
+  type: ActionTypes.CLEAR_CART;
 }
