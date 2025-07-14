@@ -2,9 +2,7 @@ import axios from "axios";
 import { ActionTypes } from "./header.action-types";
 import { Dispatch } from "redux";
 
-
-
-// ✅ F (Redux Integrated)
+// F (Redux Integrated)
 export const fetchHeader = () => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.HEADER_FETCH_REQUEST });

@@ -63,6 +63,7 @@ const SliderUpload = () => {
     try {
       const config = {
         headers: { "Content-Type": "multipart/form-data" },
+        withCredentials:true
       };
 
       const { data } = await proshopAPI.post("/api/upload", formData, config);
@@ -101,6 +102,15 @@ const SliderUpload = () => {
             onChange={(e) => setSliderData({ ...sliderData, name: e.target.value })}
             className="mt-1 block w-full rounded-md border pb-2 border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
           />
+        </div>
+
+        <div>
+          <input 
+          type = "checkbox"
+          name="option 1"
+          value="option 1"
+          >
+          </input>
         </div>
 
         {/* Description Field */}

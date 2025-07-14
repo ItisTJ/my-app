@@ -28,6 +28,7 @@ export const useSliderActions = () => {
   }, [dispatch]);
 };
 
+
 export const useFooterActions = () => {
   const dispatch = useDispatch();
 

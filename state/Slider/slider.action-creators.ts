@@ -23,10 +23,13 @@ export const fetchSliders = () => async (dispatch: Dispatch) => {
 
 // ✅ Delete Slider
 export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {
+  const config={
+    withCredentials: true
+  };
   try {
     dispatch({ type: ActionTypes.SLIDER_DELETE_REQUEST });
 
-    await axios.delete(`http://localhost:4000/api/slider/${id}`);
+    await axios.delete(`http://localhost:4000/api/slider/${id}`,config);
 
     dispatch({ type: ActionTypes.SLIDER_DELETE_SUCCESS, payload: id });
   } catch (error: any) {
@@ -40,6 +43,7 @@ export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {
 
 // ✅ Update Slider
 export const updateSlider = (slider: { _id: string; name: string; description: string; image: string }) => async (dispatch: Dispatch) => {
+  
   try {
     dispatch({ type: ActionTypes.SLIDER_UPDATE_REQUEST });
 
@@ -47,6 +51,7 @@ export const updateSlider = (slider: { _id: string; name: string; description: s
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: true
     };
 
     const { data } = await axios.put(`http://localhost:4000/api/slider/${slider._id}`, slider, config);

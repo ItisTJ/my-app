@@ -1,4 +1,4 @@
-"use client";
+"use client"; //ensure client-side rendering
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
