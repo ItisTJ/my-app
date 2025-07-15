@@ -8,3 +8,4 @@ export * as SliderActionCreators from './Slider/slider.action-creators';
 export * as FooterActionCreators from './Footer/footer.action-creators';
 export * as HeaderActionCreators from './Header/header.action-creators';
 export * as ServicesActionCreators from './Services/services.actions';
+export * as BuyNowActionCreators from './BuyNow/buynow.action-creators'; // ✅ Export BuyNow actions here
