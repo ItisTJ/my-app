@@ -10,6 +10,7 @@ import {
   FooterActionCreators,
   HeaderActionCreators,
   ServicesActionCreators,
+  BuyNowActionCreators,  // ✅ Import BuyNow actions here
 } from '../state';
 
 export const useProductsActions = () => {
@@ -19,7 +20,6 @@ export const useProductsActions = () => {
     return bindActionCreators(ProductsActionCreators, dispatch);
   }, [dispatch]);
 };
-
 
 export const useSliderActions = () => {
   const dispatch = useDispatch();
@@ -74,5 +74,14 @@ export const useServicesActions = () => {
 
   return useMemo(() => {
     return bindActionCreators(ServicesActionCreators, dispatch);
+  }, [dispatch]);
+};
+
+// ✅ New hook for BuyNow actions
+export const useBuyNowActions = () => {
+  const dispatch = useDispatch();
+
+  return useMemo(() => {
+    return bindActionCreators(BuyNowActionCreators, dispatch);
   }, [dispatch]);
 };
