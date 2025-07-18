@@ -23,6 +23,22 @@ export const fetchFooter = () => async (dispatch: Dispatch) => {
   }
 };
 
+const fetchServices = () => async (dispatch: Dispatch) => {
+  try { 
+    dispatch({ type: ActionTypes.SERVICES_FETCH_REQUEST });
+
+    const { data } = await axios.get("http://localhost:4000/api/services");
+
+    dispatch({ type: ActionTypes.SERVICES_FETCH_SUCCESS, payload: data });
+  }
+  catch (error: any) {
+    dispatch({
+      type: ActionTypes.SERVICES_FETCH_FAIL,
+      payload: error.response?.data?.message ? error.response.data.message + " Fetch failed" : error.message,
+    });
+  }
+};
+
 
 // ✅ Delete Slider
 // export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {

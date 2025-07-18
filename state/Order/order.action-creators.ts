@@ -4,9 +4,10 @@ import { proshopAPI } from '../../lib';
 import { ActionTypes } from './order.action-types';
 import { OrderAction } from './order.actions';
 import Router from 'next/router';
+import { clearCart } from '../Cart/cart.action-creators';
 
 export const createOrder =
-  (order: OrderInterface) => async (dispatch: Dispatch<OrderAction>) => {
+  (order: OrderInterface) => async (dispatch: Dispatch<any>) => { // Dispatch<any> so we can dispatch multiple action types
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -26,7 +27,10 @@ export const createOrder =
         payload: data,
       });
 
-      Router.push(`/api/orders/${data._id}`);
+      // ✅ Clear cart after successful order creation
+      dispatch(clearCart());
+
+      Router.push(`/orders/${data._id}`);
     } catch (error: any) {
       dispatch({
         type: ActionTypes.CREATE_ORDER_ERROR,
@@ -106,7 +110,7 @@ export const payOrder =
       });
 
       const { data } = await proshopAPI.put(
-        `/api/orders/${orderId}/pay`,
+        `/orders/${orderId}/pay`,
         {
           paymentResult,
         },
