@@ -1,6 +1,4 @@
-import { useEffect, useState, FormEvent, ChangeEvent } from "react";
-import Link from "next/link";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { useEffect, useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../hooks";
 import { fetchFooter } from "../../state/Footer/footer.action-creators";
@@ -11,8 +9,6 @@ import { proshopAPI } from "../../lib";
 
 const FooterManager = () => {
   const dispatch = useDispatch();
-
-  // Redux state for footer data
   const { loading, error, data } = useTypedSelector((state) => state.footer || { loading: false, error: null, data: [] });
   const footer = Array.isArray(data) && data.length > 0 ? data[0] : null;
 
@@ -50,11 +46,8 @@ const FooterManager = () => {
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
-      const config = {
-        headers: { "Content-Type": "application/json" },
-      };
+      const config = { headers: { "Content-Type": "application/json" } };
       await proshopAPI.post("/api/footer/upload", footerData, config);
       window.location.reload();
     } catch (error) {
@@ -71,88 +64,120 @@ const FooterManager = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <FormContainer>
-          <h1 style={{ textAlign: "center" ,fontSize:"30px"}}>Update Footer</h1>
+          <h1 className="text-3xl font-bold text-center mb-6">Update Footer</h1>
           {message && <Message variant="danger">{message}</Message>}
-          <Form onSubmit={onSubmitHandler}>
-            <Form.Group controlId="contactNumber">
-              <Form.Label>Contact Number</Form.Label>
-              <Form.Control
+          <form onSubmit={onSubmitHandler} className="space-y-4">
+            <div>
+              <label htmlFor="contactNumber" className="block font-bold mb-1">
+                Contact Number
+              </label>
+              <input
+                id="contactNumber"
                 type="text"
                 value={footerData.contactNumber}
                 onChange={(e) => setFooterData({ ...footerData, contactNumber: e.target.value })}
+                className="w-full border border-gray-300 rounded px-3 py-2"
               />
-            </Form.Group>
-            
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block font-bold mb-1">
+                Email
+              </label>
+              <input
+                id="email"
                 type="email"
                 value={footerData.email}
                 onChange={(e) => setFooterData({ ...footerData, email: e.target.value })}
+                className="w-full border border-gray-300 rounded px-3 py-2"
               />
-            </Form.Group>
+            </div>
 
-            <Form.Group controlId="aboutUs">
-              <Form.Label>About Us</Form.Label>
-              <Form.Control
-                type="textarea"
-                as="textarea"
+            <div>
+              <label htmlFor="aboutUs" className="block font-bold mb-1">
+                About Us
+              </label>
+              <textarea
+                id="aboutUs"
                 rows={10}
                 value={footerData.aboutUs}
                 onChange={(e) => setFooterData({ ...footerData, aboutUs: e.target.value })}
+                className="w-full border border-gray-300 rounded px-3 py-2"
               />
-            </Form.Group>
+            </div>
 
-            <Form.Group controlId="fbLink">
-              <Form.Label>Facebook Link</Form.Label>
-              <Form.Control
+            <div>
+              <label htmlFor="fbLink" className="block font-bold mb-1">
+                Facebook Link
+              </label>
+              <input
+                id="fbLink"
                 type="text"
                 value={footerData.fbLink}
                 onChange={(e) => setFooterData({ ...footerData, fbLink: e.target.value })}
+                className="w-full border border-gray-300 rounded px-3 py-2"
               />
-            </Form.Group>
+            </div>
 
-            <Form.Group controlId="whatsappLink">
-              <Form.Label>WhatsApp Link</Form.Label>
-              <Form.Control
+            <div>
+              <label htmlFor="whatsappLink" className="block font-bold mb-1">
+                WhatsApp Link
+              </label>
+              <input
+                id="whatsappLink"
                 type="text"
                 value={footerData.whatsappLink}
                 onChange={(e) => setFooterData({ ...footerData, whatsappLink: e.target.value })}
+                className="w-full border border-gray-300 rounded px-3 py-2"
               />
-            </Form.Group>
+            </div>
 
-            <Form.Group controlId="instaLink">
-              <Form.Label>Instagram Link</Form.Label>
-              <Form.Control
+            <div>
+              <label htmlFor="instaLink" className="block font-bold mb-1">
+                Instagram Link
+              </label>
+              <input
+                id="instaLink"
                 type="text"
                 value={footerData.instaLink}
                 onChange={(e) => setFooterData({ ...footerData, instaLink: e.target.value })}
+                className="w-full border border-gray-300 rounded px-3 py-2"
               />
+            </div>
 
-            </Form.Group>
-
-            <Form.Group controlId="ytLink">
-              <Form.Label>YouTube Link</Form.Label>
-              <Form.Control
+            <div>
+              <label htmlFor="ytLink" className="block font-bold mb-1">
+                YouTube Link
+              </label>
+              <input
+                id="ytLink"
                 type="text"
                 value={footerData.ytLink}
                 onChange={(e) => setFooterData({ ...footerData, ytLink: e.target.value })}
+                className="w-full border border-gray-300 rounded px-3 py-2"
               />
-            </Form.Group>
+            </div>
 
-            <Form.Group controlId="tiktokLink">
-              <Form.Label>TikTok Link</Form.Label>
-              <Form.Control
+            <div>
+              <label htmlFor="ttLink" className="block font-bold mb-1">
+                TikTok Link
+              </label>
+              <input
+                id="ttLink"
                 type="text"
                 value={footerData.ttLink}
                 onChange={(e) => setFooterData({ ...footerData, ttLink: e.target.value })}
+                className="w-full border border-gray-300 rounded px-3 py-2"
               />
-            </Form.Group>
+            </div>
 
-            <br></br>
-
-            <Button type="submit" variant="primary">Update Footer</Button>
-          </Form>
+            <button
+              type="submit"
+              className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full mt-6"
+            >
+              Submit Footer
+            </button>
+          </form>
         </FormContainer>
       )}
     </>

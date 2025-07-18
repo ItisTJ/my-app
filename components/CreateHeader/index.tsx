@@ -8,6 +8,7 @@ import Message from "../../components/Message";
 import { proshopAPI } from "../../lib";
 
 const HeaderManager = () => {
+  
   const dispatch = useAppDispatch();
   const { loading, error, data } = useTypedSelector((state) => state.header || { loading: false, error: null, data: [] });
 
@@ -50,6 +51,7 @@ const HeaderManager = () => {
     try {
       const config = {
         headers: { "Content-Type": "application/json" },
+        withCredentials: true
       };
 
       await proshopAPI.post("/api/header/upload", { name, color, image, items: headerData.items }, config);

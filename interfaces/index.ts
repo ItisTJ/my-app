@@ -127,3 +127,40 @@ export interface PaginatedProducts {
   pages: number;
   page: number;
 }
+
+export interface  ServiceInterface {
+  _id: any;
+  title: string;
+  description: string; 
+  image: string;
+}
+
+export interface PrivacyPolicyInterface {
+  _id: any;
+  title: string;
+  description: string;
+}
+
+export interface BuyNowItem {
+  product: {
+    _id: string
+    name: string
+    image: string
+    price: number
+    countInStock: number
+  }
+  qty: number
+}
+
+
+export interface BranchesInterface {
+  _id: any;
+  city: string;
+  image: string;
+  contact: string;
+  openAt: string;
+  closeAt: string;
+  location: string;
+}
+
+
