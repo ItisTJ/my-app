@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useActionState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   CheckCircle,
@@ -29,16 +29,30 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
     (state) => state.order
   );
 
-  const user = useTypedSelector(state => state.user.data);
+  const user = useTypedSelector((state) => state.user.data);
   const [currentStep, setCurrentStep] = useState(1);
   const [estimatedDelivery, setEstimatedDelivery] = useState("");
 
+  // Fetch order on mount
   useEffect(() => {
     if (orderId) {
       fetchOrder(orderId);
     }
   }, [orderId, fetchOrder]);
 
+  // Sync current step with backend status
+  useEffect(() => {
+    if (order && order.status) {
+      const stepId = Object.keys(statusMap).find(
+        (key) => statusMap[parseInt(key)] === order.status
+      );
+      if (stepId) {
+        setCurrentStep(parseInt(stepId));
+      }
+    }
+  }, [order]);
+
+  // Calculate estimated delivery
   useEffect(() => {
     const today = new Date();
     const deliveryDate = new Date(today);
@@ -52,16 +66,11 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
         day: "numeric",
       })
     );
-
-    const timer = setTimeout(() => {
-      setCurrentStep(2);
-    }, 2000);
-
-    return () => clearTimeout(timer);
   }, []);
 
+  // Update status in backend
   const handleStepClick = async (stepId: number) => {
-    if (stepId <= currentStep) return;
+    if (stepId <= currentStep) return; // Prevent going backward
 
     const newStatus = statusMap[stepId];
     try {
@@ -84,7 +93,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
       }
 
       console.log("Order status updated successfully");
-      setCurrentStep(stepId);
+      await fetchOrder(orderId); // Fetch updated status
     } catch (err) {
       console.error("Failed to update status:", err);
       alert("Could not update order status. Please try again.");
@@ -169,7 +178,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
               <div
                 key={step.id}
                 className={`flex flex-col items-center ${
-                  step.id >= 3 ? "cursor-pointer" : "cursor-not-allowed"
+                  step.id > currentStep ? "cursor-pointer" : "cursor-default"
                 }`}
                 onClick={() => handleStepClick(step.id)}
               >

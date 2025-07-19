@@ -138,3 +138,21 @@ export const savePaymentMethod =
       console.log(getErrorMessage(error));
     }
   };
+
+// ✅ New: Clear Cart action creator
+export const clearCart = () => async (dispatch: Dispatch<CartAction>) => {
+  try {
+    await proshopAPI.delete('api/cart', { withCredentials: true }); // Call backend API
+
+    // Optionally clear localStorage if used
+    localStorage.removeItem('cartItems');
+
+    dispatch({
+      type: ActionTypes.CLEAR_CART,
+    });
+
+    console.log('Cart cleared successfully');
+  } catch (error: any) {
+    console.log(getErrorMessage(error));
+  }
+};

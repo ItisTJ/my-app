@@ -10,11 +10,12 @@ export const cartReducer = (
   switch (action.type) {
     case ActionTypes.ADD_CART_ITEM_START:
       return { ...state, loading: true, error: null };
+
     case ActionTypes.ADD_CART_ITEM_SUCCESS:
       const item = action.payload;
 
       const itemExists = state.data.cartItems.find(
-        x => x.productId === item.productId
+        (x) => x.productId === item.productId
       );
 
       if (itemExists) {
@@ -23,7 +24,7 @@ export const cartReducer = (
           loading: false,
           data: {
             ...state.data,
-            cartItems: state.data.cartItems.map(x =>
+            cartItems: state.data.cartItems.map((x) =>
               x.productId === itemExists.productId ? item : x
             ),
           },
@@ -35,6 +36,7 @@ export const cartReducer = (
         data: { ...state.data, cartItems: [...state.data.cartItems, item] },
         error: null,
       };
+
     case ActionTypes.ADD_CART_ITEM_ERROR:
       return { ...state, loading: false, error: action.payload };
 
@@ -44,7 +46,7 @@ export const cartReducer = (
         data: {
           ...state.data,
           cartItems: state.data.cartItems.filter(
-            x => x.productId !== action.payload
+            (x) => x.productId !== action.payload
           ),
         },
       };
@@ -69,17 +71,25 @@ export const cartReducer = (
 
     case ActionTypes.GET_CART_START:
       return { ...state, loading: true };
+
     case ActionTypes.GET_CART_SUCCESS:
       return {
         loading: false,
         data: action.payload,
         error: null,
       };
+
     case ActionTypes.GET_CART_ERROR:
       return { ...state, loading: false, error: action.payload };
 
     case ActionTypes.CALCULATE_PRICES:
       return { ...state, data: action.payload };
+
+    // ✅ 🆕 Clear cart: reset state to initial values
+    case ActionTypes.CLEAR_CART:
+      return {
+        ...cartInitialState, // reset entire cart state
+      };
 
     default:
       return state;
