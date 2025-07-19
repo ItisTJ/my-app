@@ -9,6 +9,7 @@ import axios from "axios";
 const Footer: React.FC = () => {
   const [services, setServices] = useState([]);
   const [privacyPolicy, setPrivacyPolicy] = useState([]);
+  const [branches, setBranches] = useState([]);
   const dispatch = useDispatch();
 
   const { loading, error, footerdata } = useTypedSelector((state) => ({
@@ -75,28 +76,22 @@ const Footer: React.FC = () => {
     fetchPrivacyPoliciesFromAPI();
   }, []);
 
+  useEffect(() => {
+    const fetchbranchesFromAPI = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/branches");
+        setBranches(response.data);
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      }
+    };
+    fetchbranchesFromAPI();
+  }, []);
+
+
 
   const data = {
-    branches: [
-      {
-        branchName: "Rathnapura",
-        image: "/images/image.png",
-        contact: "+94 71 234 5678",
-        openHours: "10 AM - 4 PM",
-      },
-      {
-        branchName: "Colombo",
-        image: "/images/image.png",
-        contact: "+94 71 876 5432",
-        openHours: "9 AM - 5 PM",
-      },
-      {
-        branchName: "Kandy",
-        image: "/images/image.png",
-        contact: "+94 71 345 6789",
-        openHours: "9 AM - 6 PM",
-      },
-    ],
+    branches: branches,
     aboutUs: footerData.aboutUs,
     services: services,
     privacyAndPolicies: privacyPolicy,
@@ -122,13 +117,15 @@ const Footer: React.FC = () => {
                   key={index}
                   className="flex flex-col items-center text-center bg-gray-800 p-4 rounded-xl shadow-lg min-w-[200px]"
                 >
-                  <h4 className="text-white font-semibold">{branch.branchName}</h4>
-                  <Image src={branch.image} alt={branch.branchName} width={150} height={60} />
+                  <h4 className="text-white font-semibold">{branch.city}</h4>
+                  <a href={branch.location} target="_blank" rel="noopener noreferrer">
+                    <Image src={branch.image} alt={branch.city} width={150} height={60} className="cursor-pointer" />
+                    </a>
                   <p className="text-xs text-blue-300 mt-2">
                     📞 {branch.contact}
                   </p>
                   <p className="text-xs text-green-300">
-                    🕒 Open: {branch.openHours}
+                    🕒 Open: {branch.openAt} - {branch.closeAt}
                   </p>
                 </div>
               ))}
@@ -151,7 +148,7 @@ const Footer: React.FC = () => {
           <ul className="space-y-2">
             {data.services.map((service: any, index: number) => (
               <li key={index}>
-                <Link href="/services" className="hover:text-blue-300">{service.title}</Link>
+                <Link href={`/services/${service._id}`} className="hover:text-blue-300">{service.title}</Link>
               </li>
             ))}
           </ul>
