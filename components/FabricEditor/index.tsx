@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { fabric } from "fabric";
-import { FaDownload, FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import Loader from "../Loader";
 
 interface ObjectWithControlId extends fabric.Object {
@@ -14,6 +14,7 @@ interface Banner {
   title: string;
   image: string;
   productId: string;
+  enable:boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -25,7 +26,7 @@ const FabricCanvasEditor: React.FC = () => {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
   const [editBannerId, setEditBannerId] = useState<string | null>(null);
-  const [editedValues, setEditedValues] = useState<{ title: string; productId: string }>({
+  const [editedValues, setEditedValues] = useState<{ title: string; productId: string; enable?: boolean }>({
     title: "",
     productId: "",
   });
@@ -64,8 +65,8 @@ const FabricCanvasEditor: React.FC = () => {
 
     // Get screen/container width (up to max of 800)
     const parentWidth = canvasEl.parentElement?.offsetWidth || 800;
-    const width = Math.min(parentWidth, 800);
-    const height = (width * 500) / 800; // Maintain 16:10 aspect ratio
+    const width = parentWidth;
+    const height = (width * 300) / 800; // Maintain 16:10 aspect ratio
 
     // Set canvas element dimensions
     canvasEl.width = width;
@@ -126,6 +127,32 @@ const FabricCanvasEditor: React.FC = () => {
       alert("Update failed. See console.");
     }
   };
+
+  const toggleEnable = async (bannerId: string, newEnable: boolean) => {
+  try {
+    setLoading(true);
+
+    const res = await fetch(`http://localhost:4000/api/banner/${bannerId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ enable: newEnable }),
+    });
+
+    if (!res.ok) throw new Error("Failed to update enable status");
+
+    setBanners((prev) =>
+      prev.map((b) => (b._id === bannerId ? { ...b, enable: newEnable } : b))
+    );
+
+    alert("Banner enable status updated!");
+  } catch (error) {
+    console.error("Error updating enable status:", error);
+    alert("Failed to update enable status");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const addText = () => {
     const canvas = fabricRef.current;
@@ -457,7 +484,7 @@ const FabricCanvasEditor: React.FC = () => {
       `}</style>
 
       {/* Controls Column */}
-      <div className="flex flex-col gap-4 w-full md:w-80 overflow-x-auto">
+      <div className="flex flex-col gap-4 w-full md:w-80 overflow-x-auto min-w-[300]">
         {/* Text Controls */}
         <div className="controls rounded-lg shadow w-full border-2 border-gray-300 p-4 bg-white">
           <button onClick={addText} className="bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded mb-2 w-full">
@@ -589,7 +616,7 @@ const FabricCanvasEditor: React.FC = () => {
               </button>
             </div>
             
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto ">
               {loading ? (
                 <div className="p-6 text-center text-gray-500">Loading banners...</div>
               ) : banners.length === 0 ? (
@@ -602,13 +629,13 @@ const FabricCanvasEditor: React.FC = () => {
                         Preview
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Enable
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Title
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Created
+                        Linked Product
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
@@ -628,6 +655,23 @@ const FabricCanvasEditor: React.FC = () => {
                             }}
                           />
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                        <label className="relative inline-block w-11 h-6 cursor-pointer">
+                                      <input
+                                        type="checkbox"
+                                        className="peer sr-only"
+                                        checked={banner.enable}
+                                        onChange={() => toggleEnable(banner._id, !banner.enable)} 
+                                      />
+                                      {/* Track */}
+                                      <div className="w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors"></div>
+                                      {/* Knob */}
+                                      <span className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full
+                                                      transition-transform peer-checked:translate-x-5"></span>
+                        </label>
+
+                      </td>
+
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {editBannerId === banner._id ? (
                             <input
@@ -646,7 +690,7 @@ const FabricCanvasEditor: React.FC = () => {
                             <input
                               type="text"
                               name="productId"
-                              placeholder="link a product"
+                              placeholder="place a product ID"
                               value={editedValues.productId}
                               onChange={handleInputChange}
                               className="border-1 border-gray-300 px-2 py-1 rounded w-full"
@@ -654,9 +698,6 @@ const FabricCanvasEditor: React.FC = () => {
                           ) : (
                             banner.productId
                           )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {banner.createdAt ? formatDate(banner.createdAt) : 'N/A'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex gap-4">
                           {editBannerId === banner._id ? (
