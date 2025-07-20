@@ -1,6 +1,6 @@
 // Import core libraries and custom hooks/components
 import Link from 'next/link';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState, useRef } from 'react';
 import { useAdmin, useProductsActions, useTypedSelector } from '../../hooks';
 import { ProductInterface } from '../../interfaces';
 import { proshopAPI } from '../../lib';
@@ -86,6 +86,18 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
       setUploading(false);
     }
   };
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-adjust height when content or component loads
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, 
+  [productDetails.description]
+);
 
   return (
     <div className=" bg-gray-50 flex flex-col items-center justify-center p-8">
@@ -182,12 +194,18 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
                 {/* Description */}
                 <div className="py-2">
                   <label className="block text-sm font-medium text-gray-700">Description</label>
-                  <input
-                    type="text"
+                  <textarea
+                    ref={textareaRef}
                     placeholder="Enter description"
                     value={productDetails.description}
                     onChange={e => setDetails({ ...productDetails, description: e.target.value })}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    onInput={e => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = 'auto';
+                      target.style.height = target.scrollHeight + 'px';
+                    }}
+                    rows={1}
+                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none resize-none overflow-hidden"
                   />
                 </div>
 
