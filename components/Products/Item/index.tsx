@@ -15,12 +15,12 @@ const Item: React.FC<ProductInterface> = ({
   return (
     // Main container for the product card
     <div
-      className=" my-3 p-3 rounded  cursor-pointer bg-white shadow hover:shadow-md transition-shadow h-full"
+      className="my-3 p-3 rounded cursor-pointer bg-white shadow hover:shadow-md transition-shadow h-full flex flex-col sm:flex-row md:flex-col lg:flex-row xl:flex-col"
       role="button" // Makes the card feel like a clickable item (accessibility)
     >
       {/* Product Image with link to product details page */}
       <div className="h-64 w-full flex flex-col items-center overflow-hidden">
-        <Link href={`/product/${_id}`} passHref className='mt-auto mb-auto'>
+        <Link href={`/product/${_id}`} passHref className="mt-auto mb-auto">
           <img
             src={image}
             alt={name}
@@ -30,7 +30,7 @@ const Item: React.FC<ProductInterface> = ({
       </div>
 
       {/* Product text details */}
-      <div className=" flex flex-col items-center justify-between pt-auto pb-0">
+      <div className="flex flex-col items-center justify-between pt-auto pb-0">
         {/* Product Name with link to product details */}
         <Link href={`/product/${_id}`} passHref>
           <h3 className="text-lg font-bold">
