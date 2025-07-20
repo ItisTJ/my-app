@@ -7,7 +7,7 @@ const AdminProductsPage: NextPage = () => {
   return (
     <>
       <SEO {...homeConfig} />
-      <main className="wrapper p-5">
+      <main className="wrapper p-5 mt-5">
         <ProductsList />
       </main>
     </>
