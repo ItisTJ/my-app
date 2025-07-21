@@ -283,7 +283,7 @@ const Header = () => {
                     className="block px-4 py-2 hover:bg-gray-100"
                     onClick={() => setIsAdminOpen(false)}
                   >
-                    Update Footer
+                    Update Contact Details
                   </Link>
                   <Link
                     href="/admin/updateServices"
@@ -306,6 +306,14 @@ const Header = () => {
                     onClick={() => setIsAdminOpen(false)}
                   >
                     Update Branches
+                  </Link>
+
+                  <Link
+                    href="/admin/updateAbout"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setIsAdminOpen(false)}
+                  >
+                    Update About
                   </Link>
                 </div>
               </div>
