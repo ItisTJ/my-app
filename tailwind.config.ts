@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-export default {
+const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -12,7 +12,22 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundSize: {
+        '400': '400% 400%',
+      },
+      keyframes: {
+        borderAnim: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+      },
+      animation: {
+        border: 'borderAnim 5s linear infinite',
+      },
     },
   },
   plugins: [],
-} satisfies Config;
+};
+
+export default config;
