@@ -3,8 +3,8 @@
 import { NextPage } from 'next';
 //importing components
 import Products from '../components/Products';
-import ProductCarousel from '../components/ProductCarousel';
-import Link from 'next/link';
+import ProductCarousel from '../components/ProductCarousel';  
+import Banner from '../components/Banner';
 
 const HomePage: NextPage = () => {
   return (
@@ -12,6 +12,7 @@ const HomePage: NextPage = () => {
       
       <main className="wrapper">
         <ProductCarousel />
+        <Banner/>
         <Products/>
       </main>
     </>

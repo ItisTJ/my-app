@@ -13,6 +13,7 @@ interface Product {
   price: number;
   category: string;
   brand: string;
+  countInStock: number;
 }
 
 // Props for the ProductsList component
@@ -142,6 +143,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
                   <th className="border border-gray-300 px-4 py-2 text-left">PRICE</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">CATEGORY</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">BRAND</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">IN STOCK</th>
                   <th className="border border-gray-300 px-4 py-2 text-left"></th>
                 </tr>
               </thead>
@@ -154,6 +156,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
                     <td className="border border-gray-300 px-4 py-2">${product.price}</td>
                     <td className="border border-gray-300 px-4 py-2">{product.category}</td>
                     <td className="border border-gray-300 px-4 py-2">{product.brand}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.countInStock}</td>
                     <td className="border border-gray-300 px-4 py-2 space-x-2">
                       {/* Edit button */}
                       <Link href={`/admin/products/edit/${product._id}`} passHref>
