@@ -1,12 +1,13 @@
 // Import core libraries and custom hooks/components
 import Link from 'next/link';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState, useRef } from 'react';
 import { useAdmin, useProductsActions, useTypedSelector } from '../../hooks';
 import { ProductInterface } from '../../interfaces';
 import { proshopAPI } from '../../lib';
 import { FaArrowLeft } from 'react-icons/fa';
 import Loader from '../Loader';
 import Message from '../Message';
+import axios from 'axios';
 
 // Props interface to accept the product ID from the route or parent component
 interface ProductsEditProps {
@@ -33,6 +34,8 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
   // Redux state and actions
   const { data, loading, error } = useTypedSelector(state => state.product);
   const { fetchProduct, updateProduct } = useProductsActions();
+  const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
+
 
   // Local state
   const [uploading, setUploading] = useState<boolean>(false); // Uploading state for image
@@ -57,6 +60,20 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
       });
     }
   }, [data]);
+
+   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get('http://localhost:4000/api/categories');
+        setCategories(res.data);
+      } catch (err) {
+        console.error('Failed to fetch categories', err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
 
   // Handle form submission to update the product
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -86,6 +103,18 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
       setUploading(false);
     }
   };
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-adjust height when content or component loads
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, 
+  [productDetails.description]
+);
 
   return (
     <div className=" bg-gray-50 flex flex-col items-center justify-center p-8">
@@ -169,25 +198,45 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
 
                 {/* Category */}
                 <div className="py-2">
-                  <label className="block text-sm font-medium text-gray-700">Category</label>
-                  <input
-                    type="text"
-                    placeholder="Enter category"
+                  <label className="inline-block text-sm font-medium text-gray-700">Category</label>
+                  <a
+                    href="/admin/categories"
+                    className="inline-block ml-2 bg-gray-900 text-xs text-gray-100 font-semibold py-1 px-4 rounded-lg hover:bg-gray-300 transition"
+                  >
+                    Manage Categories
+                  </a>
+
+                  <select
                     value={productDetails.category}
                     onChange={e => setDetails({ ...productDetails, category: e.target.value })}
                     className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
-                  />
+                  >
+                    <option value="" className='text-gray-300 text-center'>Select a category</option>
+                    
+                    {categories.map((category) => (
+                      <option key={category._id} value={category.name}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
 
                 {/* Description */}
                 <div className="py-2">
                   <label className="block text-sm font-medium text-gray-700">Description</label>
-                  <input
-                    type="text"
+                  <textarea
+                    ref={textareaRef}
                     placeholder="Enter description"
                     value={productDetails.description}
                     onChange={e => setDetails({ ...productDetails, description: e.target.value })}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    onInput={e => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = 'auto';
+                      target.style.height = target.scrollHeight + 'px';
+                    }}
+                    rows={1}
+                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none resize-none overflow-hidden"
                   />
                 </div>
 
