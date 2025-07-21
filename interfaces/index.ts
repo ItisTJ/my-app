@@ -164,3 +164,10 @@ export interface BranchesInterface {
 }
 
 
+export interface AboutInterface {
+  _id: any;
+  about: string;
+  vision: string;
+  mission: string;
+}
+
