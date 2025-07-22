@@ -12,6 +12,8 @@ const Footer: React.FC = () => {
   const [branches, setBranches] = useState([]);
   const dispatch = useDispatch();
 
+  
+
   const { loading, error, footerdata } = useTypedSelector((state) => ({
     loading: state.footer?.loading || false,
     error: state.footer?.error || null,
@@ -123,14 +125,8 @@ const Footer: React.FC = () => {
                 >
                   <h4 className="text-white font-semibold">{branch.city}</h4>
                   <a href={branch.location} target="_blank" rel="noopener noreferrer">
-                    <Image
-                      src={branch.image}
-                      alt={branch.city}
-                      width={200}
-                      height={80}
-                      className="w-[180px] h-[140px] object-cover rounded-md cursor-pointer"
-                    />
-                  </a>
+                    <Image src={branch.image} alt={branch.city} width={150} height={60} className="cursor-pointer aspect-[2:1]" />
+                    </a>
                   <p className="text-xs text-blue-300 mt-2">
                     📞 {branch.contact}
                   </p>
@@ -158,7 +154,7 @@ const Footer: React.FC = () => {
           <ul className="space-y-2">
             {data.services.map((service: any, index: number) => (
               <li key={index}>
-                <Link href={`/services/${service._id}`} className="hover:text-blue-300">{service.title}</Link>
+                <Link href={`/services/?id=${service._id}`} className="hover:text-blue-300">{service.title}</Link>
               </li>
             ))}
           </ul>
@@ -168,9 +164,9 @@ const Footer: React.FC = () => {
         <div className="flex-1 min-w-[200px]">
           <h3 className="text-lg font-semibold mb-3 text-gray-100">Privacy & Policies</h3>
           <ul className="space-y-2">
-            {data.privacyAndPolicies.map((term, index) => (
+            {data.privacyAndPolicies.map((privacyPolicy: any, index: number) => (
               <li key={index}>
-                <Link href="/services" className="hover:text-blue-300">{term.title}</Link>
+                <Link href={`/privacyPolicies/?id=${privacyPolicy._id}`} className="hover:text-blue-300">{privacyPolicy.title}</Link>
               </li>
             ))}
           </ul>

@@ -80,7 +80,7 @@ const SearchBox = () => {
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               placeholder="Search Products..."
-              className="w-full pl-10 pr-8 py-2 rounded-full text-sm text-black h-10 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-600 shadow-md md:shadow-none"
+              className="w-full pl-10 pr-8 py-2 rounded-full opacity-80 text-sm text-black h-10 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-600 shadow-md md:shadow-none"
               aria-label="Search products"
             />
             
