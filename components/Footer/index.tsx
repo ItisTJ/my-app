@@ -8,7 +8,7 @@ import axios from "axios";
 
 const Footer: React.FC = () => {
   const [services, setServices] = useState([]);
-  const [privacyPolicy, setPrivacyPolicy] = useState([]);
+  const [privacyPolicy, setprivacyPolicy] = useState([]);
   const [branches, setBranches] = useState([]);
   const dispatch = useDispatch();
 
@@ -68,9 +68,9 @@ const Footer: React.FC = () => {
     const fetchPrivacyPoliciesFromAPI = async () => {
       try {
         const response = await axios.get("http://localhost:4000/api/privacyPolicy");
-        setServices(response.data);
+        setprivacyPolicy(response.data);
       } catch (error) {
-        console.error("Error fetching services:", error);
+        console.error("Error fetching privacy & policy:", error);
       }
     };
     fetchPrivacyPoliciesFromAPI();

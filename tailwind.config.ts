@@ -23,7 +23,7 @@ const config: Config = {
         },
       },
       animation: {
-        border: 'borderAnim 5s linear infinite',
+        border: 'borderAnim 8s ease-in-out infinite',
       },
     },
   },
