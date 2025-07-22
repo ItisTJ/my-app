@@ -88,6 +88,9 @@ const Header = () => {
   const categoryFromUrl = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("category") : null;
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+
+
 
   useEffect(() => {
     let itemsArray: string[] = [];
