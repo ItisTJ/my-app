@@ -76,7 +76,8 @@ const Shipping = () => {
                 placeholder="Enter your address"
                 value={shippingAddress.address}
                 onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })}
-                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer hover:bg-gray-100
+"
               />
             </div>
 
@@ -88,7 +89,8 @@ const Shipping = () => {
                 id="city"
                 value={shippingAddress.city}
                 onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
-                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer hover:bg-gray-100
+"
               >
                 <option value="">Select your city</option>
                 {districtsOfSriLanka.map((city) => (
@@ -107,7 +109,8 @@ const Shipping = () => {
                 id="country"
                 value={shippingAddress.country}
                 onChange={(e) => setShippingAddress({ ...shippingAddress, country: e.target.value })}
-                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer hover:bg-gray-100
+"
               >
                 <option value="">Select your country</option>
                 {countries.map((country) => (
@@ -128,15 +131,26 @@ const Shipping = () => {
                 placeholder="Enter your postal code"
                 value={shippingAddress.postalCode}
                 onChange={(e) => setShippingAddress({ ...shippingAddress, postalCode: e.target.value })}
-                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all hover:cursor-pointer hover:bg-gray-100
+"
               />
             </div>
 
             <div className="pt-4">
-              <button type="submit" className="bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white rounded-lg hover:cursor-pointer">
+              <button type="submit" className="bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white rounded-lg hover:cursor-pointer hover:opacity-90 transition duration-500 ease-in-out ...">
                 Continue to Payment
               </button>
             </div>
+
+            <div className="mt-4 text-left">
+                <Link
+                  href="/cart"
+                  className="text-gray-600 hover:text-teal-600 text-sm font-medium transition-colors inline-flex items-center"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  Back to cart
+                </Link>
+              </div>
           </form>
         </div>
       </div>

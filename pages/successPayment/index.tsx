@@ -79,7 +79,7 @@ const Success = () => {
           {orderId && (
             <Link href={`/orders/${orderId}`} passHref>
               <button
-                className="w-fit p-4 mx-8 bg-gradient-to-r bg-gray-200 hover:opacity-90 text-black font-semibold py-3 rounded-lg shadow-md transition"
+                className="flex-1 border-1 border-black-500  bg-transparen hover:bg-gray-100 transition duration-500 ease-in-out ... disabled:bg-gray-300 disabled:cursor-not-allowed text-black font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center gap-2"
               >
                 View Order Details
               </button>

@@ -254,7 +254,7 @@ const Header = () => {
                   <FaTimes size={20} color="white" className="absolute top-4 right-4 cursor-pointer" onClick={() => setIsUserOpen(false)}/>
                   <p className=" font-sans text-white block px-4 py-0"> Hello</p>
                   <h1 className="font-bold text-2xl font-impact text-white block px-4 py-0 pb-2">{data.name} !</h1>
-                  <p className=" font-sans text-xs text-[gold] block px-4 py-0">{data.isAdmin ? "(Admin User)" : ""}</p>
+                  <p className=" font-sans text-xs text-[hsl(51,100%,50%)] block px-4 py-0">{data.isAdmin ? "(Admin User)" : ""}</p>
                   <hr className="my-2 border-gray-300" />
                   <Link
                     href="/profile"
@@ -343,7 +343,7 @@ const Header = () => {
                     className="block px-4 py-2 hover:bg-gray-100"
                     onClick={() => setIsAdminOpen(false)}
                   >
-                    Update Contact Details
+                    Update Basic Details
                   </Link>
                   <Link
                     href="/admin/updateServices"

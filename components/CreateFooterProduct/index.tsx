@@ -1,11 +1,11 @@
-import { useEffect, useState, FormEvent } from "react";
+// components/FooterManager.tsx
+import React, { useEffect, useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../hooks";
 import { fetchFooter } from "../../state/Footer/footer.action-creators";
-import FormContainer from "../../components/FormContainer";
+import { proshopAPI } from "../../lib";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { proshopAPI } from "../../lib";
 
 const FooterManager = () => {
   const dispatch = useDispatch();
@@ -13,21 +13,22 @@ const FooterManager = () => {
   const { loading, error, data } = useTypedSelector(
     (state) => state.footer || { loading: false, error: null, data: [] }
   );
-
   const footer = Array.isArray(data) && data.length > 0 ? data[0] : null;
 
   const [footerData, setFooterData] = useState({
-    contactNumber: footer?.contactNumber || "",
-    email: footer?.email || "",
-    aboutUs: footer?.aboutUs || "",
-    fbLink: footer?.fbLink || "",
-    whatsappLink: footer?.whatsappLink || "",
-    instaLink: footer?.instaLink || "",
-    ytLink: footer?.ytLink || "",
-    ttLink: footer?.ttLink || "",
+    contactNumber: "",
+    email: "",
+    aboutUs: "",
+    vision: "",
+    mission: "",
+    fbLink: "",
+    whatsappLink: "",
+    instaLink: "",
+    ytLink: "",
+    ttLink: "",
   });
 
-  const [message, setMessage] = useState<string | null | string[]>(error);
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchFooter());
@@ -36,14 +37,16 @@ const FooterManager = () => {
   useEffect(() => {
     if (footer) {
       setFooterData({
-        contactNumber: footer.contactNumber,
-        email: footer.email,
-        aboutUs: footer.aboutUs,
-        fbLink: footer.fbLink,
-        whatsappLink: footer.whatsappLink,
-        instaLink: footer.instaLink,
-        ytLink: footer.ytLink,
-        ttLink: footer.ttLink,
+        contactNumber: footer.contactNumber || "",
+        email: footer.email || "",
+        aboutUs: footer.aboutUs || "",
+        vision: footer.vision || "",
+        mission: footer.mission || "",
+        fbLink: footer.fbLink || "",
+        whatsappLink: footer.whatsappLink || "",
+        instaLink: footer.instaLink || "",
+        ytLink: footer.ytLink || "",
+        ttLink: footer.ttLink || "",
       });
     }
   }, [footer]);
@@ -53,7 +56,8 @@ const FooterManager = () => {
     try {
       const config = { headers: { "Content-Type": "application/json" } };
       await proshopAPI.post("/api/footer/upload", footerData, config);
-      window.location.reload();
+      setMessage("Footer updated successfully.");
+      dispatch(fetchFooter());
     } catch (error) {
       console.error("Upload Error:", error);
       setMessage("Failed to upload footer item.");
@@ -61,19 +65,42 @@ const FooterManager = () => {
   };
 
   return (
-    <>
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6 text-center mt-8">
+        ADD BASIC DETAILS
+      </h1>
+
+      {message && (
+        <div
+          className={`p-3 mb-4 rounded ${
+            message.toLowerCase().includes("success")
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {message}
+          <button
+            onClick={() => setMessage(null)}
+            className="float-right text-xl font-bold"
+            aria-label="Dismiss message"
+          >
+            &times;
+          </button>
+        </div>
+      )}
+
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant="danger" className="mb-4 text-center">
+          {error}
+        </Message>
       ) : (
-        <FormContainer>
-          <h1 className="text-3xl font-bold text-center mb-6">Update Footer</h1>
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">UPDATE CONTACT DETAILS</h2>
-          {message && <Message variant="danger">{message}</Message>}
-          <form onSubmit={onSubmitHandler} className="space-y-4">
+        <form onSubmit={onSubmitHandler} className="space-y-6">
+          <div className="border rounded p-6 bg-white shadow space-y-6">
+            {/* Contact Number */}
             <div>
-              <label htmlFor="contactNumber" className="block font-bold mb-1">
+              <label htmlFor="contactNumber" className="block font-semibold mb-2">
                 Contact Number
               </label>
               <input
@@ -83,125 +110,113 @@ const FooterManager = () => {
                 onChange={(e) =>
                   setFooterData({ ...footerData, contactNumber: e.target.value })
                 }
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full border p-2 rounded"
+                placeholder="+1 234 567 8900"
+                required
               />
             </div>
 
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="block font-bold mb-1">
+              <label htmlFor="email" className="block font-semibold mb-2">
                 Email
               </label>
               <input
                 id="email"
                 type="email"
                 value={footerData.email}
-                onChange={(e) =>
-                  setFooterData({ ...footerData, email: e.target.value })
-                }
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                onChange={(e) => setFooterData({ ...footerData, email: e.target.value })}
+                className="w-full border p-2 rounded"
+                placeholder="example@mail.com"
+                required
               />
             </div>
 
+            {/* About Us */}
             <div>
-              <label htmlFor="aboutUs" className="block font-bold mb-1">
+              <label htmlFor="aboutUs" className="block font-semibold mb-2">
                 About Us
               </label>
               <textarea
                 id="aboutUs"
-                rows={10}
+                rows={6}
                 value={footerData.aboutUs}
                 onChange={(e) =>
                   setFooterData({ ...footerData, aboutUs: e.target.value })
                 }
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full border p-2 rounded resize-y"
+                placeholder="Write something about your company..."
+                required
               />
             </div>
 
+            {/* Vision */}
             <div>
-              <label htmlFor="fbLink" className="block font-bold mb-1">
-                Facebook Link
+              <label htmlFor="vision" className="block font-semibold mb-2">
+                Vision
               </label>
-              <input
-                id="fbLink"
-                type="text"
-                value={footerData.fbLink}
-                onChange={(e) =>
-                  setFooterData({ ...footerData, fbLink: e.target.value })
-                }
-                className="w-full border border-gray-300 rounded px-3 py-2"
+              <textarea
+                id="vision"
+                rows={4}
+                value={footerData.vision}
+                onChange={(e) => setFooterData({ ...footerData, vision: e.target.value })}
+                className="w-full border p-2 rounded resize-y"
+                placeholder="Write your vision statement..."
               />
             </div>
 
+            {/* Mission */}
             <div>
-              <label htmlFor="whatsappLink" className="block font-bold mb-1">
-                WhatsApp Link
+              <label htmlFor="mission" className="block font-semibold mb-2">
+                Mission
               </label>
-              <input
-                id="whatsappLink"
-                type="text"
-                value={footerData.whatsappLink}
-                onChange={(e) =>
-                  setFooterData({ ...footerData, whatsappLink: e.target.value })
-                }
-                className="w-full border border-gray-300 rounded px-3 py-2"
+              <textarea
+                id="mission"
+                rows={4}
+                value={footerData.mission}
+                onChange={(e) => setFooterData({ ...footerData, mission: e.target.value })}
+                className="w-full border p-2 rounded resize-y"
+                placeholder="Write your mission statement..."
               />
             </div>
 
-            <div>
-              <label htmlFor="instaLink" className="block font-bold mb-1">
-                Instagram Link
-              </label>
-              <input
-                id="instaLink"
-                type="text"
-                value={footerData.instaLink}
-                onChange={(e) =>
-                  setFooterData({ ...footerData, instaLink: e.target.value })
-                }
-                className="w-full border border-gray-300 rounded px-3 py-2"
-              />
+            {/* Social Links */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                { id: "fbLink", label: "Facebook Link" },
+                { id: "whatsappLink", label: "WhatsApp Link" },
+                { id: "instaLink", label: "Instagram Link" },
+                { id: "ytLink", label: "YouTube Link" },
+                { id: "ttLink", label: "TikTok Link" },
+              ].map(({ id, label }) => (
+                <div key={id}>
+                  <label htmlFor={id} className="block font-semibold mb-2">
+                    {label}
+                  </label>
+                  <input
+                    id={id}
+                    type="url"
+                    value={footerData[id as keyof typeof footerData]}
+                    onChange={(e) =>
+                      setFooterData({ ...footerData, [id]: e.target.value })
+                    }
+                    className="w-full border p-2 rounded"
+                    placeholder={`https://www.${label.toLowerCase().replace(" ", "")}.com/yourprofile`}
+                  />
+                </div>
+              ))}
             </div>
+          </div>
 
-            <div>
-              <label htmlFor="ytLink" className="block font-bold mb-1">
-                YouTube Link
-              </label>
-              <input
-                id="ytLink"
-                type="text"
-                value={footerData.ytLink}
-                onChange={(e) =>
-                  setFooterData({ ...footerData, ytLink: e.target.value })
-                }
-                className="w-full border border-gray-300 rounded px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="ttLink" className="block font-bold mb-1">
-                TikTok Link
-              </label>
-              <input
-                id="ttLink"
-                type="text"
-                value={footerData.ttLink}
-                onChange={(e) =>
-                  setFooterData({ ...footerData, ttLink: e.target.value })
-                }
-                className="w-full border border-gray-300 rounded px-3 py-2"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full mt-6"
-            >
-              Submit Footer
-            </button>
-          </form>
-        </FormContainer>
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-950 to-teal-500 text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
+          >
+            Submit Details
+          </button>
+        </form>
       )}
-    </>
+    </div>
   );
 };
 
