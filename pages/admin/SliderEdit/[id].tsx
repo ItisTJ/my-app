@@ -43,15 +43,15 @@ const SliderEdit = () => {
   };
 
   return (
-    <>
-      <h1>Edit Slider</h1>
+    <div className="container mt-15 p-4 bg-white rounded shadow">
+      <h1 className="mb-4 text-center text-primary">Edit Slider</h1>
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
         <Form onSubmit={submitHandler}>
-          <Form.Group controlId="name">
+          <Form.Group controlId="name" className="mb-3">
             <Form.Label>Slider Name</Form.Label>
             <Form.Control
               type="text"
@@ -61,19 +61,8 @@ const SliderEdit = () => {
               required
             />
           </Form.Group>
-
-          <Form.Group controlId="productId" className="mt-3">
-            <Form.Label>Product ID</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter product ID"
-              value={productId}
-              onChange={(e) => setProductId(e.target.value)}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group controlId="description" className="mt-3">
+  
+          <Form.Group controlId="description" className="mb-3">
             <Form.Label>Description</Form.Label>
             <Form.Control
               type="text"
@@ -83,8 +72,8 @@ const SliderEdit = () => {
               required
             />
           </Form.Group>
-
-          <Form.Group controlId="image" className="mt-3">
+  
+          <Form.Group controlId="image" className="mb-4">
             <Form.Label>Image URL</Form.Label>
             <Form.Control
               type="text"
@@ -94,13 +83,14 @@ const SliderEdit = () => {
               required
             />
           </Form.Group>
-
-          <Button type="submit" variant="primary" className="mt-4">
+  
+          <Button type="submit" variant="primary" className="w-60 rounded-lg border-lg secondary">
             Update
           </Button>
         </Form>
       )}
-    </>
+    </div>
+
   );
 };
 
