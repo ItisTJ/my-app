@@ -72,7 +72,7 @@ const ProductCarousel: React.FC = () => {
                 <div className="space-y-3 text-left">
                   <h2 className="font-sans text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">{product.name}</h2>
                   <p className="font-sans text-base sm:text-lg md:text-lg lg:text-xl text-gray-600 line-clamp-3 mb-24">{product.description}</p>
-                  <Link href={`/product/${product._id}`} passHref>
+                  <Link href={`/product/${product.productId}`} passHref>
                     <button className="mt-12 sm:mt-4 bg-transparent text-gray-800 hover:text-white px-4 sm:px-6 py-2 rounded-3xl hover:bg-gray-800 transition-colors text-sm sm:text-base border-2 border-gray-800 bodrer-solid group">
                       Show More <FaAngleDown className="inline-block ml-2 animate-bounce hover:color-white " />
                     </button>
