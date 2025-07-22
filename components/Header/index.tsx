@@ -317,7 +317,7 @@ const Header = () => {
                     className="block px-4 py-2 hover:bg-gray-100"
                     onClick={() => setIsAdminOpen(false)}
                   >
-                    Update Contact Details
+                    Update Basic Details
                   </Link>
                   <Link
                     href="/admin/updateServices"
