@@ -24,13 +24,15 @@ const Header = () => {
   const [headerData, setHeaderData] = useState<{
     name: string;
     color: string;
+    secondaryColor: string;
+    ternaryColor: string;
     image: string;
-    items: string | string[];
   }>({
     name: "Sample name",
     color: "#000000",
+    secondaryColor: "#000000",
+    ternaryColor: "#000000",
     image: "",
-    items: "",
   });
 
   useEffect(() => {
@@ -44,11 +46,36 @@ const Header = () => {
       setHeaderData({
         name: header.name || "Sample name",
         color: header.color || "#000000",
+        secondaryColor: header.secondaryColor || "#000000",
+        ternaryColor: header.ternaryColor || "#000000",
         image: header.image || "",
-        items: header.items || "",
       });
     }
   }, [header]);
+
+
+
+  useEffect(() => {
+    if (header?.secondaryColor) {
+      document.documentElement.style.setProperty(
+        "--secondary-color",
+        header.secondaryColor
+      );
+    }
+  }, [header?.secondaryColor]);
+
+
+  useEffect(() => {
+    if (header?.ternaryColor) {
+      document.documentElement.style.setProperty(
+        "--ternary-color",
+        header.ternaryColor
+      );
+    }
+  }, [header?.ternaryColor]);
+  
+
+
 
   const { data } = useTypedSelector((state) => state.user);
   const { logout } = useUserActions();
@@ -57,12 +84,11 @@ const Header = () => {
     color: string;
     logo: string;
     alt: string;
-    item: string[];
+  
   }>({
     color: "#343a40",
     logo: "/default-logo.png",
-    alt: "logo",
-    item: [],
+    alt: "logo"
   });
 
   const [imageError, setImageError] = useState(false);
@@ -72,18 +98,12 @@ const Header = () => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   useEffect(() => {
-    let itemsArray: string[] = [];
-    if (typeof headerData.items === "string") {
-      itemsArray = headerData.items.split(",").map((i) => i.trim());
-    } else if (Array.isArray(headerData.items)) {
-      itemsArray = headerData.items;
-    }
-    console.log("itemsArray:", itemsArray); // Debug
+   
     setHeaderSettings({
       color: headerData.color || "#343a40",
       logo: headerData.image || "/default-logo.png",
       alt: headerData.name || "logo",
-      item: itemsArray,
+      
     });
   }, [headerData]);
 
@@ -144,50 +164,22 @@ const Header = () => {
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}><FaTimes size={24}  className="lg:hidden text-white absolute top-4 right-4" /></button>
           
           <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-6">
-            {/* Categories Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                className="text-white hover:text-gray-300 focus:outline-none flex items-center group"
-              >
-                CATEGORIES
-                <FaAngleDown size={20} color="white" className="group-hover:animate-bounce "/>
-              </button>
-              <div
-                className={`fixed top-0 right-0 w-3/4 sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out  ${
-                  isCategoriesOpen ? "opacity-100 block" : "opacity-0 hidden"
-                }`}
-              >
-                <FaTimes size={24} className="absolute top-4 right-4 " onClick={() => setIsCategoriesOpen(false)} />
-                  <div className="px-2 py-12">
-                {headerSettings.item.map((item, index) => (
-                  <Link
-                    key={index}
-                    href={`/${item.toLowerCase()}`}
-                    className="block px-4 py-2 hover:bg-gray-100 capitalize"
-                    onClick={() => setIsCategoriesOpen(false)}
-                  >
-                    {item}
-                  </Link>
-                ))}
-                </div>
-              </div>
-            </div>
+            
 
-            <Link href="/cart" className="text-white hover:text-gray-300 flex items-center">
+            <Link href="/cart" className="text-white bg-none hover:text-gray-300 flex items-center">
               <FaShoppingCart size={20} />
             </Link>
 
             {data ? (
               <div className="relative">
                 <button
-                  onClick={() => setIsUserOpen(!isUserOpen)}>
+                  onClick={() => setIsUserOpen(!isUserOpen)} className="bg-transparent">
                   <FaUser size={20} color="white" className={`${data.isAdmin ? "hidden":"visible"}`}/>
                   <FaUserAstronaut size={20} color="magenta" className={`${data.isAdmin ? "visible":"hidden"} absolute top-0 right-0 animate-ping` }/>
                   <FaUserAstronaut size={20} color="white" className={`${data.isAdmin ? "visible":"hidden"}`}/>
                 </button>
                  <div
-                    className={`fixed top-0 right-0 w-fit sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
+                    className={`fixed top-0 bg-transparent right-0 w-fit sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
                       isUserOpen ? 'translate-x-0' : 'translate-x-full'
                     } flex flex-col p-4`}
                   >
@@ -209,7 +201,7 @@ const Header = () => {
                       logout();
                       setIsUserOpen(false);
                     }}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 hover:text-red-500 group"
+                    className="block w-full bg-transparent text-left px-4 py-2 hover:bg-blue-500 hover:text-red-500 group"
                   >
                     <FaSignOutAlt size={20} className=" mr-2 inline group-hover:text-red-500" />
                     Logout
@@ -226,7 +218,7 @@ const Header = () => {
               <div className="relative">
                 <button
                   onClick={() => setIsAdminOpen(!isAdminOpen)}
-                  className="text-white hover:text-gray-300 focus:outline-none flex items-center"
+                  className="text-white bg-transparent hover:text-gray-300 focus:outline-none flex items-center"
                 >
                   <FaChessKing size={20} color="gold" />
                 </button>
