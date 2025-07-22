@@ -67,7 +67,7 @@ const Payment = () => {
                     ${
                       paymentMethod === option.id
                         ? "border-2 border-teal-500 bg-gradient-to-r from-rose-50 to-teal-50"
-                        : "border border-gray-200 hover:border-gray-300"
+                        : "border border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                     }`}
                   onClick={() => setPaymentMethod(option.id)}
                 >
@@ -119,7 +119,7 @@ const Payment = () => {
             <div className="flex flex-col space-y-3 pt-4">
               <button
                 type="submit"
-                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full"
+                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md  hover:shadow-lg w-full hover:opacity-90 transition duration-500 ease-in-out ..."
               >
                 <span className="relative z-10 flex items-center justify-center gap-2 font-medium">
                   Continue to Payment

@@ -88,78 +88,54 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <>
-          {/* Main product details layout */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Product image spans 1 column on medium screens */}
-          <div className="md:col-span-1 flex justify-center items-start">
-            <img
-              src={image}
-              alt={name}
-              className="w-4/5 h-auto object-contain max-h-[400px]"
-            />
-          </div>
+        <div className="space-y-8">
+          {/* Product Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Product Image */}
+            <div>
+              <img src={image || "/placeholder.svg"} alt={name} className="w-full h-auto rounded-lg border" />
+            </div>
 
-            {/* Product info list */}
-          <div className="md:col-span-1">
-            <ul className="space-y-4">
-              <li>
-                <h3>{name}</h3>
-              </li>
-              <li>
-                {/* Rating component shows stars and number of reviews */}
-                <Rating value={rating} text={`${numReviews} reviews`} />
-              </li>
-              <li>Price: ${price}</li>
-              <li>
-                <span>Description:</span>
-                <p className="break-words whitespace-pre-wrap">{description}</p>
-              </li>
-            </ul>
-          </div>
+            {/* Product Details */}
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-2xl font-semibold text-gray-900">{name}</h1>
+                <div className="flex items-center gap-2 mt-2">
+                  <Rating value={rating} text={`${numReviews} reviews`} />
+                </div>
+                <div className="text-2xl font-bold text-gray-900 mt-4">${price}</div>
+              </div>
 
-            {/* Purchase and stock details */}
-            <div className="md:col-span-1">
-              <div className="border rounded shadow p-4 space-y-4 max-w-sm mx-auto">
-                {/* Price */}
-                <div className="flex justify-between">
-                  <span>Price:</span>
-                  <strong>${price}</strong>
+              <div>
+                <p className="text-gray-600">{description}</p>
+              </div>
+
+              {/* Purchase Options */}
+              <div className="border-t pt-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Status:</span>
+                  <span className={`text-sm font-medium ${countInStock > 0 ? "text-teal-500" : "text-red-600"}`}>
+                    {countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                  </span>
                 </div>
 
-                {/* Stock status */}
-                <div className="flex justify-between">
-                  <span>Status:</span>
-                  <span>{countInStock > 0 ? 'In Stock' : 'Out Of Stock'}</span>
-                </div>
-
-                {/* Quantity selector only if in stock */}
                 {countInStock > 0 && (
-                  <div className="flex items-center justify-start gap-4">
-                    <label htmlFor="qty">Qty</label>
-                    <input
-                      type="number"
-                      id="qty"
-                      className="border rounded px-2 py-1 w-20"
-                      value={qtyInput}
-                      min={1}
-                      max={countInStock}
-                      onFocus={() => setQtyInput('')}
-                      onChange={e => {
-                        const val = e.target.value;
-                        // Allow only digits, empty string allowed for typing
-                        if (/^\d*$/.test(val)) {
-                          setQtyInput(val);
-                        }
-                      }}
-                      onBlur={() => {
-                        let numVal = parseInt(qtyInput);
-                        if (isNaN(numVal) || numVal < 1) numVal = 1;
-                        else if (numVal > countInStock) numVal = countInStock;
-                        setQty(numVal);
-                        setQtyInput(numVal.toString());
-                      }}
-                    />
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="quantity" className="text-sm text-gray-600">
+                      Quantity:
+                    </label>
+                    <select
+                      id="quantity"
+                      value={qty}
+                      onChange={(e) => setQty(Number.parseInt(e.target.value))}
+                      className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    >
+                      {[...Array(countInStock).keys()].map((x) => (
+                        <option key={randomID()} value={x + 1}>
+                          {x + 1}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 )}
 
@@ -176,8 +152,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                     className="w-full bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50"
                     type="button"
                     disabled={countInStock === 0}
+                    className="flex-1 border-1 border-black-500  bg-transparen hover:bg-gray-100 transition duration-500 ease-in-out ... disabled:bg-gray-300 disabled:cursor-not-allowed text-black font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center gap-2"
                   >
-                    {cartLoading ? <Loader /> : 'Add To Cart'}
+                    {cartLoading ? (
+                      <Loader options={{ width: "16px", height: "16px" }} />
+                    ) : (
+                      <>
+                        <ShoppingCart className="w-4 h-4" />
+                        Add to Cart
+                      </>
+                    )}
                   </button>
 
                   <button
@@ -185,6 +169,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                     className="w-full bg-green-600 text-white py-2 px-4 rounded disabled:opacity-50"
                     type="button"
                     disabled={countInStock === 0}
+                    className="flex-1 bg-gradient-to-r from-blue-950 to-teal-500 hover:cursor-pointer hover:opacity-75 transition duration-500 ease-in-out ... disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-md transition-colors"
                   >
                     Buy Now
                   </button>
@@ -194,83 +179,103 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
 
           </div>
 
-          {/* Reviews section */}
-          <div className="mt-32 md:w-1/2 mx-auto">
-            <h2 className="text-xl font-semibold mb-4 text-center">Reviews</h2>
-            {/* Show message if no reviews */}
-            {data.reviews.length === 0 && <Message>No Reviews</Message>}
-            <ul className="space-y-4">
-              {/* List each review */}
-              {data.reviews.map(_review => (
-                <li key={_review._id} className="border-b pb-4">
-                  <strong>{_review.name}</strong>
-                  <Rating value={_review.rating} />
-                  <p>{_review.createdAt?.substring(0, 10)}</p>
-                  <p>{_review.comment}</p>
-                </li>
-              ))}
-              {/* Review submission form */}
-              <li>
-                <h2 className="text-lg font-medium mb-2">Write a Customer Review</h2>
-                {/* Show success message on successful review */}
-                {successReview && (
-                  <Message variant="success">
-                    Review submitted successfully
-                  </Message>
-                )}
-                {/* Show loading and error states */}
-                {loadingReview && <Loader />}
-                {errorReview && (
+          {/* Reviews Section */}
+          <div className="border-t pt-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Reviews</h2>
+
+            {data.reviews.length === 0 ? (
+              <p className="text-gray-500 py-8">No reviews yet</p>
+            ) : (
+              <div className="space-y-6 mb-8">
+                {data.reviews.map((_review) => (
+                  <div key={_review._id} className="border-b border-gray-200 pb-6">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h4 className="font-medium text-gray-900">{_review.name}</h4>
+                        <Rating value={_review.rating} />
+                      </div>
+                      <span className="text-sm text-gray-500">{_review.createdAt?.substring(0, 10)}</span>
+                    </div>
+                    <p className="text-gray-700">{_review.comment}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Write Review */}
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Write a Review</h3>
+
+              {successReview && (
+                <div className="mb-4">
+                  <Message variant="success">Review submitted successfully</Message>
+                </div>
+              )}
+
+              {loadingReview && (
+                <div className="mb-4">
+                  <Loader />
+                </div>
+              )}
+
+              {errorReview && (
+                <div className="mb-4">
                   <Message variant="danger">{errorReview}</Message>
-                )}
-                {/* Show form if user logged in, else prompt to sign in */}
-                {user ? (
-                  <form onSubmit={onSubmitHandler} className="space-y-4">
-                    <div>
-                      <label htmlFor="rating" className="block font-medium">Rating</label>
-                      <select
-                        id="rating"
-                        className="w-full border rounded px-3 py-2"
-                        value={_rating}
-                        onChange={e => setRating(parseInt(e.target.value))}
-                      >
-                        <option value="">Select...</option>
-                        <option value="1">★ - Poor</option>
-                        <option value="2">★★ - Fair</option>
-                        <option value="3">★★★ - Good</option>
-                        <option value="4">★★★★ - Very Good</option>
-                        <option value="5">★★★★★ - Excellent</option>
-                      </select>
+                </div>
+              )}
 
-                    </div>
-                    <div>
-                      <label htmlFor="comment" className="block font-medium">Comment</label>
-                      <textarea
-                        id="comment"
-                        className="w-full border rounded px-3 py-2"
-                        value={comment}
-                        onChange={e => setComment(e.target.value)}
-                      ></textarea>
-                    </div>
-                    <div className="flex justify-center">
-                      <button
-                        disabled={loadingReview}
-                        type="submit"
-                        className="bg-blue-600 text-white px-4 py-2 rounded"
-                      >
-                        Submit
-                      </button>
-                    </div>
+              {user ? (
+                <form onSubmit={onSubmitHandler} className="space-y-4 max-w-md">
+                  <div>
+                    <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-1">
+                      Rating
+                    </label>
+                    <select
+                      id="rating"
+                      value={_rating}
+                      onChange={(e) => setRating(Number.parseInt(e.target.value))}
+                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select...</option>
+                      <option value="1">1 - Poor</option>
+                      <option value="2">2 - Fair</option>
+                      <option value="3">3 - Good</option>
+                      <option value="4">4 - Very Good</option>
+                      <option value="5">5 - Excellent</option>
+                    </select>
+                  </div>
 
-                  </form>
-                ) : (
-                  <Message>
-                    Please <Link href="/login">sign in</Link> to write a
-                    review{' '}
-                  </Message>
-                )}
-              </li>
-            </ul>
+                  <div>
+                    <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-1">
+                      Comment
+                    </label>
+                    <textarea
+                      id="comment"
+                      rows={3}
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loadingReview}
+                    className="bg-gradient-to-r from-blue-950 to-teal-500 hover:cursor-pointer hover:opacity-75 transition duration-500 ease-in-out ... disabled:bg-gray-300 text-white font-medium py-2 px-6 rounded transition-colors"
+                  >
+                    Submit
+                  </button>
+                </form>
+              ) : (
+                <p className="text-gray-600">
+                  Please{" "}
+                  <Link href="/login" className="text-blue-600 hover:underline">
+                    sign in
+                  </Link>{" "}
+                  to write a review
+                </p>
+              )}
+            </div>
           </div>
 
         </>
