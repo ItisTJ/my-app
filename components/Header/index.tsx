@@ -54,6 +54,8 @@ const Header = () => {
     }
   }, [header]);
 
+  
+
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
 
    useEffect(() => {
