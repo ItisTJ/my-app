@@ -164,14 +164,14 @@ const PrivacyPolicyManager = () => {
           <button
             type="button"
             onClick={addPolicy}
-            className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg"
+            className="group secondary relative overflow-hidden rounded-lg px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg"
           >
             Add Policy
           </button>
         )}
         <button
           type="submit"
-          className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full mt-6"
+          className="group secondary relative overflow-hidden rounded-lg px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full mt-6"
         >
           {editingPolicyId ? "Save Changes" : "Submit Policies"}
         </button>

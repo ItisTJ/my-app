@@ -123,7 +123,7 @@ const OrderSummaryContent = () => {
 };
 
   const processOrder = () => {
-    const discount = itemsPrice > 500 ? itemsPrice * 0.1 : 0
+    const discount = itemsPrice > 5000 ? itemsPrice * 0.1 : 0
     const finalTotal = Number((itemsPrice - discount + calculatedShipping).toFixed(2))
 
     createOrder({

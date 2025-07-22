@@ -15,6 +15,7 @@ const Item: React.FC<ProductInterface> = ({
   return (
     // Main container for the product card
     <div
+    
       className="my-3 p-3 rounded cursor-pointer bg-white shadow hover:shadow-md transition-shadow h-full flex flex-col sm:flex-row md:flex-col lg:flex-row xl:flex-col"
       role="button" // Makes the card feel like a clickable item (accessibility)
     >

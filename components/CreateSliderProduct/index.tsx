@@ -78,7 +78,7 @@ const SliderUpload = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md">
+    <div className="max-w-xl mx-auto p-6 mt-10 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-semibold mb-6">Upload Slider Item</h1>
 
       {message && (
@@ -136,7 +136,7 @@ const SliderUpload = () => {
 
         <button
           type="submit"
-          className="w-full opacity-90 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
+          className="secondary w-full opacity-90 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
         >
           Upload
         </button>

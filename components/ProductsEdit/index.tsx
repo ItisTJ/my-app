@@ -243,7 +243,7 @@ const ProductsEdit: React.FC<ProductsEditProps> = ({ pageId }) => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
+                  className="w-full secondary hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
                 >
                   Update
                 </button>

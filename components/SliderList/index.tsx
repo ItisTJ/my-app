@@ -24,7 +24,7 @@ const SliderList = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 mt-10 ml-6 mr-6">
       <h1 className="text-2xl font-semibold mb-4">Slider Products</h1>
 
       {loading ? (

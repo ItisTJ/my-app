@@ -79,7 +79,7 @@ const RandomEnabledBanner: React.FC = () => {
       </div>
 
       {/* Product Info */}
-      <div className="w-full ml-[3px] md:w-1/2 bg-white rounded-b-xl md:rounded-r-xl md:rounded-bl-none p-4 flex flex-col justify-between">
+      <div className="w-full ml-[0px] md:w-1/2 bg-white rounded-b-xl md:rounded-r-xl md:rounded-bl-none p-4 flex flex-col justify-between">
         <div className="flex flex-col md:flex-row items-center">
           <div className="w-full md:w-1/2 p-2">
             <a href={`/product/${banner.productId}`}>
@@ -113,7 +113,7 @@ const RandomEnabledBanner: React.FC = () => {
 
             {/* Rainbow Border Button */}
             <button
-              className="border-1 border-pink-500 text-pink-500 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out shadow-lg hover:bg-purple-500 hover:text-white hover:shadow-xl"
+              className="border-1 border-pink-500 text-pink-500 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out shadow-lg hover:bg-purple-500 hover:text-white"
               onClick={() => window.location.href = `/product/${banner.productId}`}
             >
               View Product

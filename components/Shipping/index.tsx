@@ -133,7 +133,7 @@ const Shipping = () => {
             </div>
 
             <div className="pt-4">
-              <button type="submit" className="bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white rounded-lg hover:cursor-pointer">
+              <button type="submit" className="secondary px-6 py-3 text-white rounded-lg hover:cursor-pointer">
                 Continue to Payment
               </button>
             </div>

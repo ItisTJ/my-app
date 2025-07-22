@@ -50,7 +50,7 @@ const EmptyCart = () => {
             }`}
           >
             <Link href="/">
-              <button className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full md:w-auto">
+              <button className="group secondary relative overflow-hidden rounded-lg px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full md:w-auto">
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   Continue Shopping
                   <ArrowRight

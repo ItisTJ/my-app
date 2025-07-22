@@ -120,7 +120,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
         <h1 className="text-2xl font-bold mb-2 sm:mb-0">Products</h1>
         <button
           onClick={createProduct}
-          className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors"
+          className="secondary text-white py-2 px-4 rounded hover:bg-green-700 transition-colors"
         >
           <i className="fas fa-plus mr-2"></i> Create Product
         </button>
@@ -195,7 +195,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
             )}
             {currentPage < pages && (
               <button
-                className="group flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                className="group secondary flex items-center gap-2 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
                 onClick={handleShowMore}
               >
                 Show More

@@ -22,8 +22,13 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex-col items-center justify-center p-8">
-      <div className="max-w-xl w-full bg-white rounded-xl shadow-md ml-auto mr-auto">
+    <div className="min-h-screen bg-transparent flex-col items-center justify-center">
+      <div className="primary max-w-xl w-screen mx-auto 
+        rounded-xl shadow-2xl 
+        backdrop-blur-md bg-white/40 
+        border-4 border-opacity-10
+        p-6">
+
         <div className="relative h-24 rounded-t-xl bg-gradient-to-r from-blue-200 to-gray-100 mb-12">
           <div className="absolute -bottom-10 left-8 bg-white p-4 rounded-full shadow-lg">
             <FaUserTie size={52} className="text-gray-700" strokeWidth={1.5} />
@@ -74,7 +79,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
+            className="w-full secondary hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
           >
             Sign In
           </button>

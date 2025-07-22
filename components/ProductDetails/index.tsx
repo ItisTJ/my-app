@@ -120,7 +120,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
 
             {/* Purchase and stock details */}
             <div className="md:col-span-1">
-              <div className="border rounded shadow p-4 space-y-4 max-w-sm mx-auto">
+              <div className="theme border rounded shadow p-4 space-y-4 max-w-sm mx-auto">
                 {/* Price */}
                 <div className="flex justify-between">
                   <span>Price:</span>
@@ -173,7 +173,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                         qty,
                       });
                     }}
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50"
+                    className="ternary w-full text-white py-2 px-4 rounded disabled:opacity-50"
                     type="button"
                     disabled={countInStock === 0}
                   >
@@ -182,7 +182,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
 
                   <button
                     onClick={onBuyNowHandler}
-                    className="w-full bg-green-600 text-white py-2 px-4 rounded disabled:opacity-50"
+                    className="secondary w-full text-white py-2 px-4 rounded disabled:opacity-50"
                     type="button"
                     disabled={countInStock === 0}
                   >

@@ -189,7 +189,7 @@ const BranchManager = () => {
           {/* ✅ Submit Branch Button */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-950 to-teal-500 text-white py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+            className="secondary w-full text-white py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
           >
             {editingBranchId ? "Save Changes" : "Submit Branch"}
           </button>
