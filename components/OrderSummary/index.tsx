@@ -7,6 +7,7 @@ import { useOrderActions, useShipping, useTypedSelector } from "../../hooks"
 import { useBuyNowActions } from "../../hooks"
 import PaymentModal from "../PaymentModal"
 import { createStripeCheckoutSession } from "@/utils/stripe";
+import { ArrowLeft } from "lucide-react"
 
 // Region interface for shipping calculation
 interface Region {
@@ -146,7 +147,7 @@ const OrderSummaryContent = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-8 ">
         <div className="flex-1">
           {/* Shipping Information */}
           <div className="bg-white shadow-xl rounded-2xl p-6">
@@ -200,7 +201,7 @@ const OrderSummaryContent = () => {
         </div>
 
         {/* Order Summary */}
-        <div className="md:w-1/3">
+        <div className="md:w-1/3 ">
           <div className="bg-white shadow-xl rounded-2xl p-6">
             <h2 className="text-xl font-semibold text-gray-800">Order Summary</h2>
             <div className="mt-4">
@@ -232,10 +233,20 @@ const OrderSummaryContent = () => {
               type="button"
               onClick={onPlaceOrderHandler}
               disabled={orderItems.length === 0}
-              className="w-full mt-4 bg-gradient-to-r from-blue-950 to-teal-500 text-white py-3 rounded-lg"
+              className="w-full mt-4 bg-gradient-to-r from-blue-950 to-teal-500 text-white py-3 rounded-lg hover:opacity-90 transition duration-500 ease-in-out ..."
             >
               Place Order
             </button>
+
+            <div className="mt-4 text-left">
+                <Link
+                  href="/cart"
+                  className="text-gray-600 hover:text-teal-600 text-sm font-medium transition-colors inline-flex items-center"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  Back to cart
+                </Link>
+              </div>
           </div>
         </div>
       </div>

@@ -226,7 +226,7 @@ const Cart: React.FC = () => {
 
               <button
                 type="button"
-                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full mt-6"
+                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md hover:shadow-lg w-full mt-6 hover:opacity-90 transition duration-500 ease-in-out ..."
                 onClick={onCheckoutHandler}
               >
                 <span className="relative z-10 flex items-center justify-center gap-2 font-bold">

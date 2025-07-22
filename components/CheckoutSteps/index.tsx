@@ -11,7 +11,7 @@ interface CheckoutStepsProps {
 
 const CheckoutSteps = ({ step1, step2, step3, step4 }: CheckoutStepsProps) => {
   return (
-    <div className="flex justify-center items-center mb-8">
+    <div className="flex justify-center items-center mb-8 ">
       <div className="flex items-center w-full max-w-3xl">
         {/* Step 1: Sign In */}
         <div className="flex-1">
