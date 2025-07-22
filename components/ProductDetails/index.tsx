@@ -100,7 +100,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
               <div className="border-t pt-6 space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Status:</span>
-                  <span className={`text-sm font-medium ${countInStock > 0 ? "text-green-600" : "text-red-600"}`}>
+                  <span className={`text-sm font-medium ${countInStock > 0 ? "text-teal-500" : "text-red-600"}`}>
                     {countInStock > 0 ? "In Stock" : "Out Of Stock"}
                   </span>
                 </div>
@@ -114,7 +114,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                       id="quantity"
                       value={qty}
                       onChange={(e) => setQty(Number.parseInt(e.target.value))}
-                      className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                     >
                       {[...Array(countInStock).keys()].map((x) => (
                         <option key={randomID()} value={x + 1}>
@@ -134,7 +134,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                       })
                     }}
                     disabled={countInStock === 0}
-                    className="flex-1 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 border-1 border-black-500  bg-transparen hover:bg-gray-100 transition duration-500 ease-in-out ... disabled:bg-gray-300 disabled:cursor-not-allowed text-black font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center gap-2"
                   >
                     {cartLoading ? (
                       <Loader options={{ width: "16px", height: "16px" }} />
@@ -149,7 +149,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                   <button
                     onClick={onBuyNowHandler}
                     disabled={countInStock === 0}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-md transition-colors"
+                    className="flex-1 bg-gradient-to-r from-blue-950 to-teal-500 hover:cursor-pointer hover:opacity-75 transition duration-500 ease-in-out ... disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-md transition-colors"
                   >
                     Buy Now
                   </button>
@@ -240,7 +240,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                   <button
                     type="submit"
                     disabled={loadingReview}
-                    className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 text-white font-medium py-2 px-6 rounded transition-colors"
+                    className="bg-gradient-to-r from-blue-950 to-teal-500 hover:cursor-pointer hover:opacity-75 transition duration-500 ease-in-out ... disabled:bg-gray-300 text-white font-medium py-2 px-6 rounded transition-colors"
                   >
                     Submit
                   </button>
