@@ -9,7 +9,11 @@ import { proshopAPI } from "../../lib";
 
 const FooterManager = () => {
   const dispatch = useDispatch();
-  const { loading, error, data } = useTypedSelector((state) => state.footer || { loading: false, error: null, data: [] });
+
+  const { loading, error, data } = useTypedSelector(
+    (state) => state.footer || { loading: false, error: null, data: [] }
+  );
+
   const footer = Array.isArray(data) && data.length > 0 ? data[0] : null;
 
   const [footerData, setFooterData] = useState({
@@ -65,6 +69,7 @@ const FooterManager = () => {
       ) : (
         <FormContainer>
           <h1 className="text-3xl font-bold text-center mb-6">Update Footer</h1>
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">UPDATE CONTACT DETAILS</h2>
           {message && <Message variant="danger">{message}</Message>}
           <form onSubmit={onSubmitHandler} className="space-y-4">
             <div>
@@ -75,7 +80,9 @@ const FooterManager = () => {
                 id="contactNumber"
                 type="text"
                 value={footerData.contactNumber}
-                onChange={(e) => setFooterData({ ...footerData, contactNumber: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, contactNumber: e.target.value })
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>
@@ -88,7 +95,9 @@ const FooterManager = () => {
                 id="email"
                 type="email"
                 value={footerData.email}
-                onChange={(e) => setFooterData({ ...footerData, email: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, email: e.target.value })
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>
@@ -101,7 +110,9 @@ const FooterManager = () => {
                 id="aboutUs"
                 rows={10}
                 value={footerData.aboutUs}
-                onChange={(e) => setFooterData({ ...footerData, aboutUs: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, aboutUs: e.target.value })
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>
@@ -114,7 +125,9 @@ const FooterManager = () => {
                 id="fbLink"
                 type="text"
                 value={footerData.fbLink}
-                onChange={(e) => setFooterData({ ...footerData, fbLink: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, fbLink: e.target.value })
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>
@@ -127,7 +140,9 @@ const FooterManager = () => {
                 id="whatsappLink"
                 type="text"
                 value={footerData.whatsappLink}
-                onChange={(e) => setFooterData({ ...footerData, whatsappLink: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, whatsappLink: e.target.value })
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>
@@ -140,7 +155,9 @@ const FooterManager = () => {
                 id="instaLink"
                 type="text"
                 value={footerData.instaLink}
-                onChange={(e) => setFooterData({ ...footerData, instaLink: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, instaLink: e.target.value })
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>
@@ -153,7 +170,9 @@ const FooterManager = () => {
                 id="ytLink"
                 type="text"
                 value={footerData.ytLink}
-                onChange={(e) => setFooterData({ ...footerData, ytLink: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, ytLink: e.target.value })
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>
@@ -166,7 +185,9 @@ const FooterManager = () => {
                 id="ttLink"
                 type="text"
                 value={footerData.ttLink}
-                onChange={(e) => setFooterData({ ...footerData, ttLink: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, ttLink: e.target.value })
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>

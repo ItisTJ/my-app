@@ -12,7 +12,7 @@ import {
   CreditCard,
   ShoppingCart,
 } from "lucide-react";
-import { useTypedSelector, useOrderActions, useUserActions } from "../../hooks";
+import { useTypedSelector, useOrderActions } from "../../hooks";
 import Loader from "../Loader";
 import Message from "../Message";
 
@@ -28,8 +28,9 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
   const { data: order, loading, error } = useTypedSelector(
     (state) => state.order
   );
-
   const user = useTypedSelector((state) => state.user.data);
+  const isAdmin = user?.isAdmin || false; // Check if the user is admin
+
   const [currentStep, setCurrentStep] = useState(1);
   const [estimatedDelivery, setEstimatedDelivery] = useState("");
 
@@ -57,7 +58,6 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
     const today = new Date();
     const deliveryDate = new Date(today);
     deliveryDate.setDate(today.getDate() + 3 + Math.floor(Math.random() * 3));
-
     setEstimatedDelivery(
       deliveryDate.toLocaleDateString("en-US", {
         weekday: "long",
@@ -68,8 +68,9 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
     );
   }, []);
 
-  // Update status in backend
+  // Update status in backend (admin only)
   const handleStepClick = async (stepId: number) => {
+    if (!isAdmin) return; // Block regular users
     if (stepId <= currentStep) return; // Prevent going backward
 
     const newStatus = statusMap[stepId];
@@ -80,7 +81,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.accessToken}`, // Add token if required
+            Authorization: `Bearer ${user.accessToken}`, // Token for auth
           },
           body: JSON.stringify({ status: newStatus }),
         }
@@ -93,7 +94,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
       }
 
       console.log("Order status updated successfully");
-      await fetchOrder(orderId); // Fetch updated status
+      await fetchOrder(orderId); // Refresh updated status
     } catch (err) {
       console.error("Failed to update status:", err);
       alert("Could not update order status. Please try again.");
@@ -106,12 +107,14 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-800">Order not found</h2>
+          <h2 className="text-xl font-semibold text-gray-800">
+            Order not found
+          </h2>
           <p className="text-gray-600 mt-2">
             The order details could not be loaded. Please check the URL or go
             back to your orders.
           </p>
-          <Link href="/orders">
+          <Link href="/orders" legacyBehavior>
             <a className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">
               Back to Orders
             </a>
@@ -133,9 +136,9 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
       <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl p-6 mb-8 shadow-lg">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">
+            <h5 className="text-xl font-bold text-gray-800">
               Order #{order._id}
-            </h1>
+            </h5>
             <p className="text-gray-600 mt-2">
               Thank you for your order. We’ve received your order and will begin
               processing it soon.
@@ -178,9 +181,13 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
               <div
                 key={step.id}
                 className={`flex flex-col items-center ${
-                  step.id > currentStep ? "cursor-pointer" : "cursor-default"
+                  isAdmin && step.id > currentStep
+                    ? "cursor-pointer"
+                    : "cursor-not-allowed"
                 }`}
-                onClick={() => handleStepClick(step.id)}
+                onClick={() => {
+                  if (isAdmin) handleStepClick(step.id);
+                }}
               >
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all duration-300 ${
@@ -204,6 +211,11 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
             ))}
           </div>
         </div>
+        {!isAdmin && (
+          <p className="text-sm text-gray-500 mt-4 text-center">
+            Only admins can update the order status.
+          </p>
+        )}
       </div>
 
       {/* Shipping Details */}

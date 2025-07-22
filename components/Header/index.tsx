@@ -9,6 +9,7 @@ import { fetchHeader } from "../../state/Header/header.action-creators";
 import { FaShoppingCart, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import {  FaAngleDown, FaChessKing,   FaUser, FaUserAstronaut } from "react-icons/fa6";
 import { FaTimes, FaSignInAlt } from "react-icons/fa";
+import axios from "axios";
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -53,28 +54,20 @@ const Header = () => {
     }
   }, [header]);
 
+  const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
 
+   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get('http://localhost:4000/api/categories');
+        setCategories(res.data);
+      } catch (err) {
+        console.error('Failed to fetch categories', err);
+      }
+    };
 
-  useEffect(() => {
-    if (header?.secondaryColor) {
-      document.documentElement.style.setProperty(
-        "--secondary-color",
-        header.secondaryColor
-      );
-    }
-  }, [header?.secondaryColor]);
-
-
-  useEffect(() => {
-    if (header?.ternaryColor) {
-      document.documentElement.style.setProperty(
-        "--ternary-color",
-        header.ternaryColor
-      );
-    }
-  }, [header?.ternaryColor]);
-  
-
+    fetchCategories();
+  }, []);
 
 
   const { data } = useTypedSelector((state) => state.user);
@@ -94,6 +87,7 @@ const Header = () => {
   const [imageError, setImageError] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const categoryFromUrl = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("category") : null;
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
@@ -164,9 +158,53 @@ const Header = () => {
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}><FaTimes size={24}  className="lg:hidden text-white absolute top-4 right-4" /></button>
           
           <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-6">
-            
+            {/* Categories Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                className="text-white hover:text-gray-300 focus:outline-none flex items-center group"
+              >
+                {categoryFromUrl ? categoryFromUrl : "All products"}
+                <FaAngleDown size={20} color="white" className="group-hover:animate-bounce" />
+              </button>
 
-            <Link href="/cart" className="text-white bg-none hover:text-gray-300 flex items-center">
+              <div
+                className={`fixed top-0 right-0 w-3/4 sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
+                  isCategoriesOpen ? "opacity-100 block" : "opacity-0 hidden"
+                }`}
+              >
+                <FaTimes
+                  size={24}
+                  className="absolute top-4 right-4"
+                  onClick={() => setIsCategoriesOpen(false)}
+                />
+                <div className="px-2 py-12">
+                  
+                  {/* Default All Products link */}
+                  <Link
+                    href="/"
+                    className="block px-4 py-2 hover:bg-gray-100 capitalize"
+                    onClick={() => setIsCategoriesOpen(false)}
+                  >
+                    All products
+                  </Link>
+
+                  {/* Dynamic categories */}
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat._id}
+                      href={`/category/?category=${cat.name}`}
+                      className="block px-4 py-2 hover:bg-gray-100 capitalize"
+                      onClick={() => setIsCategoriesOpen(false)}
+                    >
+                      {cat.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <Link href="/cart" className="text-white hover:text-gray-300 flex items-center">
               <FaShoppingCart size={20} />
             </Link>
 
@@ -275,7 +313,7 @@ const Header = () => {
                     className="block px-4 py-2 hover:bg-gray-100"
                     onClick={() => setIsAdminOpen(false)}
                   >
-                    Update Footer
+                    Update Contact Details
                   </Link>
                   <Link
                     href="/admin/updateServices"
@@ -298,6 +336,14 @@ const Header = () => {
                     onClick={() => setIsAdminOpen(false)}
                   >
                     Update Branches
+                  </Link>
+
+                  <Link
+                    href="/admin/updateAbout"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setIsAdminOpen(false)}
+                  >
+                    Update About
                   </Link>
                 </div>
               </div>
