@@ -25,13 +25,15 @@ const Header = () => {
   const [headerData, setHeaderData] = useState<{
     name: string;
     color: string;
+    secondaryColor: string;
+    ternaryColor: string;
     image: string;
-    items: string | string[];
   }>({
     name: "Sample name",
     color: "#000000",
+    secondaryColor: "#000000",
+    ternaryColor: "#000000",
     image: "",
-    items: "",
   });
 
   useEffect(() => {
@@ -45,8 +47,9 @@ const Header = () => {
       setHeaderData({
         name: header.name || "Sample name",
         color: header.color || "#000000",
+        secondaryColor: header.secondaryColor || "#000000",
+        ternaryColor: header.ternaryColor || "#000000",
         image: header.image || "",
-        items: header.items || "",
       });
     }
   }, [header]);
@@ -66,6 +69,33 @@ const Header = () => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    if (header?.color) {
+      document.documentElement.style.setProperty(
+        "--primary-color",
+        header.color
+      );
+    }
+  }, [header?.color]);
+
+  useEffect(() => {
+    if (header?.secondaryColor) {
+      document.documentElement.style.setProperty(
+        "--secondary-color",
+        header.secondaryColor
+      );
+    }
+  }, [header?.secondaryColor]);
+
+    useEffect(() => {
+    if (header?.ternaryColor) {
+      document.documentElement.style.setProperty(
+        "--ternary-color",
+        header.secondaryColor
+      );
+    }
+  }, [header?.ternaryColor]);
+
 
   const { data } = useTypedSelector((state) => state.user);
   const { logout } = useUserActions();
@@ -74,12 +104,11 @@ const Header = () => {
     color: string;
     logo: string;
     alt: string;
-    item: string[];
+  
   }>({
     color: "#343a40",
     logo: "/default-logo.png",
-    alt: "logo",
-    item: [],
+    alt: "logo"
   });
 
   const [imageError, setImageError] = useState(false);
@@ -88,20 +117,17 @@ const Header = () => {
   const categoryFromUrl = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("category") : null;
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+
+
 
   useEffect(() => {
-    let itemsArray: string[] = [];
-    if (typeof headerData.items === "string") {
-      itemsArray = headerData.items.split(",").map((i) => i.trim());
-    } else if (Array.isArray(headerData.items)) {
-      itemsArray = headerData.items;
-    }
-    console.log("itemsArray:", itemsArray); // Debug
+   
     setHeaderSettings({
       color: headerData.color || "#343a40",
       logo: headerData.image || "/default-logo.png",
       alt: headerData.name || "logo",
-      item: itemsArray,
+      
     });
   }, [headerData]);
 
@@ -159,14 +185,13 @@ const Header = () => {
             isMenuOpen ? "block bg-black" : "hidden"
           } absolute lg:static top-0 left-0 w-full lg:w-auto bg-[${headerSettings.color}] lg:bg TypedPropertyDescriptor-transparent p-4 lg:p-0 transition-all duration-300 z-50`}
         >
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)}><FaTimes size={24}  className="lg:hidden text-white absolute top-4 right-4" /></button>
           
           <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-6">
             {/* Categories Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                className="text-white hover:text-gray-300 focus:outline-none flex items-center group"
+                className="text-white border-none hover:text-gray-300 focus:outline-none flex items-center group border-none bg-transparent"
               >
                 {categoryFromUrl ? categoryFromUrl : "All products"}
                 <FaAngleDown size={20} color="white" className="group-hover:animate-bounce" />
@@ -215,16 +240,17 @@ const Header = () => {
             {data ? (
               <div className="relative">
                 <button
-                  onClick={() => setIsUserOpen(!isUserOpen)}>
+                  onClick={() => setIsUserOpen(!isUserOpen)} className="bg-transparent border-none">
                   <FaUser size={20} color="white" className={`${data.isAdmin ? "hidden":"visible"}`}/>
                   <FaUserAstronaut size={20} color="magenta" className={`${data.isAdmin ? "visible":"hidden"} absolute top-0 right-0 animate-ping` }/>
                   <FaUserAstronaut size={20} color="white" className={`${data.isAdmin ? "visible":"hidden"}`}/>
                 </button>
                  <div
-                    className={`fixed top-0 right-0 w-fit sm:w-64 lg:w-1/4 h-screen bg-opacity-50 bg-black backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
+                    className={`fixed top-0 right-0 w-fit sm:w-64 lg:w-1/4 h-screen bg-black bg-opacity-50 backdrop-filter backdrop-blur text-white rounded-l-md shadow-lg z-20 transform transition-transform duration-300 ease-in-out ${
                       isUserOpen ? 'translate-x-0' : 'translate-x-full'
                     } flex flex-col p-4`}
                   >
+
                   <FaTimes size={20} color="white" className="absolute top-4 right-4 cursor-pointer" onClick={() => setIsUserOpen(false)}/>
                   <p className=" font-sans text-white block px-4 py-0"> Hello</p>
                   <h1 className="font-bold text-2xl font-impact text-white block px-4 py-0 pb-2">{data.name} !</h1>
@@ -243,7 +269,7 @@ const Header = () => {
                       logout();
                       setIsUserOpen(false);
                     }}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 hover:text-red-500 group"
+                    className="block w-full bg-transparent border-none text-left px-4 py-2 hover:bg-blue-500 hover:text-red-500 group"
                   >
                     <FaSignOutAlt size={20} className=" mr-2 inline group-hover:text-red-500" />
                     Logout
@@ -260,7 +286,7 @@ const Header = () => {
               <div className="relative">
                 <button
                   onClick={() => setIsAdminOpen(!isAdminOpen)}
-                  className="text-white hover:text-gray-300 focus:outline-none flex items-center"
+                  className="text-white border-none bg-transparent hover:text-gray-300 focus:outline-none flex items-center"
                 >
                   <FaChessKing size={20} color="gold" />
                 </button>

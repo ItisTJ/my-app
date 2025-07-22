@@ -11,7 +11,8 @@ const AdminUserEditPage: NextPage = () => {
   return (
     <>
       <SEO {...homeConfig} />
-      <main className="wrapper py-5">
+      <main className="pt-40"
+        style={{ backgroundImage: 'url(/images/background.jpg)', backgroundSize: 'cover' }}>
         <UserEdit pageId={id} />
       </main>
     </>

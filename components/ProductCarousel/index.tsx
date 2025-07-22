@@ -49,7 +49,7 @@ const ProductCarousel: React.FC = () => {
 
   return (
     
-    <div className=" flex w-full min-h-screen bg-gradient-to-r from-gray-200 via-gray-300 to-gray-500 p-4 sm:p-6 md:p-12 z-0 relative">
+    <div className=" flex w-full min-h-screen bg-gradient-to-r from-slate-100 via-slate-300 to-slate-400 p-8 sm:p-6 md:p-12 z-0 relative">
       <div className="relative overflow-hidden rounded-lg h-auto max-w-full mx-auto sm:max-w-4xl lg:w-full lg:max-w-none">
         {/* Slides container */}
         <div 
@@ -73,7 +73,7 @@ const ProductCarousel: React.FC = () => {
                   <h2 className="font-sans text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">{product.name}</h2>
                   <p className="font-sans text-base sm:text-lg md:text-lg lg:text-xl text-gray-600 line-clamp-3 mb-24">{product.description}</p>
                   <Link href={`/product/${product._id}`} passHref>
-                    <button className="mt-12 sm:mt-4 bg-none text-gray-800 hover:text-white px-4 sm:px-6 py-2 rounded-3xl hover:bg-gray-800 transition-colors text-sm sm:text-base border-2 border-gray-800 bodrer-solid group">
+                    <button className="mt-12 sm:mt-4 bg-transparent text-gray-800 hover:text-white px-4 sm:px-6 py-2 rounded-3xl hover:bg-gray-800 transition-colors text-sm sm:text-base border-2 border-gray-800 bodrer-solid group">
                       Show More <FaAngleDown className="inline-block ml-2 animate-bounce hover:color-white " />
                     </button>
                   </Link>
@@ -86,7 +86,7 @@ const ProductCarousel: React.FC = () => {
         {/* Navigation Arrows */}
         <button 
           onClick={prevSlide}
-          className="absolute top-1/2 left-2 sm:left-4 -translate-y-1/2 bg-white/70 hover:bg-white p-1 sm:p-2 rounded-full shadow text-gray-800"
+          className="absolute top-1/2 border-2 border-transparent left-2 sm:left-4 -translate-y-1/2 bg-white/70 hover:bg-white p-1 sm:p-2 rounded-full shadow text-gray-800"
           aria-label="Previous slide"
         >
           <ChevronLeft size={20} className="sm:w-6 sm:h-6" />
@@ -94,7 +94,7 @@ const ProductCarousel: React.FC = () => {
         
         <button 
           onClick={nextSlide}
-          className="absolute top-1/2 right-2 sm:right-4 -translate-y-1/2 bg-white/70 hover:bg-white p-1 sm:p-2 rounded-full shadow text-gray-800"
+          className="absolute top-1/2 border-2 border-transparent right-2 sm:right-4 -translate-y-1/2 bg-white/70 hover:bg-white p-1 sm:p-2 rounded-full shadow text-gray-800"
           aria-label="Next slide"
         >
           <ChevronRight size={20} className="sm:w-6 sm:h-6" />
