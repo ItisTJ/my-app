@@ -12,8 +12,6 @@ const Footer: React.FC = () => {
   const [branches, setBranches] = useState([]);
   const dispatch = useDispatch();
 
-  
-
   const { loading, error, footerdata } = useTypedSelector((state) => ({
     loading: state.footer?.loading || false,
     error: state.footer?.error || null,
@@ -26,8 +24,8 @@ const Footer: React.FC = () => {
     contactNumber: footer?.contactNumber || "",
     email: footer?.email || "",
     aboutUs: footer?.aboutUs || "",
-    vision: footer?.vision || "",       
-    mission: footer?.mission || "",     
+    vision: footer?.vision || "",
+    mission: footer?.mission || "",
     fbLink: footer?.fbLink || "",
     whatsappLink: footer?.whatsappLink || "",
     instaLink: footer?.instaLink || "",
@@ -47,8 +45,8 @@ const Footer: React.FC = () => {
         contactNumber: footer.contactNumber,
         email: footer.email,
         aboutUs: footer.aboutUs,
-        vision: footer.vision,       
-        mission: footer.mission,     
+        vision: footer.vision,
+        mission: footer.mission,
         fbLink: footer.fbLink,
         whatsappLink: footer.whatsappLink,
         instaLink: footer.instaLink,
@@ -97,8 +95,8 @@ const Footer: React.FC = () => {
   const data = {
     branches: branches,
     aboutUs: footerData.aboutUs,
-    vision: footerData.vision,            
-    mission: footerData.mission,        
+    vision: footerData.vision,
+    mission: footerData.mission,
     services: services,
     privacyAndPolicies: privacyPolicy,
     contactNumber: footerData.contactNumber,
@@ -125,8 +123,15 @@ const Footer: React.FC = () => {
                 >
                   <h4 className="text-white font-semibold">{branch.city}</h4>
                   <a href={branch.location} target="_blank" rel="noopener noreferrer">
-                    <Image src={branch.image} alt={branch.city} width={150} height={60} className="cursor-pointer aspect-[2:1]" />
-                    </a>
+                    <div className="w-[180px] h-[110px] relative mt-2">
+                      <Image
+                        src={branch.image}
+                        alt={branch.city}
+                        fill
+                        className="object-cover rounded cursor-pointer"
+                      />
+                    </div>
+                  </a>
                   <p className="text-xs text-blue-300 mt-2">
                     📞 {branch.contact}
                   </p>
