@@ -143,7 +143,7 @@ const CategoryManager: React.FC = () => {
           className="border p-2 w-full"
         />
         <div className="flex justify-center">
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2">
+          <button type="submit" className="bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold rounded-lg shadow-md transition disabled:opacity-50 px-4 py-2">
             {editId ? "Update" : "Add"}
           </button>
         </div>
