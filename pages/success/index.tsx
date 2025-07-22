@@ -16,8 +16,15 @@ const Success = () => {
   }, [msg]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex-col items-center justify-center p-8">
-      <div className="max-w-xl w-full bg-white rounded-xl shadow-md ml-auto mr-auto">
+
+    <main className="pt-40"
+        style={{ backgroundImage: 'url(/images/background.jpg)', backgroundSize: 'cover' }}>
+<div className="min-h-screen bg-transparent flex-col items-center justify-center">
+      <div className="max-w-xl w-screen mx-auto 
+        rounded-xl shadow-2xl 
+        backdrop-blur-md bg-white/40 
+        border-4 border-white border-opacity-10
+        p-6">
         <div className="relative h-24 rounded-t-xl bg-gradient-to-r from-blue-200 to-gray-100 mb-12">
           <div className="absolute -bottom-10 left-8 bg-white p-4 rounded-full shadow-lg">
             <FaCheckDouble size={52} className="text-green-700" strokeWidth={1.5} />
@@ -48,6 +55,7 @@ const Success = () => {
         </div>
       </div>
     </div>
+    </main>
   );
 };
 
