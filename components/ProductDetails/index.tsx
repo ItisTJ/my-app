@@ -80,31 +80,19 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
               />
             </div>
 
-            {/* Product info list */}
-          <div className="md:col-span-1">
-            <ul className="space-y-4">
-              <li>
-                <h3>{name}</h3>
-              </li>
-              <li>
-                {/* Rating component shows stars and number of reviews */}
-                <Rating value={rating} text={`${numReviews} reviews`} />
-              </li>
-              <li>Price: ${price}</li>
-              <li>
-                <span>Description:</span>
-                <p className="break-words whitespace-pre-wrap">{description}</p>
-              </li>
-            </ul>
-          </div>
-
-            {/* Purchase and stock details */}
-            <div className="md:col-span-1">
-              <div className="theme border rounded shadow p-4 space-y-4 max-w-sm mx-auto">
-                {/* Price */}
-                <div className="flex justify-between">
-                  <span>Price:</span>
-                  <strong>${price}</strong>
+            {/* Product Details */}
+            <div className="md:col-span-2 flex flex-col gap-4">
+              {/* Top Row: Name and Action Section */}
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
+                {/* Left: Name, Rating, Description */}
+                <div className="flex-1 space-y-2">
+                  <h3 className="text-2xl font-bold">{name}</h3>
+                  <Rating value={rating} text={`${numReviews} reviews`} />
+                  <p className="text-xl font-semibold">Price: ${price}</p>
+                  <div>
+                    <h4 className="font-medium">Description:</h4>
+                    <p className="break-words whitespace-pre-wrap">{description}</p>
+                  </div>
                 </div>
 
                 {/* Right: Status, Quantity, Buttons */}
