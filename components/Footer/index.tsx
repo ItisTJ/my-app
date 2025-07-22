@@ -148,7 +148,7 @@ const Footer: React.FC = () => {
           <ul className="space-y-2">
             {data.services.map((service: any, index: number) => (
               <li key={index}>
-                <Link href={`/services/${service._id}`} className="hover:text-blue-300">{service.title}</Link>
+                <Link href={`/services/?id=${service._id}`} className="hover:text-blue-300">{service.title}</Link>
               </li>
             ))}
           </ul>
