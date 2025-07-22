@@ -56,20 +56,18 @@ const RandomEnabledBanner: React.FC = () => {
   return (
   <div className="w-full p-4">
     <div className="flex flex-col md:flex-row 
-  bg-gradient-to-r from-red-500 via-yellow-300 to-purple-600 
-  bg-[length:400%_400%] animate-border 
-  p-[3px] rounded-xl shadow-xl">
+  bg-blue-50 rounded-xl shadow-xl p-2">
 
 
 
       {/* Banner Image with 8:3 Ratio */}
       <div className="flex w-full md:w-1/2">
-        <div className="aspect-[8/3] bg-white rounded-t-xl md:rounded-l-xl md:rounded-tr-none overflow-hidden mt-auto mb-auto">
+        <div className="aspect-[8/3] bg-gradient-to-r from-red-500 via-yellow-300 to-purple-600 bg-[length:400%_400%] animate-border p-[5px] rounded-xl md:rounded-l-xl overflow-hidden mt-auto mb-auto">
           <a href={`/product/${banner.productId}`} className="block w-full h-full">
             <img
               src={banner.image}
               alt={banner.title}
-              className="w-full h-full object-cover shadow-4xl"
+              className="w-full h-full object-cover rounded-xl shadow-4xl"
               onError={(e) => {
                 e.currentTarget.src = "https://via.placeholder.com/800x300?text=Image+not+found";
               }}
@@ -79,7 +77,7 @@ const RandomEnabledBanner: React.FC = () => {
       </div>
 
       {/* Product Info */}
-      <div className="w-full ml-[0px] md:w-1/2 bg-white rounded-b-xl md:rounded-r-xl md:rounded-bl-none p-4 flex flex-col justify-between">
+      <div className="w-full ml-[0px] md:w-1/2 bg-blue-50 rounded-b-xl md:rounded-r-xl md:rounded-bl-none p-4 flex flex-col justify-between">
         <div className="flex flex-col md:flex-row items-center">
           <div className="w-full md:w-1/2 p-2">
             <a href={`/product/${banner.productId}`}>
@@ -113,7 +111,7 @@ const RandomEnabledBanner: React.FC = () => {
 
             {/* Rainbow Border Button */}
             <button
-              className="border-1 border-pink-500 text-pink-500 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out shadow-lg hover:bg-purple-500 hover:text-white"
+              className="border-1 border-pink-500 text-pink-500 font-bolder py-2 px-4 rounded-full transition duration-300 ease-in-out shadow-lg hover:bg-purple-500 hover:text-white"
               onClick={() => window.location.href = `/product/${banner.productId}`}
             >
               View Product
