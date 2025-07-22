@@ -7,7 +7,8 @@ const LoginPage: NextPage = () => {
   return (
     <>
       <SEO {...homeConfig} />
-      <main className="wrapper">
+      <main className="pt-40"
+        style={{ backgroundImage: 'url(/images/background.jpg)', backgroundSize: 'cover' }}>
         <Register />
       </main>
     </>

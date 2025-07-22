@@ -17,8 +17,9 @@ const HeaderManager = () => {
   const [headerData, setHeaderData] = useState({
     name: header?.name || "Sample name",
     color: header?.color || "#000000",
-    image: header?.image || "",
-    items: header?.items || []
+    secondaryColor: header?.secondaryColor || "#000000",
+    ternaryColor: header?.ternaryColor || "#000000",
+    image: header?.image || ""
   });
 
   const [message, setMessage] = useState<string | null | string[]>(error);
@@ -33,8 +34,9 @@ const HeaderManager = () => {
       setHeaderData({
         name: header.name,
         color: header.color || "#000000",
-        image: header.image,
-        items: header.items || []
+        secondaryColor: header.secondaryColor || "#000000",
+        ternaryColor: header.ternaryColor || "#000000",
+        image: header.image
       });
     }
   }, [header]);
@@ -54,10 +56,10 @@ const HeaderManager = () => {
         withCredentials: true
       };
 
-      await proshopAPI.post("/api/header/upload", { name, color, image, items: headerData.items }, config);
+      await proshopAPI.post("/api/header/upload", { name, color, secondaryColor: headerData.secondaryColor, ternaryColor: headerData.ternaryColor, image }, config);
       window.location.reload();
 
-      setHeaderData({ name: "", color: "#000000", image: "", items: [] });
+      setHeaderData({ name: "", color: "#000000", secondaryColor: "#000000", ternaryColor: "#000000", image: "" });
     } catch (error) {
       console.error("Upload Error:", error);
       setMessage("Failed to upload header item.");
@@ -136,6 +138,40 @@ const HeaderManager = () => {
               </div>
             </div>
 
+            {/* Secondary Color Picker */}
+            <div>
+              <label htmlFor="secondaryColor" className="block font-medium text-gray-700">
+                Select Button (Secondary) Color
+              </label>
+              <div className="flex flex-col md:flex-row md:items-center gap-2 mt-1">
+                <input
+                  type="color"
+                  id="secondaryColor"
+                  className="w-20 h-10"
+                  value={headerData.secondaryColor}
+                  onChange={(e) => setHeaderData({ ...headerData, secondaryColor: e.target.value })}
+                />
+                <p className="text-sm text-gray-500">Selected Color: {headerData.secondaryColor}</p>
+              </div>
+            </div>
+
+            {/* Ternary Color Picker */}
+            <div>
+              <label htmlFor="ternaryColor" className="block font-medium text-gray-700">
+                Select Border (Ternary) Color
+              </label>
+              <div className="flex flex-col md:flex-row md:items-center gap-2 mt-1">
+                <input
+                  type="color"
+                  id="ternaryColor"
+                  className="w-20 h-10"
+                  value={headerData.ternaryColor}
+                  onChange={(e) => setHeaderData({ ...headerData, ternaryColor: e.target.value })}
+                />
+                <p className="text-sm text-gray-500">Selected Color: {headerData.ternaryColor}</p>
+              </div>
+            </div>
+
             {/* Logo Upload */}
             <div>
               <label htmlFor="image" className="block font-medium text-gray-700">
@@ -153,44 +189,8 @@ const HeaderManager = () => {
               </div>
             </div>
 
-            {/* Header Items */}
-            <div>
-              <label className="block font-medium text-gray-700 mb-2">Header Items</label>
-              {headerData.items.map((item: string, index: number) => (
-                <div key={index} className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    className="flex-1 border border-gray-300 p-2 rounded"
-                    placeholder={`Item ${index + 1}`}
-                    value={item}
-                    onChange={(e) => {
-                      const updatedItems = [...headerData.items];
-                      updatedItems[index] = e.target.value;
-                      setHeaderData({ ...headerData, items: updatedItems });
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const updatedItems = headerData.items.filter((_:string, i:number) => i !== index);
-                      setHeaderData({ ...headerData, items: updatedItems });
-                    }}
-                    className="bg-gray-900 text-white px-3 py-1 rounded hover:bg-red-600"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => setHeaderData({ ...headerData, items: [...headerData.items, ""] })}
-                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-gray-700"
-              >
-                Add Item
-              </button>
-            </div>
-
-            <button type="submit" className="bg-gray-900 text-white px-6 py-2 rounded hover:bg-blue-700">
+            
+            <button type="submit" className="text-white px-6 py-2 rounded hover:bg-blue-700">
               Update Header
             </button>
           </form>
