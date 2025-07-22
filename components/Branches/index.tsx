@@ -1,8 +1,12 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { fetchFooter } from "../../state/Footer/footer.action-creators";
 
 const BranchManager = () => {
+  const dispatch = useDispatch();
+
   const [branches, setBranches] = useState<any[]>([]);
   const [editingBranchId, setEditingBranchId] = useState<string | null>(null);
   const [form, setForm] = useState({
@@ -38,15 +42,28 @@ const BranchManager = () => {
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setForm({ ...form, image: base64 });
-        setPreviewUrl(base64);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      setMessage("File size should be under 2MB.");
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      if (result.startsWith("data:image")) {
+        setForm((prevForm) => ({ ...prevForm, image: result }));
+        setPreviewUrl(result);
+      } else {
+        setMessage("Invalid image format.");
+      }
+    };
+    reader.onerror = () => {
+      console.error("Error reading file:", reader.error);
+      setMessage("Error loading image. Please try a different one.");
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -54,12 +71,15 @@ const BranchManager = () => {
     try {
       if (editingBranchId) {
         await axios.put(`http://localhost:4000/api/branches/${editingBranchId}`, form);
+        dispatch(fetchFooter()); // Refresh footer immediately after edit
         setMessage("Branch updated successfully.");
         setEditingBranchId(null);
       } else {
         await axios.post("http://localhost:4000/api/branches", form);
+        dispatch(fetchFooter()); // Refresh footer immediately after add
         setMessage("Branch added successfully.");
       }
+      // Clear form and preview after submit
       setForm({
         city: "",
         image: "",
@@ -94,8 +114,19 @@ const BranchManager = () => {
     if (!window.confirm("Are you sure you want to delete this branch?")) return;
     try {
       await axios.delete(`http://localhost:4000/api/branches/${id}`);
+      dispatch(fetchFooter()); // Refresh footer immediately after delete
       setMessage("Branch deleted successfully.");
       fetchBranches();
+      // Clear form and preview after delete just in case
+      setForm({
+        city: "",
+        image: "",
+        contact: "",
+        openAt: "",
+        closeAt: "",
+        location: ""
+      });
+      setPreviewUrl(null);
     } catch (error) {
       console.error("Error deleting branch:", error);
       setMessage("Error deleting branch.");
@@ -103,10 +134,10 @@ const BranchManager = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto p-6">
       {/* Form Section */}
-      <div className="border rounded p-6 mb-8 w-full">
-        <h1 className="text-2xl font-bold mb-4 text-center">
+      <div className="border rounded p-6 mb-8 bg-white shadow w-full">
+        <h1 className="text-2xl font-bold mb-6 mt-4 text-center">
           {editingBranchId ? "Edit Branch" : "Add Branch"}
         </h1>
         {message && (
@@ -123,7 +154,7 @@ const BranchManager = () => {
             </button>
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
           <div>
             <label className="block font-semibold mb-1">City</label>
             <input
@@ -165,7 +196,7 @@ const BranchManager = () => {
             />
           </div>
           <div>
-            <label className="block font-semibold mb-1">Location</label>
+            <label className="block font-semibold mb-1">Location (URL in the map)</label>
             <input
               type="text"
               className="w-full border p-2 rounded"
@@ -181,12 +212,11 @@ const BranchManager = () => {
               <img
                 src={previewUrl}
                 alt="preview"
-                className="mt-2 w-full max-h-48 object-cover rounded"
+                className="mt-2 w-full max-h-[400px] object-contain border rounded shadow"
               />
             )}
           </div>
 
-          {/* ✅ Submit Branch Button */}
           <button
             type="submit"
             className="w-full bg-gradient-to-r from-blue-950 to-teal-500 text-white py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
@@ -197,19 +227,19 @@ const BranchManager = () => {
       </div>
 
       {/* Table Section */}
-      <div className="border rounded p-6 w-full">
-        <h2 className="text-xl font-semibold mb-4">Branches</h2>
+      <div className="border rounded p-6 bg-white shadow w-full overflow-x-auto">
+        <h2 className="text-xl font-semibold mb-4">Submitted Branches</h2>
         {loading ? (
           <p>Loading branches...</p>
         ) : (
-          <table className="w-full table-auto text-left">
+          <table className="min-w-full text-left whitespace-nowrap">
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-2 py-1">City</th>
                 <th className="px-2 py-1">Contact</th>
                 <th className="px-2 py-1">Open</th>
                 <th className="px-2 py-1">Close</th>
-                <th className="px-2 py-1">Location</th>
+                <th className="px-2 py-1 max-w-[200px]">Location</th>
                 <th className="px-2 py-1">Image</th>
                 <th className="px-2 py-1">Actions</th>
               </tr>
@@ -221,13 +251,17 @@ const BranchManager = () => {
                   <td className="px-2 py-1">{branch.contact}</td>
                   <td className="px-2 py-1">{branch.openAt}</td>
                   <td className="px-2 py-1">{branch.closeAt}</td>
-                  <td className="px-2 py-1 break-words">{branch.location}</td>
+                  <td className="px-2 py-1 break-words max-w-[200px]">
+                    <span className="block overflow-hidden text-ellipsis">
+                      {branch.location}
+                    </span>
+                  </td>
                   <td className="px-2 py-1">
                     {branch.image && (
                       <img
                         src={branch.image}
                         alt="branch"
-                        className="w-16 h-auto rounded shadow"
+                        className="w-20 h-20 object-cover rounded shadow"
                       />
                     )}
                   </td>

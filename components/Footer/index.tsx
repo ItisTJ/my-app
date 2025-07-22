@@ -24,6 +24,8 @@ const Footer: React.FC = () => {
     contactNumber: footer?.contactNumber || "",
     email: footer?.email || "",
     aboutUs: footer?.aboutUs || "",
+    vision: footer?.vision || "",       
+    mission: footer?.mission || "",     
     fbLink: footer?.fbLink || "",
     whatsappLink: footer?.whatsappLink || "",
     instaLink: footer?.instaLink || "",
@@ -43,6 +45,8 @@ const Footer: React.FC = () => {
         contactNumber: footer.contactNumber,
         email: footer.email,
         aboutUs: footer.aboutUs,
+        vision: footer.vision,       
+        mission: footer.mission,     
         fbLink: footer.fbLink,
         whatsappLink: footer.whatsappLink,
         instaLink: footer.instaLink,
@@ -62,7 +66,7 @@ const Footer: React.FC = () => {
       }
     };
     fetchServicesFromAPI();
-  }, []);
+  }, [footer]);
 
   useEffect(() => {
     const fetchPrivacyPoliciesFromAPI = async () => {
@@ -74,7 +78,7 @@ const Footer: React.FC = () => {
       }
     };
     fetchPrivacyPoliciesFromAPI();
-  }, []);
+  }, [footer]);
 
   useEffect(() => {
     const fetchbranchesFromAPI = async () => {
@@ -86,13 +90,13 @@ const Footer: React.FC = () => {
       }
     };
     fetchbranchesFromAPI();
-  }, []);
-
-
+  }, [footer]);
 
   const data = {
     branches: branches,
     aboutUs: footerData.aboutUs,
+    vision: footerData.vision,            
+    mission: footerData.mission,        
     services: services,
     privacyAndPolicies: privacyPolicy,
     contactNumber: footerData.contactNumber,
@@ -119,8 +123,14 @@ const Footer: React.FC = () => {
                 >
                   <h4 className="text-white font-semibold">{branch.city}</h4>
                   <a href={branch.location} target="_blank" rel="noopener noreferrer">
-                    <Image src={branch.image} alt={branch.city} width={150} height={60} className="cursor-pointer" />
-                    </a>
+                    <Image
+                      src={branch.image}
+                      alt={branch.city}
+                      width={200}
+                      height={80}
+                      className="w-[180px] h-[140px] object-cover rounded-md cursor-pointer"
+                    />
+                  </a>
                   <p className="text-xs text-blue-300 mt-2">
                     📞 {branch.contact}
                   </p>
