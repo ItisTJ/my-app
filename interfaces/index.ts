@@ -17,6 +17,7 @@ export interface SliderInterface {
   name: string; 
   image: string;
   description: string; 
+  productId: string; // Reference to the product this slider is associated with
 }
 
 export interface HeaderInterface {

@@ -46,7 +46,7 @@ export const deleteSlider = (id: string) => async (dispatch: Dispatch) => {
 
 
 // ✅ Update Slider
-export const updateSlider = (slider: { _id: string; name: string; description: string; image: string }) => async (dispatch: Dispatch) => {
+export const updateSlider = (slider: { _id: string; name: string; description: string; image: string, productId: string }) => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: ActionTypes.SLIDER_UPDATE_REQUEST });
 

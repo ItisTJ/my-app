@@ -18,6 +18,7 @@ const SliderEdit = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
+  const [productId, setProductId] = useState('');
 
   useEffect(() => {
     if (!data || data.length === 0) {
@@ -28,6 +29,7 @@ const SliderEdit = () => {
         setName(sliderToEdit.name);
         setDescription(sliderToEdit.description);
         setImage(sliderToEdit.image);
+        setProductId(sliderToEdit.productId || ''); // Assuming productId is part of the slider
       }
     }
   }, [data, dispatch, id]);
@@ -35,7 +37,7 @@ const SliderEdit = () => {
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     if (typeof id === 'string') {
-      dispatch(updateSlider({ _id: id, name, description, image }));
+      dispatch(updateSlider({ _id: id, name, description, image, productId }));
       router.push('/admin/updateSlider'); // or wherever your list page is
     }
   };
@@ -56,6 +58,17 @@ const SliderEdit = () => {
               placeholder="Enter slider name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group controlId="productId" className="mt-3">
+            <Form.Label>Product ID</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter product ID"
+              value={productId}
+              onChange={(e) => setProductId(e.target.value)}
               required
             />
           </Form.Group>
