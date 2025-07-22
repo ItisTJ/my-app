@@ -5,7 +5,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 const CategoryManager: React.FC = () => {
   const [categories, setCategories] = useState<any[]>([]);
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");  // <-- Added description state
+  const [description, setDescription] = useState("");
   const [editId, setEditId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -37,7 +37,7 @@ const CategoryManager: React.FC = () => {
     try {
       await axios.post(
         "http://localhost:4000/api/categories",
-        { name: name.trim(), description: description.trim() },  // send both name & description
+        { name: name.trim(), description: description.trim() },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -47,7 +47,7 @@ const CategoryManager: React.FC = () => {
       );
       setMessage("Category added.");
       setName("");
-      setDescription("");  // clear description input
+      setDescription("");
       fetchCategories();
     } catch (error: any) {
       console.error("Upload error:", error.response?.data || error.message);
@@ -64,7 +64,7 @@ const CategoryManager: React.FC = () => {
     try {
       await axios.put(
         `http://localhost:4000/api/categories/${editId}`,
-        { name: name.trim(), description: description.trim() },  // send both here too
+        { name: name.trim(), description: description.trim() },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -109,7 +109,6 @@ const CategoryManager: React.FC = () => {
     else uploadCategory();
   };
 
-  // When editing a category, populate both name and description fields
   const startEditing = (cat: any) => {
     setName(cat.name);
     setDescription(cat.description || "");
@@ -123,7 +122,7 @@ const CategoryManager: React.FC = () => {
   }, [accessToken]);
 
   return (
-    <div className="p-4">
+    <div className="p-4 flex flex-col items-center justify-center">
       <h2 className="text-xl font-bold mb-4">Manage Categories</h2>
       {message && <p className="mb-2 text-green-600">{message}</p>}
 
@@ -143,12 +142,14 @@ const CategoryManager: React.FC = () => {
           onChange={(e) => setDescription(e.target.value)}
           className="border p-2 w-full"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2">
-          {editId ? "Update" : "Add"}
-        </button>
+        <div className="flex justify-center">
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2">
+            {editId ? "Update" : "Add"}
+          </button>
+        </div>
       </form>
 
-      <ul>
+      <ul className="w-full max-w-2xl">
         {categories.map((cat) => (
           <li key={cat._id} className="flex justify-between items-center border-b py-2">
             <div>
