@@ -9,12 +9,19 @@ body {
 }
 
 :root {
+    --primary-color:white;
     --secondary-color: #ffffff; /* default fallback */
-    --ternary-color: #ffffff; /* default fallback */
+    --ternary-color: #aaaaaa; /* default fallback */
   }
 
-  button{
-    background-color: var(--secondary-color);
-    border: 1px solid var(--ternary-color);
-    border-radius: 8px;
+  .primary{
+    border: 1px solid var(--primary-color);
+  }
+
+  .secondary{
+    border: 1px solid var(--secondary-color);
+  }
+
+  .ternary{
+    border: 2px solid var(--ternary-color);
   }
