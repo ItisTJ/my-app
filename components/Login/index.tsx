@@ -23,10 +23,10 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-transparent flex-col items-center justify-center">
-      <div className="max-w-xl w-screen mx-auto 
+      <div className="primary max-w-xl w-screen mx-auto 
         rounded-xl shadow-2xl 
         backdrop-blur-md bg-white/40 
-        border-4 border-white border-opacity-10
+        border-4 border-opacity-10
         p-6">
 
         <div className="relative h-24 rounded-t-xl bg-gradient-to-r from-blue-200 to-gray-100 mb-12">
