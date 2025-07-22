@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
+import { FaServicestack } from "react-icons/fa";
 
 interface Service {
   _id: string;
@@ -37,25 +38,52 @@ const ServicePage = () => {
     fetchService();
   }, [id]);
 
-  if (loading) return <p className="p-6 text-center">Loading service...</p>;
-  if (error) return <p className="p-6 text-center text-red-600">{error}</p>;
-  if (!service) return <p className="p-6 text-center">Service not found.</p>;
-
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <Link href="/"
-        className="text-blue-600 hover:underline mb-4 inline-block">&larr; Back to Home
+    <div className="max-w-6xl mx-auto px-6 py-6 bg-white rounded-2xl shadow-2xl my-12">
+      {/* Back link */}
+      <Link
+        href="/"
+        className="text-blue-600 hover:underline text-sm inline-block mb-4 mt-6 "
+      >
+        &larr; Back to Home
       </Link>
-      <h1 className="text-3xl font-bold mb-4">{service.title}</h1>
-      {service.image && (
-        // Use next/image if you want optimization, or regular img
-        <img
-          src={service.image}
-          alt={service.title}
-          className="w-full max-h-80 object-contain mb-4 rounded"
-        />
+
+      {/* Page Title with icon */}
+      <h1 className="text-4xl font-extrabold text-gray-900 mb-10 text-center mt-6 flex justify-center items-center gap-3">
+        <FaServicestack className="text-aqua-500" />
+        Service Information
+      </h1>
+
+      {loading ? (
+        <p className="text-center text-gray-500">Loading service...</p>
+      ) : error ? (
+        <p className="text-center text-red-600">{error}</p>
+      ) : !service ? (
+        <p className="text-center text-gray-600">Service not found.</p>
+      ) : (
+        <>
+          {/* Service Title */}
+          <h2 className="text-2xl font-bold mb-6 text-indigo-700 text-center">
+            {service.title}
+          </h2>
+
+          {/* Service Image */}
+          {service.image && (
+            <div className="flex justify-center mb-8">
+              <img
+                src={service.image}
+                alt={`Image for service: ${service.title}`}
+                className="rounded-xl max-w-full max-h-[400px] object-contain shadow-md"
+              />
+            </div>
+          )}
+
+          {/* Service Description */}
+          <p className="text-lg leading-relaxed text-gray-800 whitespace-pre-line  text-justify">
+            {service.description}
+          </p>
+        </>
       )}
-      <p className="text-lg whitespace-pre-line">{service.description}</p>
     </div>
   );
 };

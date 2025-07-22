@@ -20,6 +20,7 @@ const BranchManager = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const fetchBranches = async () => {
     setLoading(true);
@@ -68,18 +69,40 @@ const BranchManager = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const newErrors: { [key: string]: string } = {};
+
+    if (!form.city.trim()) newErrors.city = "City cannot be empty.";
+    if (!form.contact.trim()) newErrors.contact = "Contact Number cannot be empty.";
+    else if (!/^\d{10,15}$/.test(form.contact)) newErrors.contact = "Invalid contact number.";
+
+    if (!form.openAt.trim()) newErrors.openAt = "Open Time cannot be empty.";
+    if (!form.closeAt.trim()) newErrors.closeAt = "Close Time cannot be empty.";
+
+    if (!form.location.trim()) newErrors.location = "Location cannot be empty.";
+    else if (!/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(form.location))
+      newErrors.location = "Invalid URL format.";
+
+    if (!form.image.trim()) newErrors.image = "Image is required.";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     try {
       if (editingBranchId) {
         await axios.put(`http://localhost:4000/api/branches/${editingBranchId}`, form);
-        dispatch(fetchFooter()); // Refresh footer immediately after edit
+        dispatch(fetchFooter());
         setMessage("Branch updated successfully.");
         setEditingBranchId(null);
       } else {
         await axios.post("http://localhost:4000/api/branches", form);
-        dispatch(fetchFooter()); // Refresh footer immediately after add
+        dispatch(fetchFooter());
         setMessage("Branch added successfully.");
       }
-      // Clear form and preview after submit
+
       setForm({
         city: "",
         image: "",
@@ -89,6 +112,7 @@ const BranchManager = () => {
         location: ""
       });
       setPreviewUrl(null);
+      setErrors({});
       fetchBranches();
     } catch (error) {
       console.error("Error saving branch:", error);
@@ -114,10 +138,9 @@ const BranchManager = () => {
     if (!window.confirm("Are you sure you want to delete this branch?")) return;
     try {
       await axios.delete(`http://localhost:4000/api/branches/${id}`);
-      dispatch(fetchFooter()); // Refresh footer immediately after delete
+      dispatch(fetchFooter());
       setMessage("Branch deleted successfully.");
       fetchBranches();
-      // Clear form and preview after delete just in case
       setForm({
         city: "",
         image: "",
@@ -162,8 +185,8 @@ const BranchManager = () => {
               className="w-full border p-2 rounded"
               value={form.city}
               onChange={(e) => handleChange("city", e.target.value)}
-              required
             />
+            {errors.city && <p className="text-red-600 text-sm mt-1">{errors.city}</p>}
           </div>
           <div>
             <label className="block font-semibold mb-1">Contact Number</label>
@@ -172,8 +195,8 @@ const BranchManager = () => {
               className="w-full border p-2 rounded"
               value={form.contact}
               onChange={(e) => handleChange("contact", e.target.value)}
-              required
             />
+            {errors.contact && <p className="text-red-600 text-sm mt-1">{errors.contact}</p>}
           </div>
           <div>
             <label className="block font-semibold mb-1">Open Time</label>
@@ -182,8 +205,8 @@ const BranchManager = () => {
               className="w-full border p-2 rounded"
               value={form.openAt}
               onChange={(e) => handleChange("openAt", e.target.value)}
-              required
             />
+            {errors.openAt && <p className="text-red-600 text-sm mt-1">{errors.openAt}</p>}
           </div>
           <div>
             <label className="block font-semibold mb-1">Close Time</label>
@@ -192,8 +215,8 @@ const BranchManager = () => {
               className="w-full border p-2 rounded"
               value={form.closeAt}
               onChange={(e) => handleChange("closeAt", e.target.value)}
-              required
             />
+            {errors.closeAt && <p className="text-red-600 text-sm mt-1">{errors.closeAt}</p>}
           </div>
           <div>
             <label className="block font-semibold mb-1">Location (URL in the map)</label>
@@ -202,12 +225,13 @@ const BranchManager = () => {
               className="w-full border p-2 rounded"
               value={form.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              required
             />
+            {errors.location && <p className="text-red-600 text-sm mt-1">{errors.location}</p>}
           </div>
           <div>
             <label className="block font-semibold mb-1">Image</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
+            {errors.image && <p className="text-red-600 text-sm mt-1">{errors.image}</p>}
             {previewUrl && (
               <img
                 src={previewUrl}

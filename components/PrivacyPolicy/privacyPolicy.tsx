@@ -6,7 +6,7 @@ import {
   deletePrivacyPolicy,
   editPrivacyPolicy,
 } from "../../state/PrivacyPolicy/privacyPolicy.action-creators";
-import { fetchFooter } from "../../state/Footer/footer.action-creators"; // <== Import this
+import { fetchFooter } from "../../state/Footer/footer.action-creators";
 import { useTypedSelector } from "../../hooks";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
@@ -19,6 +19,14 @@ const PrivacyPolicyManager = () => {
 
   const [submittedPolicies, setSubmittedPolicies] = useState<any[]>([]);
   const [editingPolicyId, setEditingPolicyId] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const [policies, setPolicies] = useState([{ title: "", description: "" }]);
+  const [errors, setErrors] = useState<{ title?: string; description?: string }[]>([]);
+
+  const { loading, error } = useTypedSelector(
+    (state) => state.privacyPolicy || { loading: false, error: null }
+  );
 
   useEffect(() => {
     dispatch(fetchPrivacyPolicies());
@@ -34,30 +42,53 @@ const PrivacyPolicyManager = () => {
     }
   };
 
-  const { loading, error } = useTypedSelector(
-    (state) => state.privacyPolicy || { loading: false, error: null }
-  );
-
-  const [policies, setPolicies] = useState([{ title: "", description: "" }]);
-  const [message, setMessage] = useState<string | null>(null);
-
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...policies];
     updated[index] = { ...updated[index], [field]: value };
     setPolicies(updated);
+
+    const updatedErrors = [...errors];
+    updatedErrors[index] = {
+      ...updatedErrors[index],
+      [field]: "",
+    };
+    setErrors(updatedErrors);
   };
 
   const addPolicy = () => {
     setPolicies([...policies, { title: "", description: "" }]);
+    setErrors([...errors, {}]);
   };
 
   const removePolicy = (index: number) => {
-    const updated = policies.filter((_, i) => i !== index);
-    setPolicies(updated);
+    setPolicies(policies.filter((_, i) => i !== index));
+    setErrors(errors.filter((_, i) => i !== index));
+  };
+
+  const validatePolicies = () => {
+    const validationErrors = policies.map((p) => {
+      const err: { title?: string; description?: string } = {};
+      if (!p.title.trim()) err.title = "Title is required.";
+      if (!p.description.trim()) err.description = "Description is required.";
+      return err;
+    });
+
+    const hasErrors = validationErrors.some(
+      (err) => err.title || err.description
+    );
+
+    setErrors(validationErrors);
+    return !hasErrors;
   };
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!validatePolicies()) {
+      setMessage("Please fill out all required fields.");
+      return;
+    }
+
     try {
       if (editingPolicyId) {
         const success = await dispatch(editPrivacyPolicy(editingPolicyId, policies[0]));
@@ -65,7 +96,8 @@ const PrivacyPolicyManager = () => {
           setMessage("Privacy Policy updated successfully.");
           setEditingPolicyId(null);
           setPolicies([{ title: "", description: "" }]);
-          dispatch(fetchFooter()); // <-- Refresh footer on edit success
+          setErrors([]);
+          dispatch(fetchFooter());
         } else {
           setMessage("Failed to update policy.");
         }
@@ -74,11 +106,13 @@ const PrivacyPolicyManager = () => {
         if (success) {
           setMessage("Privacy Policies uploaded successfully.");
           setPolicies([{ title: "", description: "" }]);
-          dispatch(fetchFooter()); // <-- Refresh footer on add success
+          setErrors([]);
+          dispatch(fetchFooter());
         } else {
           setMessage("Failed to upload policies.");
         }
       }
+
       await dispatch<any>(fetchPrivacyPolicies());
       fetchSubmittedPolicies();
     } catch (error) {
@@ -90,6 +124,7 @@ const PrivacyPolicyManager = () => {
   const handleEdit = (policy: any) => {
     setEditingPolicyId(policy._id);
     setPolicies([{ title: policy.title, description: policy.description }]);
+    setErrors([{}]);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -101,9 +136,10 @@ const PrivacyPolicyManager = () => {
         setMessage("Privacy Policy deleted successfully.");
         await dispatch<any>(fetchPrivacyPolicies());
         fetchSubmittedPolicies();
-        setPolicies([{ title: "", description: "" }]); // Clear form on delete
+        setPolicies([{ title: "", description: "" }]);
         setEditingPolicyId(null);
-        dispatch(fetchFooter()); // <-- Refresh footer on delete success
+        setErrors([]);
+        dispatch(fetchFooter());
       } else {
         setMessage("Failed to delete policy.");
       }
@@ -122,7 +158,7 @@ const PrivacyPolicyManager = () => {
       {message && (
         <div
           className={`p-3 mb-4 rounded ${
-            message.includes("success")
+            message.toLowerCase().includes("success")
               ? "bg-green-100 text-green-800"
               : "bg-red-100 text-red-800"
           }`}
@@ -148,6 +184,9 @@ const PrivacyPolicyManager = () => {
                 value={policy.title}
                 onChange={(e) => handleChange(index, "title", e.target.value)}
               />
+              {errors[index]?.title && (
+                <p className="text-red-600 text-sm mt-1">{errors[index].title}</p>
+              )}
             </div>
             <div>
               <label className="block font-semibold mb-1">Description</label>
@@ -155,10 +194,11 @@ const PrivacyPolicyManager = () => {
                 className="w-full border p-2 rounded"
                 rows={4}
                 value={policy.description}
-                onChange={(e) =>
-                  handleChange(index, "description", e.target.value)
-                }
-              ></textarea>
+                onChange={(e) => handleChange(index, "description", e.target.value)}
+              />
+              {errors[index]?.description && (
+                <p className="text-red-600 text-sm mt-1">{errors[index].description}</p>
+              )}
             </div>
             {policies.length > 1 && (
               <button
@@ -209,7 +249,12 @@ const PrivacyPolicyManager = () => {
               {submittedPolicies.map((policy, index) => (
                 <tr key={index} className="border-t">
                   <td className="px-4 py-2 align-top break-words max-w-xs">{policy.title}</td>
-                  <td className="px-4 py-2 align-top break-words">{policy.description}</td>
+                  <td
+                    className="px-4 py-2 align-top break-words max-w-xs overflow-hidden whitespace-nowrap overflow-ellipsis"
+                    title={policy.description}
+                  >
+                    {policy.description}
+                  </td>
                   <td className="px-4 py-2 flex items-center space-x-4">
                     <button
                       onClick={() => handleEdit(policy)}
