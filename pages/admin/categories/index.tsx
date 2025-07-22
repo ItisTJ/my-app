@@ -1,12 +1,12 @@
-import ManageCategories from '@/components/ManageCategories'
-import React from 'react'
+import ManageCategories from '@/components/ManageCategories';
+import React from 'react';
 
-function categories() {
+function Categories() {
   return (
     <div className='mt-28'>
-        <ManageCategories/>
+      <ManageCategories />
     </div>
-  )
+  );
 }
 
-export default categories
+export default Categories;
