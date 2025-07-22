@@ -1,11 +1,12 @@
-import React, { useState, FormEvent, useEffect, ChangeEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   uploadPrivacyPolicy,
   fetchPrivacyPolicies,
   deletePrivacyPolicy,
-  editPrivacyPolicy
+  editPrivacyPolicy,
 } from "../../state/PrivacyPolicy/privacyPolicy.action-creators";
+import { fetchFooter } from "../../state/Footer/footer.action-creators"; // <== Import this
 import { useTypedSelector } from "../../hooks";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
@@ -42,7 +43,7 @@ const PrivacyPolicyManager = () => {
 
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...policies];
-    (updated[index] as any)[field] = value;
+    updated[index] = { ...updated[index], [field]: value };
     setPolicies(updated);
   };
 
@@ -64,6 +65,7 @@ const PrivacyPolicyManager = () => {
           setMessage("Privacy Policy updated successfully.");
           setEditingPolicyId(null);
           setPolicies([{ title: "", description: "" }]);
+          dispatch(fetchFooter()); // <-- Refresh footer on edit success
         } else {
           setMessage("Failed to update policy.");
         }
@@ -71,6 +73,8 @@ const PrivacyPolicyManager = () => {
         const success = await dispatch<any>(uploadPrivacyPolicy(policies));
         if (success) {
           setMessage("Privacy Policies uploaded successfully.");
+          setPolicies([{ title: "", description: "" }]);
+          dispatch(fetchFooter()); // <-- Refresh footer on add success
         } else {
           setMessage("Failed to upload policies.");
         }
@@ -97,6 +101,9 @@ const PrivacyPolicyManager = () => {
         setMessage("Privacy Policy deleted successfully.");
         await dispatch<any>(fetchPrivacyPolicies());
         fetchSubmittedPolicies();
+        setPolicies([{ title: "", description: "" }]); // Clear form on delete
+        setEditingPolicyId(null);
+        dispatch(fetchFooter()); // <-- Refresh footer on delete success
       } else {
         setMessage("Failed to delete policy.");
       }
@@ -107,13 +114,14 @@ const PrivacyPolicyManager = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-center text-2xl font-bold mb-4">
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6 text-center mt-8">
         {editingPolicyId ? "Edit Privacy Policy" : "Add Privacy Policies"}
       </h1>
+
       {message && (
         <div
-          className={`p-3 rounded mb-4 ${
+          className={`p-3 mb-4 rounded ${
             message.includes("success")
               ? "bg-green-100 text-green-800"
               : "bg-red-100 text-red-800"
@@ -122,17 +130,18 @@ const PrivacyPolicyManager = () => {
           {message}
           <button
             onClick={() => setMessage(null)}
-            className="float-right px-3 py-1 text-xl"
+            className="float-right text-xl font-bold"
           >
             &times;
           </button>
         </div>
       )}
+
       <form onSubmit={onSubmitHandler} className="space-y-6">
         {policies.map((policy, index) => (
-          <div key={index} className="border rounded p-4 space-y-4">
+          <div key={index} className="border rounded p-4 space-y-4 bg-white shadow">
             <div>
-              <label className="block font-bold mb-1">Title</label>
+              <label className="block font-semibold mb-1">Title</label>
               <input
                 type="text"
                 className="w-full border p-2 rounded"
@@ -141,37 +150,41 @@ const PrivacyPolicyManager = () => {
               />
             </div>
             <div>
-              <label className="block font-bold mb-1">Description</label>
+              <label className="block font-semibold mb-1">Description</label>
               <textarea
                 className="w-full border p-2 rounded"
                 rows={4}
                 value={policy.description}
-                onChange={(e) => handleChange(index, "description", e.target.value)}
+                onChange={(e) =>
+                  handleChange(index, "description", e.target.value)
+                }
               ></textarea>
             </div>
             {policies.length > 1 && (
               <button
                 type="button"
                 onClick={() => removePolicy(index)}
-                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-red-700 to-red-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg"
+                className="bg-gradient-to-r from-red-700 to-red-500 text-white px-4 py-2 rounded-lg shadow hover:shadow-lg transition-all duration-300"
               >
                 Remove
               </button>
             )}
           </div>
         ))}
+
         {!editingPolicyId && (
           <button
             type="button"
             onClick={addPolicy}
-            className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg"
+            className="bg-gradient-to-r from-blue-950 to-teal-500 text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
           >
             Add Policy
           </button>
         )}
+
         <button
           type="submit"
-          className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md transition-all duration-300 hover:shadow-lg w-full mt-6"
+          className="w-full bg-gradient-to-r from-blue-950 to-teal-500 text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
         >
           {editingPolicyId ? "Save Changes" : "Submit Policies"}
         </button>
@@ -183,31 +196,31 @@ const PrivacyPolicyManager = () => {
       ) : error ? (
         <p className="text-red-600">Error: {error}</p>
       ) : (
-        <div className="overflow-x-auto border rounded-lg">
-          <table className="min-w-full table-auto border-collapse text-left">
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden text-left">
             <thead className="bg-gray-100">
               <tr>
-                <th className="border px-4 py-2">Title</th>
-                <th className="border px-4 py-2">Description</th>
-                <th className="border px-4 py-2">Actions</th>
+                <th className="px-4 py-2">Title</th>
+                <th className="px-4 py-2">Description</th>
+                <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {submittedPolicies.map((policy, index) => (
                 <tr key={index} className="border-t">
-                  <td className="px-4 py-2">{policy.title}</td>
-                  <td className="px-4 py-2">{policy.description}</td>
-                  <td className="px-4 py-2 flex space-x-2">
+                  <td className="px-4 py-2 align-top break-words max-w-xs">{policy.title}</td>
+                  <td className="px-4 py-2 align-top break-words">{policy.description}</td>
+                  <td className="px-4 py-2 flex items-center space-x-4">
                     <button
                       onClick={() => handleEdit(policy)}
-                      className="text-blue-600 hover:text-blue-800 text-lg"
+                      className="text-blue-600 hover:text-blue-800"
                       title="Edit"
                     >
                       <FaEdit />
                     </button>
                     <button
                       onClick={() => handleDelete(policy._id)}
-                      className="text-red-600 hover:text-red-800 text-lg"
+                      className="text-red-600 hover:text-red-800"
                       title="Delete"
                     >
                       <FaTrash />
