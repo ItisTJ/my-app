@@ -7,7 +7,7 @@ const ShippingPage: NextPage = () => {
   return (
     <>
       <SEO {...shippingConfig} />
-      <main className="wrapper">
+      <main className="wrapper mt-20">
         <Shipping />
       </main>
     </>
