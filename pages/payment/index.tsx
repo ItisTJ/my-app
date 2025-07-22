@@ -7,7 +7,7 @@ const PaymentPage: NextPage = () => {
   return (
     <>
       <SEO {...homeConfig} />
-      <main className="wrapper py-5">
+      <main className="wrapper py-5 mt-10">
         <Payment />
       </main>
     </>

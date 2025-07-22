@@ -26,6 +26,8 @@ const Footer: React.FC = () => {
     contactNumber: footer?.contactNumber || "",
     email: footer?.email || "",
     aboutUs: footer?.aboutUs || "",
+    vision: footer?.vision || "",       
+    mission: footer?.mission || "",     
     fbLink: footer?.fbLink || "",
     whatsappLink: footer?.whatsappLink || "",
     instaLink: footer?.instaLink || "",
@@ -45,6 +47,8 @@ const Footer: React.FC = () => {
         contactNumber: footer.contactNumber,
         email: footer.email,
         aboutUs: footer.aboutUs,
+        vision: footer.vision,       
+        mission: footer.mission,     
         fbLink: footer.fbLink,
         whatsappLink: footer.whatsappLink,
         instaLink: footer.instaLink,
@@ -64,7 +68,7 @@ const Footer: React.FC = () => {
       }
     };
     fetchServicesFromAPI();
-  }, []);
+  }, [footer]);
 
   useEffect(() => {
     const fetchPrivacyPoliciesFromAPI = async () => {
@@ -76,7 +80,7 @@ const Footer: React.FC = () => {
       }
     };
     fetchPrivacyPoliciesFromAPI();
-  }, []);
+  }, [footer]);
 
   useEffect(() => {
     const fetchbranchesFromAPI = async () => {
@@ -88,13 +92,13 @@ const Footer: React.FC = () => {
       }
     };
     fetchbranchesFromAPI();
-  }, []);
-
-
+  }, [footer]);
 
   const data = {
     branches: branches,
     aboutUs: footerData.aboutUs,
+    vision: footerData.vision,            
+    mission: footerData.mission,        
     services: services,
     privacyAndPolicies: privacyPolicy,
     contactNumber: footerData.contactNumber,

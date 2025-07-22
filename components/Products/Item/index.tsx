@@ -16,7 +16,7 @@ const Item: React.FC<ProductInterface> = ({
     // Main container for the product card
     <div
     
-      className="my-3 p-3 rounded cursor-pointer bg-white shadow hover:shadow-md transition-shadow h-full flex flex-col sm:flex-row md:flex-col lg:flex-row xl:flex-col"
+      className="my-3 p-3 rounded cursor-pointer bg-purple-50 shadow hover:shadow-md transition-shadow h-full flex flex-col sm:flex-row md:flex-col lg:flex-row xl:flex-col"
       role="button" // Makes the card feel like a clickable item (accessibility)
     >
       {/* Product Image with link to product details page */}
@@ -25,7 +25,7 @@ const Item: React.FC<ProductInterface> = ({
           <img
             src={image}
             alt={name}
-            className="w-64 object-cover rounded-t" // set fixed width
+            className="w-64 object-cover rounded-t transform transition-transform duration-300 ease-in-out hover:scale-105"
           />
         </Link>
       </div>
@@ -34,9 +34,7 @@ const Item: React.FC<ProductInterface> = ({
       <div className="flex flex-col items-center justify-between pt-auto pb-0">
         {/* Product Name with link to product details */}
         <Link href={`/product/${_id}`} passHref>
-          <h3 className="text-lg font-bold">
-            {name}
-          </h3>
+          <h3 className="text-lg font-bold">{name}</h3>
         </Link>
 
         {/* Product Rating with number of reviews */}
@@ -45,9 +43,7 @@ const Item: React.FC<ProductInterface> = ({
         </div>
 
         {/* Product Price */}
-        <h3 className="text-xl font-semibold py-1">
-          ${price}
-        </h3>
+        <h3 className="text-xl font-semibold py-1">${price}</h3>
       </div>
     </div>
   );

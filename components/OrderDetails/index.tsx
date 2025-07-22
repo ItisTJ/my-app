@@ -221,7 +221,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
       {/* Shipping Details */}
       <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
         <h3 className="flex items-center text-lg font-semibold mb-4">
-          <MapPin className="w-5 h-5 mr-2 text-blue-600" />
+          <MapPin className="w-5 h-5 mr-2 text-teal-600" />
           Shipping Details
         </h3>
         <p><strong>Address:</strong> {order.shippingDetails.address}</p>
@@ -231,7 +231,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
         <p className="mt-2">
           <strong>Status:</strong>{" "}
           {order.isDelivered ? (
-            <span className="text-green-600">Delivered</span>
+            <span className="text-teal-600">Delivered</span>
           ) : (
             <span className="text-yellow-500">Not Delivered</span>
           )}
@@ -241,14 +241,14 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
       {/* Payment Method */}
       <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
         <h3 className="flex items-center text-lg font-semibold mb-4">
-          <CreditCard className="w-5 h-5 mr-2 text-purple-600" />
+          <CreditCard className="w-5 h-5 mr-2 text-teal-600" />
           Payment Method
         </h3>
         <p><strong>Method:</strong> {order.paymentMethod}</p>
         <p className="mt-2">
           <strong>Paid:</strong>{" "}
           {order.isPaid ? (
-            <span className="text-green-600">Yes</span>
+            <span className="text-teal-600">Yes</span>
           ) : (
             <span className="text-red-600">No</span>
           )}
@@ -258,7 +258,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
       {/* Order Items */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
         <h3 className="flex items-center text-lg font-semibold mb-4">
-          <ShoppingCart className="w-5 h-5 mr-2 text-amber-600" />
+          <ShoppingCart className="w-5 h-5 mr-2 text-teal-600" />
           Order Items
         </h3>
         {order.orderItems.map((item) => (
