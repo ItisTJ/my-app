@@ -4,7 +4,7 @@ import {
   uploadServices,
   fetchServices,
   deleteService,
-  editService
+  editService,
 } from "../../state/Services/services.action-creators";
 import { fetchFooter } from "../../state/Footer/footer.action-creators";
 import { useTypedSelector } from "../../hooks";
@@ -14,11 +14,34 @@ import { RootState } from "../../state";
 import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
+interface Service {
+  title: string;
+  description: string;
+  image: string;
+}
+
+interface ServiceErrors {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
 const ServiceManager = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
 
-  const [submittedServices, setSubmittedServices] = useState<any[]>([]);
+  const [submittedServices, setSubmittedServices] = useState<Service[]>([]);
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
+
+  const { loading, error } = useTypedSelector(
+    (state) => state.services || { loading: false, error: null }
+  );
+
+  const [services, setServices] = useState<Service[]>([
+    { title: "", description: "", image: "" },
+  ]);
+  const [previewUrls, setPreviewUrls] = useState<(string | null)[]>([null]);
+  const [message, setMessage] = useState<string | null>(null);
+  const [errors, setErrors] = useState<ServiceErrors[]>([]);
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -34,25 +57,36 @@ const ServiceManager = () => {
     }
   };
 
-  const { loading, error } = useTypedSelector(
-    (state) => state.services || { loading: false, error: null }
-  );
-
-  const [services, setServices] = useState([
-    { title: "", description: "", image: "" }
-  ]);
-  const [message, setMessage] = useState<string | null>(null);
-  const [previewUrls, setPreviewUrls] = useState<(string | null)[]>([null]);
-
-  const handleChange = (index: number, field: string, value: string) => {
+  const handleChange = (index: number, field: keyof Service, value: string) => {
     const updated = [...services];
-    (updated[index] as any)[field] = value;
+    updated[index] = { ...updated[index], [field]: value };
     setServices(updated);
+
+    // Clear error on change for that field
+    const newErrors = [...errors];
+    if (newErrors[index]) {
+      newErrors[index][field] = undefined;
+      setErrors(newErrors);
+    }
   };
 
   const handleImageChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        const newErrors = [...errors];
+        if (!newErrors[index]) newErrors[index] = {};
+        newErrors[index].image = "File size must be under 2MB.";
+        setErrors(newErrors);
+        return;
+      } else {
+        // Clear image error if any
+        const newErrors = [...errors];
+        if (newErrors[index]) {
+          newErrors[index].image = undefined;
+          setErrors(newErrors);
+        }
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64 = reader.result as string;
@@ -71,23 +105,64 @@ const ServiceManager = () => {
   const addService = () => {
     setServices([...services, { title: "", description: "", image: "" }]);
     setPreviewUrls([...previewUrls, null]);
+    setErrors([...errors, {}]);
   };
 
   const removeService = (index: number) => {
     const updated = services.filter((_, i) => i !== index);
     const updatedPreviews = previewUrls.filter((_, i) => i !== index);
+    const updatedErrors = errors.filter((_, i) => i !== index);
     setServices(updated);
     setPreviewUrls(updatedPreviews);
+    setErrors(updatedErrors);
   };
 
   const clearForm = () => {
     setServices([{ title: "", description: "", image: "" }]);
     setPreviewUrls([null]);
     setEditingServiceId(null);
+    setErrors([]);
+  };
+
+  // Validation function
+  const validateServices = (): boolean => {
+    const validationErrors: ServiceErrors[] = services.map((service) => {
+      const err: ServiceErrors = {};
+
+      if (typeof service.title !== "string" || !service.title.trim()) {
+        err.title = "Title cannot be empty.";
+      }
+
+      if (
+        typeof service.description !== "string" ||
+        !service.description.trim()
+      ) {
+        err.description = "Description cannot be empty.";
+      }
+
+      if (typeof service.image !== "string" || !service.image.trim()) {
+        err.image = "Image is required.";
+      }
+
+      return err;
+    });
+
+    const hasErrors = validationErrors.some(
+      (err) => err.title || err.description || err.image
+    );
+
+    setErrors(validationErrors);
+    return !hasErrors;
   };
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!validateServices()) {
+      setMessage("Please fill all the fields before submittin.");
+      return;
+    }
+
     try {
       let success = false;
       if (editingServiceId) {
@@ -110,7 +185,11 @@ const ServiceManager = () => {
         );
         clearForm();
       } else {
-        setMessage(editingServiceId ? "Failed to update service." : "Failed to upload services.");
+        setMessage(
+          editingServiceId
+            ? "Failed to update service."
+            : "Failed to upload services."
+        );
       }
     } catch (error) {
       console.error("Upload error:", error);
@@ -118,12 +197,13 @@ const ServiceManager = () => {
     }
   };
 
-  const handleEdit = (service: any) => {
+  const handleEdit = (service: Service & { _id: string }) => {
     setEditingServiceId(service._id);
     setServices([
-      { title: service.title, description: service.description, image: service.image }
+      { title: service.title, description: service.description, image: service.image },
     ]);
     setPreviewUrls([service.image || null]);
+    setErrors([{}]);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -158,40 +238,62 @@ const ServiceManager = () => {
       {message && (
         <div
           className={`p-3 mb-4 rounded ${
-            message.includes("success")
+            message.toLowerCase().includes("success")
               ? "bg-green-100 text-green-800"
               : "bg-red-100 text-red-800"
           }`}
         >
           {message}
-          <button onClick={() => setMessage(null)} className="float-right font-bold">
+          <button
+            onClick={() => setMessage(null)}
+            className="float-right font-bold"
+            aria-label="Dismiss message"
+          >
             &times;
           </button>
         </div>
       )}
 
-      <form onSubmit={onSubmitHandler} className="space-y-6 border rounded p-6 mb-8 bg-white shadow w-full">
+      <form
+        onSubmit={onSubmitHandler}
+        className="space-y-6 border rounded p-6 mb-8 bg-white shadow w-full"
+      >
         {services.map((service, index) => (
-          <div key={index} className="space-y-4 border rounded p-4 bg-white shadow">
+          <div
+            key={index}
+            className="space-y-4 border rounded p-4 bg-white shadow"
+          >
             <div>
               <label className="block font-semibold mb-1">Title</label>
               <input
                 type="text"
-                className="w-full border p-2 rounded"
+                className={`w-full border p-2 rounded ${
+                  errors[index]?.title ? "border-red-600" : ""
+                }`}
                 value={service.title}
                 onChange={(e) => handleChange(index, "title", e.target.value)}
-                required
               />
+              {errors[index]?.title && (
+                <p className="text-red-600 text-sm mt-1">{errors[index]?.title}</p>
+              )}
             </div>
             <div>
               <label className="block font-semibold mb-1">Service Description</label>
               <textarea
-                className="w-full border p-2 rounded"
+                className={`w-full border p-2 rounded ${
+                  errors[index]?.description ? "border-red-600" : ""
+                }`}
                 rows={4}
                 value={service.description}
-                onChange={(e) => handleChange(index, "description", e.target.value)}
-                required
+                onChange={(e) =>
+                  handleChange(index, "description", e.target.value)
+                }
               ></textarea>
+              {errors[index]?.description && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors[index]?.description}
+                </p>
+              )}
             </div>
             <div>
               <label className="block font-semibold mb-1">Image</label>
@@ -199,7 +301,11 @@ const ServiceManager = () => {
                 type="file"
                 accept="image/*"
                 onChange={(e) => handleImageChange(index, e)}
+                className={errors[index]?.image ? "border-red-600" : ""}
               />
+              {errors[index]?.image && (
+                <p className="text-red-600 text-sm mt-1">{errors[index]?.image}</p>
+              )}
               {previewUrls[index] && (
                 <img
                   src={previewUrls[index]!}
@@ -219,6 +325,7 @@ const ServiceManager = () => {
             )}
           </div>
         ))}
+
         {!editingServiceId && (
           <button
             type="button"
@@ -228,6 +335,7 @@ const ServiceManager = () => {
             Add Service
           </button>
         )}
+
         <button
           type="submit"
           className="bg-gradient-to-r from-blue-950 to-teal-500 text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300 w-full mt-6"
@@ -256,7 +364,12 @@ const ServiceManager = () => {
               {submittedServices.map((service) => (
                 <tr key={service._id} className="border-t">
                   <td className="px-2 py-1">{service.title}</td>
-                  <td className="px-2 py-1 break-words max-w-[400px]">{service.description}</td>
+                  <td
+                    className="px-2 py-1 max-w-xs overflow-hidden whitespace-nowrap overflow-ellipsis"
+                    title={service.description}
+                  >
+                    {service.description}
+                  </td>
                   <td className="px-2 py-1">
                     {service.image && (
                       <img

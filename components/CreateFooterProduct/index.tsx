@@ -1,4 +1,3 @@
-// components/FooterManager.tsx
 import React, { useEffect, useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../hooks";
@@ -29,6 +28,7 @@ const FooterManager = () => {
   });
 
   const [message, setMessage] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     dispatch(fetchFooter());
@@ -51,8 +51,48 @@ const FooterManager = () => {
     }
   }, [footer]);
 
+  const validateInputs = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!footerData.contactNumber.trim()) {
+      newErrors.contactNumber = "Contact number is required.";
+    } else if (!/^\+?[0-9\s\-]{10,15}$/.test(footerData.contactNumber)) {
+      newErrors.contactNumber = "Invalid contact number format.";
+    }
+
+    if (!footerData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(footerData.email)
+    ) {
+      newErrors.email = "Invalid email address.";
+    }
+
+    if (!footerData.aboutUs.trim()) {
+      newErrors.aboutUs = "About Us section cannot be empty.";
+    }
+
+    const socialFields = ["fbLink", "whatsappLink", "instaLink", "ytLink", "ttLink"];
+    for (const field of socialFields) {
+      const value = footerData[field as keyof typeof footerData];
+      if (value && !/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(value)) {
+        newErrors[field] = "Invalid URL format.";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setMessage(null);
+
+    if (!validateInputs()) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     try {
       const config = { headers: { "Content-Type": "application/json" } };
       await proshopAPI.post("/api/footer/upload", footerData, config);
@@ -112,8 +152,10 @@ const FooterManager = () => {
                 }
                 className="w-full border p-2 rounded"
                 placeholder="+1 234 567 8900"
-                required
               />
+              {errors.contactNumber && (
+                <p className="text-red-600 text-sm mt-1">{errors.contactNumber}</p>
+              )}
             </div>
 
             {/* Email */}
@@ -125,11 +167,15 @@ const FooterManager = () => {
                 id="email"
                 type="email"
                 value={footerData.email}
-                onChange={(e) => setFooterData({ ...footerData, email: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, email: e.target.value })
+                }
                 className="w-full border p-2 rounded"
                 placeholder="example@mail.com"
-                required
               />
+              {errors.email && (
+                <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             {/* About Us */}
@@ -146,8 +192,10 @@ const FooterManager = () => {
                 }
                 className="w-full border p-2 rounded resize-y"
                 placeholder="Write something about your company..."
-                required
               />
+              {errors.aboutUs && (
+                <p className="text-red-600 text-sm mt-1">{errors.aboutUs}</p>
+              )}
             </div>
 
             {/* Vision */}
@@ -159,7 +207,9 @@ const FooterManager = () => {
                 id="vision"
                 rows={4}
                 value={footerData.vision}
-                onChange={(e) => setFooterData({ ...footerData, vision: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, vision: e.target.value })
+                }
                 className="w-full border p-2 rounded resize-y"
                 placeholder="Write your vision statement..."
               />
@@ -174,7 +224,9 @@ const FooterManager = () => {
                 id="mission"
                 rows={4}
                 value={footerData.mission}
-                onChange={(e) => setFooterData({ ...footerData, mission: e.target.value })}
+                onChange={(e) =>
+                  setFooterData({ ...footerData, mission: e.target.value })
+                }
                 className="w-full border p-2 rounded resize-y"
                 placeholder="Write your mission statement..."
               />
@@ -203,6 +255,9 @@ const FooterManager = () => {
                     className="w-full border p-2 rounded"
                     placeholder={`https://www.${label.toLowerCase().replace(" ", "")}.com/yourprofile`}
                   />
+                  {errors[id] && (
+                    <p className="text-red-600 text-sm mt-1">{errors[id]}</p>
+                  )}
                 </div>
               ))}
             </div>

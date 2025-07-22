@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
+import { FaShieldAlt } from "react-icons/fa";
 
 interface PrivacyPolicy {
   _id: string;
@@ -27,7 +28,7 @@ const PrivacyPolicyPage = () => {
         setPrivacyPolicy(response.data);
         setError(null);
       } catch (err) {
-        setError("Failed to load service data.");
+        setError("Failed to load policy data.");
       } finally {
         setLoading(false);
       }
@@ -36,17 +37,34 @@ const PrivacyPolicyPage = () => {
     fetchPrivacyPolicy();
   }, [id]);
 
-  if (loading) return <p className="p-6 text-center">Loading service...</p>;
-  if (error) return <p className="p-6 text-center text-red-600">{error}</p>;
-  if (!privacyPolicy) return <p className="p-6 text-center">Service not found.</p>;
-
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <Link href="/"
-        className="text-blue-600 hover:underline mb-4 inline-block">&larr; Back to Home
+    <div className="max-w-6xl mx-auto px-6 py-6 bg-white rounded-2xl shadow-2xl my-12">
+      <Link
+        href="/"
+        className="text-blue-600 hover:underline text-sm inline-block mb-4 mt-6"
+      >
+        &larr; Back to Home
       </Link>
-      <h1 className="text-3xl font-bold mb-4">{privacyPolicy.title}</h1>
-      <p className="text-lg whitespace-pre-line">{privacyPolicy.description}</p>
+
+      <h1 className="text-4xl font-extrabold text-gray-900 mb-10 text-center mt-6 flex justify-center items-center gap-3">
+        <FaShieldAlt className="text-indigo-500" />
+        Privacy Policy
+      </h1>
+
+      {loading ? (
+        <p className="text-center text-gray-500">Loading policy...</p>
+      ) : error ? (
+        <p className="text-center text-red-600">Error: {error}</p>
+      ) : !privacyPolicy ? (
+        <p className="text-center text-gray-600">Policy not found.</p>
+      ) : (
+        <div className="text-lg leading-relaxed text-gray-800 whitespace-pre-line">
+          <h2 className="text-2xl font-bold mb-4 text-indigo-700 text-center">
+            {privacyPolicy.title}
+          </h2>
+          <p className="text-justify">{privacyPolicy.description}</p>
+        </div>
+      )}
     </div>
   );
 };
