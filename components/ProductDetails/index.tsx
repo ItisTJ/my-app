@@ -120,7 +120,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
 
             {/* Purchase and stock details */}
             <div className="md:col-span-1">
-              <div className="border rounded shadow p-4 space-y-4 max-w-sm mx-auto">
+              <div className="theme border rounded shadow p-4 space-y-4 max-w-sm mx-auto">
                 {/* Price */}
                 <div className="flex justify-between">
                   <span>Price:</span>
