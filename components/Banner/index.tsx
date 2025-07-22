@@ -113,7 +113,7 @@ const RandomEnabledBanner: React.FC = () => {
 
             {/* Rainbow Border Button */}
             <button
-              className="border-1 border-pink-500 text-pink-500 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out shadow-lg"
+              className="border-1 border-pink-500 text-pink-500 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out shadow-lg hover:bg-purple-500 hover:text-white hover:shadow-xl"
               onClick={() => window.location.href = `/product/${banner.productId}`}
             >
               View Product
