@@ -15,14 +15,16 @@ body {
     --ternary-color: #aaaaaa; /* default fallback */
   }
 
-  .primary{
-    border: 1px solid var(--primary-color);
+.primary{
+    border: 2px solid var(--ternary-color);
+    background-color: var(--secondary-color);
   }
 
   .secondary{
-    border: 1px solid var(--secondary-color);
+    border: 1px solid var(--ternary-color);
+    background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
   }
 
   .ternary{
-    border: 2px solid var(--ternary-color);
+    background-color: var(--ternary-color);
   }

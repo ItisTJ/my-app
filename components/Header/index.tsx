@@ -54,6 +54,33 @@ const Header = () => {
     }
   }, [header]);
 
+  useEffect(() => {
+    if (header?.primaryColor) {
+      document.documentElement.style.setProperty(
+        "--primary-color",
+        header.color
+      );
+    }
+  }, [header?.color]);
+
+  useEffect(() => {
+    if (header?.secondaryColor) {
+      document.documentElement.style.setProperty(
+        "--secondary-color",
+        header.secondaryColor
+      );
+    }
+  }, [header?.secondaryColor]);
+
+  useEffect(() => {
+    if (header?.ternaryColor) {
+      document.documentElement.style.setProperty(
+        "--ternary-color",
+        header.ternaryColor
+      );
+    }
+  }, [header?.ternaryColor]);
+
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
 
    useEffect(() => {
@@ -91,7 +118,7 @@ const Header = () => {
     if (header?.ternaryColor) {
       document.documentElement.style.setProperty(
         "--ternary-color",
-        header.secondaryColor
+        header.ternaryColor
       );
     }
   }, [header?.ternaryColor]);
