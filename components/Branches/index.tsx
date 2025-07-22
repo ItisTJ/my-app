@@ -50,31 +50,42 @@ const BranchManager = () => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      if (editingBranchId) {
-        await axios.put(`http://localhost:4000/api/branches/${editingBranchId}`, form);
-        setMessage("Branch updated successfully.");
-        setEditingBranchId(null);
-      } else {
-        await axios.post("http://localhost:4000/api/branches", form);
-        setMessage("Branch added successfully.");
-      }
-      setForm({
-        city: "",
-        image: "",
-        contact: "",
-        openAt: "",
-        closeAt: "",
-        location: ""
-      });
-      setPreviewUrl(null);
-      fetchBranches();
-    } catch (error) {
-      console.error("Error saving branch:", error);
-      setMessage("Error saving branch.");
+  e.preventDefault();
+  try {
+    const accessToken = localStorage.getItem("accessToken"); // or wherever you store it
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      withCredentials: true,
+    };
+
+    if (editingBranchId) {
+      await axios.put(`http://localhost:4000/api/branches/${editingBranchId}`, form, config);
+      setMessage("Branch updated successfully.");
+      setEditingBranchId(null);
+    } else {
+      await axios.post("http://localhost:4000/api/branches", form, config);
+      setMessage("Branch added successfully.");
     }
-  };
+
+    setForm({
+      city: "",
+      image: "",
+      contact: "",
+      openAt: "",
+      closeAt: "",
+      location: ""
+    });
+    setPreviewUrl(null);
+    fetchBranches();
+  } catch (error) {
+    console.error("Error saving branch:", error);
+    setMessage("Error saving branch.");
+  }
+};
+
 
   const handleEdit = (branch: any) => {
     setEditingBranchId(branch._id);
@@ -90,17 +101,27 @@ const BranchManager = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this branch?")) return;
-    try {
-      await axios.delete(`http://localhost:4000/api/branches/${id}`);
-      setMessage("Branch deleted successfully.");
-      fetchBranches();
-    } catch (error) {
-      console.error("Error deleting branch:", error);
-      setMessage("Error deleting branch.");
-    }
-  };
+const handleDelete = async (id: string) => {
+  if (!window.confirm("Are you sure you want to delete this branch?")) return;
+  try {
+    const accessToken = localStorage.getItem("accessToken");
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      withCredentials: true,
+    };
+
+    await axios.delete(`http://localhost:4000/api/branches/${id}`, config);
+    setMessage("Branch deleted successfully.");
+    fetchBranches();
+  } catch (error) {
+    console.error("Error deleting branch:", error);
+    setMessage("Error deleting branch.");
+  }
+};
+
 
   return (
     <div className="max-w-4xl mx-auto p-4">

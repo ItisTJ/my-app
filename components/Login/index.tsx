@@ -26,7 +26,7 @@ const Login = () => {
       <div className="primary max-w-xl w-screen mx-auto 
         rounded-xl shadow-2xl 
         backdrop-blur-md bg-white/40 
-        border-4 border-opacity-10
+        border-[1px] border-opacity-10
         p-6">
 
         <div className="relative h-24 rounded-t-xl bg-gradient-to-r from-blue-200 to-gray-100 mb-12">
