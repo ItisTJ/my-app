@@ -7,7 +7,8 @@ const AdminProductsPage: NextPage = () => {
   return (
     <>
       <SEO {...homeConfig} />
-      <main className="wrapper p-5 mt-5">
+      <main className="pt-40 p-10"
+        style={{ backgroundImage: 'url(/images/background.jpg)', backgroundSize: 'cover' }}>
         <ProductsList />
       </main>
     </>

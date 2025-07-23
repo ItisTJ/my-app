@@ -216,7 +216,7 @@ const PrivacyPolicyManager = () => {
           <button
             type="button"
             onClick={addPolicy}
-            className="bg-gradient-to-r from-blue-950 to-teal-500 text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
+            className="secondary text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
           >
             Add Policy
           </button>
@@ -224,7 +224,7 @@ const PrivacyPolicyManager = () => {
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-blue-950 to-teal-500 text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
+          className="secondary w-full text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
         >
           {editingPolicyId ? "Save Changes" : "Submit Policies"}
         </button>

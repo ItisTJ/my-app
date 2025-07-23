@@ -134,7 +134,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
       ) : (
         <>
           {/* Products table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto bg-white shadow-md rounded-lg">
             <table className="min-w-full table-auto border-collapse border border-gray-300 text-sm">
               <thead>
                 <tr className="bg-gray-100">
@@ -186,7 +186,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
           <div className="flex justify-center gap-4 mt-4">
             {currentPage > 1 && (
               <button
-                className="group flex items-center gap-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+                className="secondary group flex items-center gap-2 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
                 onClick={handleShowLess}
               >
                 Show Less
@@ -195,7 +195,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
             )}
             {currentPage < pages && (
               <button
-                className="group flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                className="secondary group flex items-center gap-2 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
                 onClick={handleShowMore}
               >
                 Show More

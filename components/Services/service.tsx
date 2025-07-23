@@ -330,7 +330,7 @@ const ServiceManager = () => {
           <button
             type="button"
             onClick={addService}
-            className="bg-gradient-to-r from-blue-950 to-teal-500 text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
+            className="secondary text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300"
           >
             Add Service
           </button>
@@ -338,7 +338,7 @@ const ServiceManager = () => {
 
         <button
           type="submit"
-          className="bg-gradient-to-r from-blue-950 to-teal-500 text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300 w-full mt-6"
+          className="secondary text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition duration-300 w-full mt-6"
         >
           {editingServiceId ? "Save Changes" : "Submit Services"}
         </button>

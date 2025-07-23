@@ -51,8 +51,12 @@ const UserEdit: React.FC<UserEditProps> = ({ pageId }) => {
   };
 
   return (
-    <div className=" bg-gray-50 flex flex-col items-center justify-center p-8">
-      <div className="max-w-xl w-full bg-white rounded-xl shadow-md mx-auto">
+<div className="min-h-screen bg-transparent flex-col items-center justify-center">
+      <div className="ternary max-w-xl w-screen mx-auto 
+        rounded-xl shadow-2xl 
+        backdrop-blur-md bg-white/40 
+        border-[1px] border-opacity-10
+        p-6">
         <div className="px-8 py-6">
           <Link href="/admin/users" passHref>
             <button className="group mb-6 bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition">
@@ -113,7 +117,7 @@ const UserEdit: React.FC<UserEditProps> = ({ pageId }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-950 to-teal-600 hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
+                className="secondary w-full hover:opacity-90 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:opacity-50"
               >
                 Update
               </button>

@@ -7,7 +7,8 @@ const AdminUsersPage: NextPage = () => {
   return (
     <>
       <SEO {...homeConfig} />
-      <main className="wrapper py-5">
+      <main className="pt-40 pb-20"
+        style={{ backgroundImage: 'url(/images/background.jpg)', backgroundSize: 'cover' }}>
         <UsersList />
       </main>
     </>

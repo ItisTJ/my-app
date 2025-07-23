@@ -90,6 +90,12 @@ const HeaderManager = () => {
   };
 
   return (
+    <div className="min-h-screen bg-transparent flex-col items-center justify-center">
+      <div className="ternary w-2/3 mx-auto 
+        rounded-xl shadow-2xl 
+        backdrop-blur-md bg-white/40 
+        border-[1px] border-opacity-10
+        p-6">
     <div className="">
       {loading ? (
         <Loader />
@@ -196,6 +202,8 @@ const HeaderManager = () => {
           </form>
         </FormContainer>
       )}
+    </div>
+    </div>
     </div>
   );
 };
