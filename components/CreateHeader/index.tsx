@@ -190,7 +190,7 @@ const HeaderManager = () => {
             </div>
 
             
-            <button type="submit" className="text-white px-6 py-2 rounded hover:bg-blue-700">
+            <button type="submit" className="secondary text-white px-6 py-2 rounded hover:bg-blue-700">
               Update Header
             </button>
           </form>

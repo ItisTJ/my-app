@@ -90,7 +90,7 @@ const Cart: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 py-8 relative bg-gray-50">
       {notificationVisible && (
         <div className="max-w-7xl mx-auto mb-6 fixed top-4 right-4 z-50 transition-opacity duration-500 opacity-100">
-          <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 rounded-lg shadow-lg flex items-center">
+          <div className="secondary text-white p-4 rounded-lg shadow-lg flex items-center">
             <span className="mr-2 bg-white text-teal-600 rounded-full w-6 h-6 flex items-center justify-center">✓</span>
             <span className="font-bold">Cart updated.</span>
           </div>
@@ -226,7 +226,7 @@ const Cart: React.FC = () => {
 
               <button
                 type="button"
-                className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white shadow-md hover:shadow-lg w-full mt-6 hover:opacity-90 transition duration-500 ease-in-out ..."
+                className="secondary group relative overflow-hidden rounded-lg px-6 py-3 text-white shadow-md hover:shadow-lg w-full mt-6 hover:opacity-90 transition duration-500 ease-in-out ..."
                 onClick={onCheckoutHandler}
               >
                 <span className="relative z-10 flex items-center justify-center gap-2 font-bold">
