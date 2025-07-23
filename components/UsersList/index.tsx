@@ -19,9 +19,13 @@ const UsersList = () => {
   }, [fetchUsers, user.data, success]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex-col items-center justify-center p-8">
-      <div className=" w-full bg-white rounded-xl shadow-md ml-auto mr-auto">
-        <div className="relative h-16 rounded-t-xl bg-gradient-to-r from-blue-200 to-gray-100 mb-12 ">
+    <div className="min-h-screen bg-transparent flex-col items-center justify-center mx-5">
+      <div className="ternary w-full mx-auto 
+        rounded-xl shadow-2xl 
+        backdrop-blur-xl bg-white/40 
+        border-[1px] border-opacity-10
+        p-6">
+        <div className="gradient relative h-16 rounded-t-xl mb-12 ">
           <h2 className="font-sans text-4xl font-bold text-left ml-32 text-gray-800 mb-6 ">Users</h2>
           <div className="absolute -bottom-10 left-8 bg-white p-4 rounded-full shadow-lg mb-4">
             <FaUser size={36} className="text-gray-700 " />

@@ -487,7 +487,7 @@ const FabricCanvasEditor: React.FC = () => {
       <div className="flex flex-col gap-4 w-full md:w-80 overflow-x-auto min-w-[300]">
         {/* Text Controls */}
         <div className="controls rounded-lg shadow w-full border-2 border-gray-300 p-4 bg-white">
-          <button onClick={addText} className="bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded mb-2 w-full">
+          <button onClick={addText} className="secondary text-white hover:bg-blue-700 px-3 py-2 rounded mb-2 w-full">
             Add Text
           </button>
           <label htmlFor="fontSize">Font Size:</label>
@@ -554,7 +554,7 @@ const FabricCanvasEditor: React.FC = () => {
             id="imageInput"
             accept="image/*"
             onChange={uploadImage}
-            className="bg-white text-black file:bg-blue-600 file:text-white file:px-3 file:py-1 file:rounded file:hover:bg-blue-700 w-full"
+            className="bg-white text-black file:bg-purple-600 file:text-white file:px-3 file:py-1 file:rounded file:hover:bg-blue-700 w-full"
           />
         </div>
 
@@ -610,7 +610,7 @@ const FabricCanvasEditor: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-800">Banner Collection</h2>
               <button
                 onClick={fetchBanners}
-                className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
+                className="secondary mt-2 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
               >
                 Refresh
               </button>

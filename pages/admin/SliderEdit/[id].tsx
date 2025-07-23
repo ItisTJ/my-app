@@ -43,7 +43,7 @@ const SliderEdit = () => {
   };
 
   return (
-    <div className="container mt-15 p-4 bg-white rounded shadow">
+    <div className="container mt-40 mb-20 p-4 bg-white rounded shadow">
       <h1 className="mb-4 text-center text-primary">Edit Slider</h1>
       {loading ? (
         <Loader />
