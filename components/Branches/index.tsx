@@ -69,6 +69,7 @@ const BranchManager = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const newErrors: { [key: string]: string } = {};
 
     if (!form.city.trim()) newErrors.city = "City cannot be empty.";
@@ -114,9 +115,13 @@ const BranchManager = () => {
       setPreviewUrl(null);
       setErrors({});
       fetchBranches();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving branch:", error);
-      setMessage("Error saving branch.");
+      if (axios.isAxiosError(error) && error.response?.status === 413) {
+        setMessage("Failed to added branch. Maximum file size is 2MB.");
+      } else {
+        setMessage("Error saving branch. Please try again.");
+      }
     }
   };
 
