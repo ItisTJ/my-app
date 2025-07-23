@@ -17,7 +17,7 @@ body {
 
 .primary{
     border: 2px solid var(--ternary-color);
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
   }
 
   .secondary{
@@ -26,5 +26,9 @@ body {
   }
 
   .ternary{
-    background-color: var(--ternary-color);
+    border-color: var(--ternary-color);
+  }
+
+  .gradient {
+    background: linear-gradient(to right, var(--secondary-color), #ffffff22);
   }

@@ -109,7 +109,7 @@ const Products: React.FC<ProductsInterface> = ({ keyword, pageId }) => {
             <div className="flex justify-center gap-4 mt-4 mb-8">
               {currentPage > 1 && (
                 <button
-                  className="group flex items-center gap-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+                  className="secondary group flex items-center gap-2 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
                   onClick={handleShowLess}
                 >
                   Show Less
@@ -118,7 +118,7 @@ const Products: React.FC<ProductsInterface> = ({ keyword, pageId }) => {
               )}
               {currentPage < pages && (
                 <button
-                  className="group flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                  className="secondary group flex items-center gap-2 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
                   onClick={handleShowMore}
                 >
                   Show More

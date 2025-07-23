@@ -47,8 +47,8 @@ const Shipping = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-8 bg-gray-50">
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-2xl">
-        <div className="relative h-24 bg-gradient-to-r from-blue-100 to-teal-100">
+      <div className="ternary bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-2xl">
+        <div className="gradient relative h-24">
           <div className="absolute -bottom-10 left-8 bg-white p-4 rounded-full shadow-lg">
             <MapPin size={32} className="text-gray-700" strokeWidth={1.5} />
           </div>
@@ -137,7 +137,7 @@ const Shipping = () => {
             </div>
 
             <div className="pt-4">
-              <button type="submit" className="bg-gradient-to-r from-blue-950 to-teal-500 px-6 py-3 text-white rounded-lg hover:cursor-pointer hover:opacity-90 transition duration-500 ease-in-out ...">
+              <button type="submit" className="secondary px-6 py-3 text-white rounded-lg hover:cursor-pointer hover:opacity-90 transition duration-500 ease-in-out ...">
                 Continue to Payment
               </button>
             </div>

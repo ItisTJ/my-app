@@ -17,7 +17,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }: CheckoutStepsProps) => {
         <div className="flex-1">
           {step1 ? (
             <Link href="/login" className="flex flex-col items-center group">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-800 to-blue-950 text-white flex items-center justify-center mb-1 shadow-md transform transition-transform duration-300 scale-95 hover:scale-100">
+              <div className="secondary w-10 h-10 rounded-full text-white flex items-center justify-center mb-1 shadow-md transform transition-transform duration-300 scale-95 hover:scale-100">
                 <Check className="h-5 w-5" />
               </div>
               <span className="text-sm font-medium text-gray-800">Sign In</span>
@@ -33,13 +33,13 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }: CheckoutStepsProps) => {
         </div>
 
         {/* Connector */}
-        <div className={`h-1 flex-1 ${step2 ? "bg-gradient-to-r from-blue-500 to-teal-300" : "bg-gray-200"}`}></div>
+        <div className={`h-1 flex-1 ${step2 ? "secondary" : "bg-gray-200"}`}></div>
 
         {/* Step 2: Shipping */}
         <div className="flex-1">
           {step2 ? (
             <Link href="/shipping" className="flex flex-col items-center group">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-teal-300 text-white flex items-center justify-center mb-1 shadow-md transform transition-transform duration-300 scale-95 hover:scale-100">
+              <div className="secondary w-10 h-10 rounded-full text-white flex items-center justify-center mb-1 shadow-md transform transition-transform duration-300 scale-95 hover:scale-100">
                 <Check className="h-5 w-5" />
               </div>
               <span className="text-sm font-medium text-gray-800">Shipping</span>
@@ -55,13 +55,13 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }: CheckoutStepsProps) => {
         </div>
 
         {/* Connector */}
-        <div className={`h-1 flex-1 ${step3 ? "bg-gradient-to-r from-teal-300 to-teal-400" : "bg-gray-200"}`}></div>
+        <div className={`h-1 flex-1 ${step3 ? "secondary" : "bg-gray-200"}`}></div>
 
         {/* Step 3: Payment */}
         <div className="flex-1">
           {step3 ? (
             <Link href="/payment" className="flex flex-col items-center group">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-300 to-teal-400 text-white flex items-center justify-center mb-1 shadow-md transform transition-transform duration-300 scale-95 hover:scale-100">
+              <div className="secondary w-10 h-10 rounded-full text-white flex items-center justify-center mb-1 shadow-md transform transition-transform duration-300 scale-95 hover:scale-100">
                 <Check className="h-5 w-5" />
               </div>
               <span className="text-sm font-medium text-gray-800">Payment</span>
@@ -77,14 +77,14 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }: CheckoutStepsProps) => {
         </div>
 
         {/* Connector */}
-        <div className={`h-1 flex-1 ${step3 ? "bg-gradient-to-r from-teal-400 to-blue-950" : "bg-gray-200"}`}></div>
+        <div className={`h-1 flex-1 ${step3 ? "secondary" : "bg-gray-200"}`}></div>
 
 
         {/* Step 4: Place Order */}
         <div className="flex-1">
           {step4 ? (
             <Link href="/placeorder" className="flex flex-col items-center group">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-400 to-blue-950 text-white flex items-center justify-center mb-1 shadow-md transform transition-transform duration-300 scale-95 hover:scale-100">
+              <div className="secondary w-10 h-10 rounded-full text-white flex items-center justify-center mb-1 shadow-md transform transition-transform duration-300 scale-95 hover:scale-100">
                 4
               </div>
               <span className="text-sm font-medium text-gray-800">Place Order</span>

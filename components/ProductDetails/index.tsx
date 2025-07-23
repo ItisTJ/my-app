@@ -140,7 +140,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                     <button
                       onClick={onBuyNowHandler}
                       disabled={countInStock === 0}
-                      className="flex-1 bg-gradient-to-r from-blue-950 to-teal-500 hover:cursor-pointer hover:opacity-75 transition duration-500 ease-in-out ... disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-md transition-colors"
+                      className="secondary flex-1 hover:cursor-pointer hover:opacity-75 transition duration-500 ease-in-out ... disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-md transition-colors"
                     >
                       Buy Now
                     </button>
@@ -214,7 +214,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
                     <button
                       disabled={loadingReview}
                       type="submit"
-                      className="bg-gradient-to-r from-blue-950 to-teal-500 hover:cursor-pointer hover:opacity-75 transition duration-500 ease-in-out ... disabled:bg-gray-300 text-white font-medium py-2 px-6 rounded transition-colors"
+                      className="secondary hover:cursor-pointer hover:opacity-75 transition duration-500 ease-in-out ... disabled:bg-gray-300 text-white font-medium py-2 px-6 rounded transition-colors"
                     >
                       Submit
                     </button>

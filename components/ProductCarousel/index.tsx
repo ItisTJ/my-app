@@ -107,7 +107,7 @@ const ProductCarousel: React.FC = () => {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all ${
-                currentSlide === index ? 'bg-black w-4 sm:w-6' : 'bg-gray-400'
+                currentSlide === index ? 'primary w-4 sm:w-6' : 'bg-gray-400'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

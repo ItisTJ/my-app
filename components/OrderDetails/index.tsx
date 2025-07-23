@@ -168,7 +168,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
           {/* Progress bar */}
           <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200">
             <div
-              className="h-full bg-gradient-to-r from-blue-950 to-teal-500 transition-all duration-500"
+              className="secondary h-full transition-all duration-500"
               style={{
                 width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
               }}
@@ -192,7 +192,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all duration-300 ${
                     step.id <= currentStep
-                      ? "bg-gradient-to-r from-blue-950 to-teal-500 text-white"
+                      ? "secondary text-white"
                       : "bg-gray-200 text-gray-400"
                   }`}
                 >

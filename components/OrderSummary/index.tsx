@@ -233,7 +233,7 @@ const OrderSummaryContent = () => {
               type="button"
               onClick={onPlaceOrderHandler}
               disabled={orderItems.length === 0}
-              className="w-full mt-4 bg-gradient-to-r from-blue-950 to-teal-500 text-white py-3 rounded-lg hover:opacity-90 transition duration-500 ease-in-out ..."
+              className="secondary w-full mt-4 text-white py-3 rounded-lg hover:opacity-90 transition duration-500 ease-in-out ..."
             >
               Place Order
             </button>

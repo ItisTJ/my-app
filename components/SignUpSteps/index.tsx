@@ -19,7 +19,7 @@ const SignUpSteps = ({ step1, step2, step3 }: SignUpStepsProps) => {
         <div key={index} className="flex items-center">
           {step.active ? (
             <Link href={step.href}>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-800 to-gray-700 text-white flex items-center justify-center font-semibold shadow cursor-pointer">
+              <div className="secondary w-8 h-8 rounded-full text-white flex items-center justify-center font-semibold shadow cursor-pointer">
                 {index + 1}
               </div>
             </Link>
