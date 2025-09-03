@@ -82,7 +82,7 @@ const PlaceOrder = () => {
     })
 
     // Navigate to order details page
-    router.push("/OrderDetails")
+    router.push("/OrderDetails?orderId=12345") // Replace with actual order ID after creation
   }
 
   return (
