@@ -107,7 +107,7 @@ export const logout = () => async (dispatch: Dispatch<UserAction>) => {
   }
 };
 
-export const register = (name: string, email: string, password: string) => async (dispatch: Dispatch<Action>) => {
+export const register = (name: string, email: string, password: string) => async (dispatch: Dispatch<UserAction>) => {
   try {
     dispatch({ type: ActionTypes.USER_REGISTER_START });
 

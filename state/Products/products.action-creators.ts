@@ -56,12 +56,12 @@ export const fetchTopRatedProducts =
   };
 
 
-  export const fetchProductsByCategory = (category: string, pageId?: number) => async (dispatch) => {
+  export const fetchProductsByCategory = (category: string, pageId?: number) => async (dispatch : Dispatch) => {
   try {
     dispatch({ type: 'PRODUCT_LIST_REQUEST' });
     const { data } = await proshopAPI.get(`/api/products/category/${category}?page=${pageId || 1}`);
     dispatch({ type: 'PRODUCT_LIST_SUCCESS', payload: data });
-  } catch (error) {
+  } catch (error: any) {
     dispatch({
       type: 'PRODUCT_LIST_FAIL',
       payload: error.response?.data?.message || error.message,

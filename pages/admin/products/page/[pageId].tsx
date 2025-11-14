@@ -15,7 +15,7 @@ const HomePage: NextPage = () => {
       <SEO {...homeConfig} />
       <main className="pt-40 p-10"
         style={{ backgroundImage: 'url(/images/background.jpg)', backgroundSize: 'cover' }}>
-        <ProductsList pageId={pageId} />
+        <ProductsList pageId={pageId as string} />
       </main>
     </>
   );

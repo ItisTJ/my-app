@@ -95,12 +95,12 @@ const BranchManager = () => {
     try {
       if (editingBranchId) {
         await axios.put(`http://localhost:4000/api/branches/${editingBranchId}`, form);
-        dispatch(fetchFooter());
+        dispatch(fetchFooter() as any);
         setMessage("Branch updated successfully.");
         setEditingBranchId(null);
       } else {
         await axios.post("http://localhost:4000/api/branches", form);
-        dispatch(fetchFooter());
+        dispatch(fetchFooter() as any);
         setMessage("Branch added successfully.");
       }
 
@@ -143,7 +143,7 @@ const BranchManager = () => {
     if (!window.confirm("Are you sure you want to delete this branch?")) return;
     try {
       await axios.delete(`http://localhost:4000/api/branches/${id}`);
-      dispatch(fetchFooter());
+      dispatch(fetchFooter() as any);
       setMessage("Branch deleted successfully.");
       fetchBranches();
       setForm({

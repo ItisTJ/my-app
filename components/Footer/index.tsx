@@ -6,10 +6,19 @@ import { useTypedSelector } from "../../hooks";
 import { fetchFooter } from "../../state/Footer/footer.action-creators";
 import axios from "axios";
 
+interface Branch {
+  city: string;
+  location: string;
+  image: string;
+  contact: string;
+  openAt: string;
+  closeAt: string;
+}
+
 const Footer: React.FC = () => {
-  const [services, setServices] = useState([]);
-  const [privacyPolicy, setprivacyPolicy] = useState([]);
-  const [branches, setBranches] = useState([]);
+  const [services, setServices] = useState<any[]>([]);
+  const [privacyPolicy, setprivacyPolicy] = useState<any[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
   const dispatch = useDispatch();
 
   const { loading, error, footerdata } = useTypedSelector((state) => ({
@@ -35,7 +44,7 @@ const Footer: React.FC = () => {
 
   useEffect(() => {
     if (!footerdata.length) {
-      dispatch(fetchFooter());
+      dispatch(fetchFooter() as any);
     }
   }, [dispatch, footerdata.length]);
 

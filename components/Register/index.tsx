@@ -31,30 +31,34 @@ const Register = () => {
     setMessage(error);
   }, [error]);
 
-  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    const { name, email, password, confirmPassword } = credentials;
+  const { name, email, password, confirmPassword } = credentials;
 
-    if (!name || !email || !password || !confirmPassword) {
-      setMessage('All fields are required.');
-      return;
-    }
+  if (!name || !email || !password || !confirmPassword) {
+    setMessage('All fields are required.');
+    return;
+  }
 
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
-      return;
-    }
+  if (password !== confirmPassword) {
+    setMessage('Passwords do not match');
+    return;
+  }
 
-    const success = await register(name, email, password);
-
-    if (success) {
-      router.push({
-        pathname: '/verifyToken',
-        query: { name, email },
-      });
-    }
-  };
+  try {
+    await register(name, email, password);
+    
+    // After successful registration, navigate
+    router.push({
+      pathname: '/verifyToken',
+      query: { name, email },
+    });
+  } catch (error) {
+    // Error will be caught and set in Redux state
+    console.error('Registration failed:', error);
+  }
+};
 
   return (
     <div className="min-h-screen bg-transparent flex-col items-center justify-center">

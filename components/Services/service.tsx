@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
+import React, { useState, FormEvent, ChangeEvent, useEffect, Key } from "react";
 import { useDispatch } from "react-redux";
 import {
   uploadServices,
@@ -15,6 +15,7 @@ import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 interface Service {
+  _id: Key | null | undefined;
   title: string;
   description: string;
   image: string;
@@ -37,7 +38,7 @@ const ServiceManager = () => {
   );
 
   const [services, setServices] = useState<Service[]>([
-    { title: "", description: "", image: "" },
+    { title: "", description: "", image: "" , _id: null},
   ]);
   const [previewUrls, setPreviewUrls] = useState<(string | null)[]>([null]);
   const [message, setMessage] = useState<string | null>(null);
@@ -64,8 +65,8 @@ const ServiceManager = () => {
 
     // Clear error on change for that field
     const newErrors = [...errors];
-    if (newErrors[index]) {
-      newErrors[index][field] = undefined;
+    if (newErrors[index] && field in newErrors[index]) {
+      newErrors[index][field as keyof ServiceErrors] = undefined;
       setErrors(newErrors);
     }
   };
@@ -103,7 +104,7 @@ const ServiceManager = () => {
   };
 
   const addService = () => {
-    setServices([...services, { title: "", description: "", image: "" }]);
+    setServices([...services, { title: "", description: "", image: "", _id: null }]);
     setPreviewUrls([...previewUrls, null]);
     setErrors([...errors, {}]);
   };
@@ -118,7 +119,7 @@ const ServiceManager = () => {
   };
 
   const clearForm = () => {
-    setServices([{ title: "", description: "", image: "" }]);
+    setServices([{ title: "", description: "", image: "", _id: null }]);
     setPreviewUrls([null]);
     setEditingServiceId(null);
     setErrors([]);
@@ -200,7 +201,7 @@ const ServiceManager = () => {
   const handleEdit = (service: Service & { _id: string }) => {
     setEditingServiceId(service._id);
     setServices([
-      { title: service.title, description: service.description, image: service.image },
+      { title: service.title, description: service.description, image: service.image , _id: service._id},
     ]);
     setPreviewUrls([service.image || null]);
     setErrors([{}]);
@@ -381,14 +382,14 @@ const ServiceManager = () => {
                   </td>
                   <td className="px-2 py-1 flex space-x-2">
                     <button
-                      onClick={() => handleEdit(service)}
+                      onClick={() => handleEdit(service as Service & { _id: string })}
                       className="text-blue-600 hover:text-blue-800"
                       aria-label="Edit service"
                     >
                       <FaEdit />
                     </button>
                     <button
-                      onClick={() => handleDelete(service._id)}
+                      onClick={() => handleDelete(service._id as string)}
                       className="text-red-600 hover:text-red-800"
                       aria-label="Delete service"
                     >

@@ -106,7 +106,7 @@ const OrderSummaryContent = () => {
   } else if (paymentMethod === "Credit Card") {
     try {
       const session = await createStripeCheckoutSession(
-        orderItems.map((item) => ({
+        orderItems.map((item : any) => ({
           name: item.name,
           price: item.price,
           quantity: item.qty,
@@ -135,7 +135,6 @@ const OrderSummaryContent = () => {
       totalPrice: finalTotal,
       itemsPrice,
       orderItems,
-      discount: Number(discount.toFixed(2)),
     })
 
     if (isBuyNow) {
@@ -175,7 +174,7 @@ const OrderSummaryContent = () => {
               <p className="text-red-500">No items to order</p>
             ) : (
               <div className="space-y-4 mt-4">
-                {orderItems.map((item, index) => (
+                {orderItems.map((item: { productId: string; name: string; image?: string; price: number; qty: number }, index: number) => (
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center">
                       <img

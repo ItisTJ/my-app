@@ -261,7 +261,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
           <ShoppingCart className="w-5 h-5 mr-2 text-teal-600" />
           Order Items
         </h3>
-        {order.orderItems.map((item) => (
+        {order.orderItems.map((item : any) => (
           <div
             key={item._id}
             className="flex items-center justify-between border-b py-3 last:border-none"

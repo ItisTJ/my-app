@@ -24,7 +24,7 @@ const SliderList = () => {
 
   useEffect(() => {
     const fetchProductNames = async () => {
-      const ids = Array.from(new Set(data.map((s) => s.productId)));
+      const ids = Array.from(new Set(data.map((s : any) => s.productId)));
 
       const names: { [key: string]: string } = {};
 
@@ -32,9 +32,9 @@ const SliderList = () => {
         ids.map(async (id) => {
           try {
             const res = await axios.get(`http://localhost:4000/api/products/${id}`);
-            names[id] = res.data?.name || "Unknown";
+            names[id as string] = res.data?.name || "Unknown";
           } catch (err) {
-            names[id] = "Unknown";
+            names[id as string] = "Unknown";
           }
         })
       );

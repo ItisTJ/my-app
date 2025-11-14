@@ -41,7 +41,7 @@ const Products: React.FC<ProductsInterface> = ({ keyword, pageId }) => {
   // Effect: Add new products to allProducts only if they're not already present
   useEffect(() => {
     if (products.length > 0) {
-      const newProducts = products.filter((product) => 
+      const newProducts = products.filter((product : any) => 
         !allProducts.some((p) => p._id === product._id)
       );
       setAllProducts((prevProducts) => [...prevProducts, ...newProducts]);

@@ -62,7 +62,7 @@ const ProductsList: React.FC<ProductListProps> = ({ pageId }) => {
   // Effect to append new products to the list, avoiding duplicates
   useEffect(() => {
     if (products.length > 0) {
-      const newProducts = products.filter((product) => !allProducts.some((p) => p._id === product._id));
+      const newProducts = products.filter((product : any) => !allProducts.some((p) => p._id === product._id));
       setAllProducts((prevProducts) => [...prevProducts, ...newProducts]);
     }
 

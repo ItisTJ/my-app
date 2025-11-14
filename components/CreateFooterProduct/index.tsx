@@ -31,7 +31,7 @@ const FooterManager = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    dispatch(fetchFooter());
+    dispatch(fetchFooter() as any);
   }, [dispatch]);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const FooterManager = () => {
       const config = { headers: { "Content-Type": "application/json" } };
       await proshopAPI.post("/api/footer/upload", footerData, config);
       setMessage("Footer updated successfully.");
-      dispatch(fetchFooter());
+      dispatch(fetchFooter() as any);
     } catch (error) {
       console.error("Upload Error:", error);
       setMessage("Failed to upload footer item.");
@@ -132,9 +132,11 @@ const FooterManager = () => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger" className="mb-4 text-center">
-          {error}
-        </Message>
+        <div className="mb-4 text-center">
+          <Message variant="danger">
+            {error}
+          </Message>
+        </div>
       ) : (
         <form onSubmit={onSubmitHandler} className="space-y-6">
           <div className="border rounded p-6 bg-white shadow space-y-6">

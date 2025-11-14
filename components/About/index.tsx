@@ -5,7 +5,8 @@ import { fetchFooter } from "../../state/Footer/footer.action-creators";
 import { FaInfoCircle, FaBullseye, FaRocket } from "react-icons/fa";
 
 const AboutPage: React.FC = () => {
-  const dispatch = useDispatch();
+   
+  const dispatch = useDispatch<any>();
 
   const { loading, error, footerdata } = useTypedSelector((state) => ({
     loading: state.footer?.loading || false,
@@ -25,7 +26,7 @@ const AboutPage: React.FC = () => {
     if (!footerdata.length) {
       dispatch(fetchFooter());
     }
-  }, [dispatch, footerdata.length]);
+  }, [dispatch, footerdata]);
 
   useEffect(() => {
     if (footer) {

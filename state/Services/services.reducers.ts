@@ -25,7 +25,7 @@ export const servicesReducer = (
       return { ...state, loading: true, error: null, success: false };
 
     case ActionTypes.SERVICES_UPLOAD_SUCCESS:
-      return { loading: false, data: action.payload, error: null, success: true };
+      return { loading: false, data: [action.payload], error: null, success: true };
 
     case ActionTypes.SERVICES_UPLOAD_FAIL:
       return { ...state, loading: false, error: action.payload, success: false };

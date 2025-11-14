@@ -14,7 +14,7 @@ const HomePage: NextPage = () => {
     <>
       <SEO {...homeConfig} />
       <main className="wrapper py-5">
-        <Products pageId={pageId} keyword={keyword} />
+        <Products pageId={pageId as string} keyword={keyword as string} />
       </main>
     </>
   );

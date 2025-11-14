@@ -252,7 +252,7 @@ const Profile = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {userOrders.data?.map((order) => (
+                    {userOrders.data?.map((order : any) => (
                       <tr key={order._id} className="hover:bg-gray-50 transition-colors duration-200">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center space-x-2">

@@ -25,7 +25,13 @@ export const branchesReducer = (
       return { ...state, loading: true, error: null, success: false };
 
     case ActionTypes.BRANCHES_UPLOAD_SUCCESS:
-      return { loading: false, data: action.payload, error: null, success: true };
+      return {
+        ...state,
+        loading: false,
+        data: state.data ? [...state.data, action.payload] : [action.payload],
+        error: null,
+        success: true,
+      };
 
     case ActionTypes.BRANCHES_UPLOAD_FAIL:
       return { ...state, loading: false, error: action.payload, success: false };

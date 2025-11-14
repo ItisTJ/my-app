@@ -167,7 +167,7 @@ const FabricCanvasEditor: React.FC = () => {
     });
     canvas.add(text);
     canvas.setActiveObject(text);
-    attachControls(text);
+    attachControls(text as ObjectWithControlId);
     canvas.requestRenderAll();
     console.log("Added text");
   };
@@ -175,7 +175,7 @@ const FabricCanvasEditor: React.FC = () => {
   const updateFontSize = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const canvas = fabricRef.current;
     const obj = canvas?.getActiveObject() as fabric.IText;
-    if (obj && obj.isType("i-text")) {
+    if (obj && obj.isType("i-text") && canvas) {
       obj.set({ fontSize: parseInt(e.target.value) });
       canvas.requestRenderAll();
     }
@@ -184,7 +184,7 @@ const FabricCanvasEditor: React.FC = () => {
   const toggleBold = () => {
     const canvas = fabricRef.current;
     const obj = canvas?.getActiveObject() as fabric.IText;
-    if (obj && obj.isType("i-text")) {
+    if (obj && obj.isType("i-text") && canvas) {
       obj.set("fontWeight", obj.fontWeight === "bold" ? "normal" : "bold");
       canvas.requestRenderAll();
     }
@@ -193,7 +193,7 @@ const FabricCanvasEditor: React.FC = () => {
   const toggleItalic = () => {
     const canvas = fabricRef.current;
     const obj = canvas?.getActiveObject() as fabric.IText;
-    if (obj && obj.isType("i-text")) {
+    if (obj && obj.isType("i-text") && canvas) {
       obj.set("fontStyle", obj.fontStyle === "italic" ? "normal" : "italic");
       canvas.requestRenderAll();
     }
@@ -202,7 +202,7 @@ const FabricCanvasEditor: React.FC = () => {
   const updateFontFamily = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const canvas = fabricRef.current;
     const obj = canvas?.getActiveObject() as fabric.IText;
-    if (obj && obj.isType("i-text")) {
+    if (obj && obj.isType("i-text") && canvas) {
       obj.set("fontFamily", e.target.value);
       canvas.requestRenderAll();
     }
@@ -211,32 +211,37 @@ const FabricCanvasEditor: React.FC = () => {
   const updateTextColor = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const canvas = fabricRef.current;
     const obj = canvas?.getActiveObject() as fabric.IText;
-    if (obj && obj.isType("i-text")) {
+    if (obj && obj.isType("i-text") && canvas) {
       obj.set("fill", e.target.value);
       canvas.requestRenderAll();
     }
   };
 
   const setCanvasBackgroundImage = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const canvas = fabricRef.current;
-    if (!canvas) return;
-
-    const url = e.target.value;
-    if (!url) {
-      canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
-      console.log("Background cleared");
-      return;
-    }
-
-    fabric.Image.fromURL(url, (img) => {
-      const cw = canvas.getWidth();
-      const ch = canvas.getHeight();
-      const scale = Math.max(cw / img.width, ch / img.height);
-      img.scale(scale).set({ originX: "left", originY: "top", left: 0, top: 0 });
-      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-      console.log(`Background set to: ${url}`);
-    });
-  };
+      const canvas = fabricRef.current;
+      if (!canvas) return;
+  
+      const url = e.target.value;
+      if (!url) {
+        // cast to any to avoid TypeScript signature mismatch while clearing background
+        (canvas as any).setBackgroundImage(null, canvas.renderAll.bind(canvas));
+        console.log("Background cleared");
+        return;
+      }
+  
+      fabric.Image.fromURL(url, (img) => {
+        const cw = canvas.getWidth();
+        const ch = canvas.getHeight();
+        if (!img.width || !img.height) {
+          console.error("Image dimensions are not available");
+          return;
+        }
+        const scale = Math.max(cw / img.width, ch / img.height);
+        img.scale(scale).set({ originX: "left", originY: "top", left: 0, top: 0 });
+        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+        console.log(`Background set to: ${url}`);
+      });
+    };
 
   const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const canvas = fabricRef.current;
@@ -255,7 +260,7 @@ const FabricCanvasEditor: React.FC = () => {
           img.set({ left: 100, top: 100 });
           canvas.add(img);
           canvas.setActiveObject(img);
-          attachControls(img);
+          attachControls(img as ObjectWithControlId);
           canvas.requestRenderAll();
           console.log("Image uploaded");
         });

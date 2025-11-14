@@ -11,6 +11,7 @@ import Loader from '../Loader';
 import Message from '../Message';
 import Link from 'next/link';
 import Router from 'next/router';
+import { Review } from '@/interfaces';
 
 interface ProductDetailsProps {
   pageId: string | string[] | undefined; // The ID of the product to fetch and display
@@ -157,7 +158,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ pageId }) => {
               <Message>No Reviews</Message>
             ) : (
               <ul className="space-y-4">
-                {data.reviews.map(_review => (
+                {data.reviews.map((_review: Review) => (
                   <li key={_review._id} className="border-b pb-4">
                     <strong>{_review.name}</strong>
                     <Rating value={_review.rating} />

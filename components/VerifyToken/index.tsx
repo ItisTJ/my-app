@@ -44,7 +44,7 @@ const VerifyToken = () => {
       setTimeout(() => {
         router.push(`/success?msg=${email} verified successfully`);
       }, 2000);
-      //eslint-disable-next-line
+       
     } catch (err: any) {
       setVariant('danger');
       setMessage(err.response?.data?.message || 'Verification failed');
